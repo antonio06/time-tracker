@@ -2,6 +2,7 @@ import * as vm from './dashboard-vm';
 
 export const dashboardData: vm.Dashboard[] = [
   {
+    id: 1,
     task: 'Task 1',
     workedHours: [
       { value: 0.00, taskId: 0, dateId: 0 },
@@ -37,6 +38,7 @@ export const dashboardData: vm.Dashboard[] = [
     ],
   },
   {
+    id: 2,
     task: 'Task 2',
     workedHours: [
       { value: 4.50, taskId: 0, dateId: 0 },

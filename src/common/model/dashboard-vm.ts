@@ -1,4 +1,5 @@
 export interface Dashboard {
+  id: number;
   task: string;
   workedHours: WorkedHours[];
 }
