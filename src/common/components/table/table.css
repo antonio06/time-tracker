@@ -1,0 +1,13 @@
+.container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.table {
+  margin-top: 10px;
+}
+
+.title {
+  text-align: center;
+}

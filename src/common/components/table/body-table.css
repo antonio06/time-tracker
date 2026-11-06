@@ -1,0 +1,12 @@
+.cell {
+  text-align: center;
+  padding: 5px
+}
+
+tr:nth-child(odd) {
+  background-color: #FCFCFC;
+}
+
+tr:nth-child(even) {
+  background-color: #C2C2C2;
+}
