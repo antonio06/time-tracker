@@ -1,40 +1,24 @@
 import React from 'react';
 import * as vm from '../../model';
+import { RowTable } from './row-table.component';
+import { TotalLine } from './total-line.component';
 import './body-table.css';
-import { getTotalWorkedHoursPerTask, getTotalWorkedHoursPerDay, getTotalWorkedPerTotal, getRoundPerTwoDigits } from './table-business';
 
 interface Props {
   trackList: vm.Dashboard[];
   days: Date[];
+  onInputChange: (taskId: number, dateId: number, newValue: number) => void;
 }
 
-export const BodyTable: React.FC<Props> = ({ trackList, days }) => {
+export const BodyTable: React.FC<Props> = ({ trackList, days, onInputChange }) => {
   return (
     <tbody>
       {
         trackList.map((track, id) => {
-          return (
-            <tr key={id}>
-              <td key={id} className="cell">{track.task}</td>
-              {
-                track.workedHours.map((wh, index) => (
-                  <td key={index} className="cell">{getRoundPerTwoDigits(wh.value)}</td>
-                ))
-              }
-              <td key={id} className="cell">{getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))}</td>
-            </tr>
-          )
+          return <RowTable key={id} track={track} index={id} onInputChange={onInputChange} />
         })
       }
-      <tr>
-        <td className="cell">Total de horas</td>
-        {
-          days.map((_, index) => (
-            <td key={index} className="cell">{getRoundPerTwoDigits(getTotalWorkedHoursPerDay(index, trackList))}</td>
-          ))
-        }
-        <td className="cell">{getRoundPerTwoDigits(getTotalWorkedPerTotal(trackList))}</td>
-      </tr>
+      <TotalLine days={days} trackList={trackList} />
     </tbody>
   );
 }
