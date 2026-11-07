@@ -1,8 +1,11 @@
 import React from 'react';
 import { TimeTable } from '../../common/components'
+import { AddTrackComponent } from './components/add-track-component';
 import * as vm from '../../common/model';
 import * as api from './api/api';
-import { mapToVm } from './time-tracker.mapper';
+import { getMonthName } from '../../common/helpers';
+import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
+import './time-tracker.css';
 
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.Dashboard[]>([]);
@@ -33,7 +36,23 @@ export const TimeTrackerPage: React.FC = () => {
     return updateWorkedHours
   }
 
+  const addTrack = (taskName: string) => {
+    const newTrack = {
+      ...createEmptyTrack(trackerList.length, trackerList[0].workedHours.length),
+      task: taskName
+    }
+    setTrackerList([...trackerList, newTrack]);
+  }
+
+  const month: number = 11;
+
   return (
-    <TimeTable trackerList={trackerList} onInputChange={handledInputChange} />
+    <>
+      <div className="header">
+        <h1 className="title">Track list for {getMonthName(month)}</h1>
+        <AddTrackComponent onAddTrack={addTrack} />
+      </div>
+      <TimeTable trackerList={trackerList} onInputChange={handledInputChange} />
+    </>
   );
 };

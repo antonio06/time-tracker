@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.button {
+  border: none;
+  background-color: #3900F5;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 50%;
+}

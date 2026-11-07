@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeadTable } from './head-table.component';
 import { BodyTable } from './body-table.component';
-import { getDaysInMonth, getMonthName } from '../../helpers';
+import { getDaysInMonth } from '../../helpers';
 import * as vm from '../../model';
 import './table.css';
 
@@ -18,7 +18,7 @@ export const TimeTable: React.FC<Props> = ({ trackerList, onInputChange }) => {
 
   return (
     <div className="container">
-      <h1 className="title">Track list for {getMonthName(month)}</h1>
+
 
       <table className="table">
         <HeadTable days={days} />

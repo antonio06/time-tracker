@@ -12,3 +12,13 @@ export const mapToVm = (data: model.Dashboard[]): vm.Dashboard[] => {
     }))
   }));
 }
+
+export const createEmptyTrack = (numerOfTracks: number, numberOfDays: number): vm.Dashboard => {
+  return {
+    id: numerOfTracks + 1,
+    task: '',
+    workedHours: Array.from({ length: numberOfDays }, (_, i) => ({
+      value: 0.00, taskId: numerOfTracks + 1, dateId: i
+    }))
+  }
+};
