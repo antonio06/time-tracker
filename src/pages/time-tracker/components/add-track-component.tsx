@@ -14,7 +14,7 @@ export const AddTrackComponent: React.FC<Props> = ({ onAddTask: onAddTrack }) =>
   }
   return (
     <div className="add-track">
-      <button className="button" onClick={onAddTaskClick}>+ Add Task</button>
+      <button className="button" onClick={onAddTaskClick}>Add Task</button>
     </div>
   )
 }
