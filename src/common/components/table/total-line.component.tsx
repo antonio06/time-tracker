@@ -19,8 +19,8 @@ export const TotalLine: React.FC<Props> = ({ days, trackList }) => {
           </td>
         ))
       }
-      <td className="cell">
-        <input disabled value={getRoundPerTwoDigits(getTotalWorkedPerTotal(trackList))} />
+      <td className="total">
+        {getRoundPerTwoDigits(getTotalWorkedPerTotal(trackList))}
       </td>
     </tr>
   )

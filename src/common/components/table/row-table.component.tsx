@@ -28,8 +28,8 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
           </td>
         ))
       }
-      <td className="cell">
-        <input disabled value={getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))} />
+      <td className="total">
+        {getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))}
       </td>
     </tr>
   )

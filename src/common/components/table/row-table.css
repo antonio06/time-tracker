@@ -33,3 +33,9 @@ input:focus {
   text-align: left;
   padding: 10px;
 }
+
+.total {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+}
