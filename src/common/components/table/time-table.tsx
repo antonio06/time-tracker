@@ -7,22 +7,23 @@ import './table.css';
 
 interface Props {
   trackerList: vm.Dashboard[];
-  onInputChange: (taskId: number, dateId: number, newValue: number) => void;
+  onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
+  onInputValueStringChange: (taskId: number, newValue: string) => void;
 }
 
-export const TimeTable: React.FC<Props> = ({ trackerList, onInputChange }) => {
+export const TimeTable: React.FC<Props> = ({ trackerList, onInputValueNumberChange: onInputChange, onInputValueStringChange }) => {
   const month: number = 11;
   const year: number = new Date().getFullYear();
   const days = getDaysInMonth(month, year);
 
 
   return (
-    <div className="container">
+    <div className="table-wrapper">
 
 
       <table className="table">
         <HeadTable days={days} />
-        <BodyTable trackList={trackerList} days={days} onInputChange={onInputChange} />
+        <BodyTable trackList={trackerList} days={days} onInputValueNumberChange={onInputChange} onInputValueStringChange={onInputValueStringChange} />
       </table>
     </div>
   )

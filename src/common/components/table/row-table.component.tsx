@@ -6,18 +6,21 @@ import './row-table.css';
 interface Props {
   track: vm.Dashboard;
   index: number;
-  onInputChange: (taskId: number, dateId: number, newValue: number) => void;
+  onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
+  onInputValueStringChange: (taskId: number, newValue: string) => void;
 }
 
-export const RowTable: React.FC<Props> = ({ track, onInputChange }) => {
+export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onInputValueStringChange }) => {
 
   const onchange = (wh: vm.WorkedHours, e: React.ChangeEvent<HTMLInputElement>) => {
-    onInputChange(wh.taskId, wh.dateId, Number(e.target.value));
+    onInputValueNumberChange(wh.taskId, wh.dateId, Number(e.target.value));
   }
 
   return (
     <tr>
-      <td className="cell">{track.task}</td>
+      <td className="cell">
+        <input className="taskName" value={track.task} onChange={(e) => onInputValueStringChange(track.id, e.target.value)} />
+      </td>
       {
         track.workedHours.map((wh, i) => (
           <td key={i} className="cell">
@@ -25,7 +28,9 @@ export const RowTable: React.FC<Props> = ({ track, onInputChange }) => {
           </td>
         ))
       }
-      <td className="cell">{getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))}</td>
+      <td className="cell">
+        <input disabled value={getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))} />
+      </td>
     </tr>
   )
 }

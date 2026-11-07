@@ -1,9 +1,16 @@
+tr {
+  border-bottom: 1px solid #ccc;
+}
+
 input {
   border-style: none;
-  border-bottom: 1px solid #ccc;
-  padding: 4px;
+  padding: 10px;
   width: 100%;
   text-align: center;
+}
+
+input:disabled {
+  background-color: white;
 }
 
 input::-webkit-outer-spin-button,
@@ -15,4 +22,14 @@ input::-webkit-inner-spin-button {
 
 input:focus {
   outline: none;
+}
+
+.cell {
+  text-align: center;
+  padding: 10px;
+}
+
+.taskName {
+  text-align: left;
+  padding: 10px;
 }

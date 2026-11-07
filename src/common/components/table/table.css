@@ -1,9 +1,13 @@
-.container {
+.table-wrapper {
   padding: 10px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 .table {
   margin-top: 10px;
+  width: 100%;
 }

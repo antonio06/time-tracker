@@ -17,7 +17,7 @@ export const TimeTrackerPage: React.FC = () => {
     });
   }, []);
 
-  const handledInputChange = (taskId: number, dateId: number, newValue: number) => {
+  const handledInputValueNumberChange = (taskId: number, dateId: number, newValue: number) => {
     const updatedTrackerList = trackerList.map(track => {
       return taskId === track.id ? { ...track, workedHours: updateWorkedHours(track, dateId, newValue) } : { ...track }
     })
@@ -36,23 +36,33 @@ export const TimeTrackerPage: React.FC = () => {
     return updateWorkedHours
   }
 
-  const addTrack = (taskName: string) => {
-    const newTrack = {
+  const handledInputValueStringChange = (taskId: number, newValue: string) => {
+    const updatedTrackerList = trackerList.map(track => {
+      return taskId === track.id ? { ...track, task: newValue } : { ...track }
+    })
+
+    setTrackerList([...updatedTrackerList]);
+  }
+
+  const addTask = () => {
+    const newTask = {
       ...createEmptyTrack(trackerList.length, trackerList[0].workedHours.length),
-      task: taskName
     }
-    setTrackerList([...trackerList, newTrack]);
+    setTrackerList([...trackerList, newTask]);
   }
 
   const month: number = 11;
 
   return (
-    <>
+    <div className="container ">
       <div className="header">
-        <h1 className="title">Track list for {getMonthName(month)}</h1>
-        <AddTrackComponent onAddTrack={addTrack} />
+        <div>
+          <h1 className="title">Monthly Timesheet</h1>
+          <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
+        </div>
+        <AddTrackComponent onAddTask={addTask} />
       </div>
-      <TimeTable trackerList={trackerList} onInputChange={handledInputChange} />
-    </>
+      <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} />
+    </div>
   );
 };

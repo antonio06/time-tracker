@@ -9,7 +9,7 @@ export const HeadTable: React.FC<Props> = ({ days }) => {
   return (
     <thead>
       <tr>
-        <th className="head"></th>
+        <th className="head">Task</th>
         {
           days.map((d, id) => {
             const day = new Date(d).getDate();
@@ -17,7 +17,7 @@ export const HeadTable: React.FC<Props> = ({ days }) => {
             return <th key={id} className="head">{day} {dayOfWeek}</th>;
           })
         }
-        <th className="head">Totales</th>
+        <th className="head">Total</th>
       </tr>
     </thead>
   )
