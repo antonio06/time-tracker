@@ -9,6 +9,7 @@ export const HeadTable: React.FC<Props> = ({ days }) => {
   return (
     <thead>
       <tr>
+        <th className="head"></th>
         <th className="head">Task</th>
         {
           days.map((d, id) => {

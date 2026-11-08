@@ -12,6 +12,7 @@ export const TotalLine: React.FC<Props> = ({ days, trackList }) => {
   return (
     <tr>
       <td className="cell">Total</td>
+      <td className="cell"></td>
       {
         days.map((_, index) => (
           <td key={index} className="cell">

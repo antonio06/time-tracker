@@ -51,6 +51,11 @@ export const TimeTrackerPage: React.FC = () => {
     setTrackerList([...trackerList, newTask]);
   }
 
+  const deleteTask = (taskId: number) => {
+    const updatedTrackerList = trackerList.filter(track => track.id !== taskId);
+    setTrackerList([...updatedTrackerList]);
+  }
+
   const month: number = 11;
 
   return (
@@ -62,7 +67,7 @@ export const TimeTrackerPage: React.FC = () => {
         </div>
         <AddTrackComponent onAddTask={addTask} />
       </div>
-      <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} />
+      <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />
     </div>
   );
 };
