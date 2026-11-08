@@ -3,7 +3,7 @@ import { HeadTable } from './head-table.component';
 import { BodyTable } from './body-table.component';
 import { getDaysInMonth } from '../../helpers';
 import * as vm from '../../model';
-import './table.css';
+import classes from './table.module.css';
 
 interface Props {
   trackerList: vm.Dashboard[];
@@ -19,10 +19,10 @@ export const TimeTable: React.FC<Props> = ({ trackerList, onInputValueNumberChan
 
 
   return (
-    <div className="table-wrapper">
+    <div className={classes.tableWrapper}>
 
 
-      <table className="table">
+      <table className={classes.table}>
         <HeadTable days={days} />
         <BodyTable trackList={trackerList} days={days} onInputValueNumberChange={onInputChange} onInputValueStringChange={onInputValueStringChange} onDeleteTask={onDeleteTask} />
       </table>

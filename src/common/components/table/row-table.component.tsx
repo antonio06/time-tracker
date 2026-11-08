@@ -2,7 +2,7 @@ import React from 'react';
 import * as vm from '../../model';
 import { getTotalWorkedHoursPerTask, getRoundPerTwoDigits } from './table-business';
 import trashIcon from '../../../assets/trash.png';
-import './row-table.css';
+import classes from './row-table.module.css';
 
 interface Props {
   track: vm.Dashboard;
@@ -25,20 +25,20 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
   return (
     <tr>
       <td>
-        <button className="deleteButton" onClick={() => onClick(track.id)}><img src={trashIcon} alt="icon" /></button>
+        <button className={classes.deleteButton} onClick={() => onClick(track.id)}><img src={trashIcon} alt="icon" /></button>
       </td>
-      <td className="cell">
+      <td className={classes.cell}>
 
-        <input className="taskName" value={track.task} onChange={(e) => onInputValueStringChange(track.id, e.target.value)} />
+        <input className={classes.taskName} value={track.task} onChange={(e) => onInputValueStringChange(track.id, e.target.value)} />
       </td>
       {
         track.workedHours.map((wh, i) => (
-          <td key={i} className="cell">
+          <td key={i} className={classes.cell}>
             <input key={i} value={wh.value} onChange={(e) => onchange(wh, e)} type="number" />
           </td>
         ))
       }
-      <td className="total">
+      <td className={classes.total}>
         {getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))}
       </td>
     </tr>

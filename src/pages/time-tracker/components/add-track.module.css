@@ -1,0 +1,24 @@
+.addTrackButton {
+  border: none;
+  background-color: #3900F5;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.generateExcelButton {
+  border: none;
+  background-color: #40916c;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.addTrack {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

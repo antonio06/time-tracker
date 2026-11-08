@@ -1,5 +1,5 @@
 import React from 'react';
-import './add-track.css';
+import classes from './add-track.module.css';
 
 interface Props {
   onAddTask: (taskName: string) => void;
@@ -13,8 +13,9 @@ export const AddTrackComponent: React.FC<Props> = ({ onAddTask: onAddTrack }) =>
     setTaskName('');
   }
   return (
-    <div className="add-track">
-      <button className="button" onClick={onAddTaskClick}>Add Task</button>
+    <div className={classes.addTrack}>
+      <button className={classes.addTrackButton} onClick={onAddTaskClick}>Add Task</button>
+      <button className={classes.generateExcelButton} onClick={() => console.log('Pending to implement a function')}>Generate excel</button>
     </div>
   )
 }

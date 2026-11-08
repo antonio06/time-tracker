@@ -5,7 +5,7 @@ import * as vm from '../../common/model';
 import * as api from './api/api';
 import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
-import './time-tracker.css';
+import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.Dashboard[]>([]);
@@ -59,10 +59,10 @@ export const TimeTrackerPage: React.FC = () => {
   const month: number = 11;
 
   return (
-    <div className="container ">
-      <div className="header">
+    <div className={classes.container}>
+      <div className={classes.header}>
         <div>
-          <h1 className="title">Monthly Timesheet</h1>
+          <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
         </div>
         <AddTrackComponent onAddTask={addTask} />
