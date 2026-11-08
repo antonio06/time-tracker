@@ -3,9 +3,10 @@ import classes from './add-track.module.css';
 
 interface Props {
   onAddTask: (taskName: string) => void;
+  onGenerateExcelFile: () => void;
 }
 
-export const AddTrackComponent: React.FC<Props> = ({ onAddTask: onAddTrack }) => {
+export const AddTrackComponent: React.FC<Props> = ({ onAddTask: onAddTrack, onGenerateExcelFile }) => {
   const [taskName, setTaskName] = React.useState('');
 
   const onAddTaskClick = () => {
@@ -15,7 +16,7 @@ export const AddTrackComponent: React.FC<Props> = ({ onAddTask: onAddTrack }) =>
   return (
     <div className={classes.addTrack}>
       <button className={classes.addTrackButton} onClick={onAddTaskClick}>Add Task</button>
-      <button className={classes.generateExcelButton} onClick={() => console.log('Pending to implement a function')}>Generate excel</button>
+      <button className={classes.generateExcelButton} onClick={onGenerateExcelFile}>Generate excel</button>
     </div>
   )
 }

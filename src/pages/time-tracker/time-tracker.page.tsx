@@ -1,10 +1,12 @@
 import React from 'react';
+import { Workbook } from 'exceljs';
 import { TimeTable } from '../../common/components'
 import { AddTrackComponent } from './components/add-track-component';
 import * as vm from '../../common/model';
 import * as api from './api/api';
 import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
+import { getDaysOfMonth } from './time-tracker.business';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
@@ -56,6 +58,115 @@ export const TimeTrackerPage: React.FC = () => {
     setTrackerList([...updatedTrackerList]);
   }
 
+  const generateExcelFile = async () => {
+    const workbook = new Workbook();
+
+    const worksheet = workbook.addWorksheet('November 2026');
+
+    const days = getDaysOfMonth(2026, 10);
+
+    // Crear la cabecera
+    const headers = ['Task', ...days, 'Total'];
+
+    // Añadir la primera fila
+    const headerRow = worksheet.addRow(headers);
+
+    // Estilos de la cabecera
+    headerRow.font = {
+      bold: true,
+      color: { argb: 'FFFFFFFF' },
+    };
+
+    headerRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF0F172A' },
+    };
+
+    headerRow.alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+
+    headerRow.height = 30;
+
+    // Ajustar ancho de columnas
+    worksheet.columns = [
+      { width: 20 },
+      ...days.map(() => ({ width: 12 })),
+      { width: 15 },
+    ];
+
+    trackerList.forEach((tracker) => {
+      const workedHoursByDay = days.map((_, index) => {
+        const hours = tracker.workedHours
+          .filter((workedHour) => workedHour.dateId === index)
+          .reduce((total, workedHour) => total + workedHour.value, 0);
+
+        return hours;
+      });
+
+      const totalHours = workedHoursByDay.reduce(
+        (total, hours) => total + hours,
+        0
+      );
+
+      worksheet.addRow([
+        tracker.task,
+        ...workedHoursByDay,
+        totalHours,
+      ]);
+    });
+
+    const dailyTotals = days.map((_, index) => {
+      return trackerList.reduce((total, tracker) => {
+        const hours = tracker.workedHours
+          .filter((workedHour) => workedHour.dateId === index)
+          .reduce((sum, workedHour) => sum + workedHour.value, 0);
+
+        return total + hours;
+      }, 0);
+    });
+
+    const grandTotal = dailyTotals.reduce(
+      (total, hours) => total + hours,
+      0
+    );
+
+    const totalRow = worksheet.addRow([
+      'Total',
+      ...dailyTotals,
+      grandTotal,
+    ]);
+
+    totalRow.font = { bold: true };
+
+    totalRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFE0E7FF' },
+    };
+
+    // Generar Excel
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    const blob = new Blob([buffer as BlobPart], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'time-tracker-november.xlsx';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+  };
+
   const month: number = 11;
 
   return (
@@ -65,7 +176,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
         </div>
-        <AddTrackComponent onAddTask={addTask} />
+        <AddTrackComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />
     </div>
