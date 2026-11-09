@@ -6,7 +6,7 @@ import * as vm from '../../common/model';
 import * as api from './api/api';
 import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
-import { getDaysOfMonth } from './time-tracker.business';
+import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
@@ -99,17 +99,10 @@ export const TimeTrackerPage: React.FC = () => {
 
     trackerList.forEach((tracker) => {
       const workedHoursByDay = days.map((_, index) => {
-        const hours = tracker.workedHours
-          .filter((workedHour) => workedHour.dateId === index)
-          .reduce((total, workedHour) => total + workedHour.value, 0);
-
-        return hours;
+        return getWorkedHoursByDay(index, tracker);
       });
 
-      const totalHours = workedHoursByDay.reduce(
-        (total, hours) => total + hours,
-        0
-      );
+      const totalHours = getTotalHours(workedHoursByDay);
 
       worksheet.addRow([
         tracker.task,
@@ -119,19 +112,10 @@ export const TimeTrackerPage: React.FC = () => {
     });
 
     const dailyTotals = days.map((_, index) => {
-      return trackerList.reduce((total, tracker) => {
-        const hours = tracker.workedHours
-          .filter((workedHour) => workedHour.dateId === index)
-          .reduce((sum, workedHour) => sum + workedHour.value, 0);
-
-        return total + hours;
-      }, 0);
+      return getDailyTotals(index, trackerList)
     });
 
-    const grandTotal = dailyTotals.reduce(
-      (total, hours) => total + hours,
-      0
-    );
+    const grandTotal = getGrandTotal(dailyTotals);
 
     const totalRow = worksheet.addRow([
       'Total',
