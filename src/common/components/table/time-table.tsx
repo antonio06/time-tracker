@@ -14,8 +14,8 @@ interface Props {
 
 export const TimeTable: React.FC<Props> = ({ trackerList, onInputValueNumberChange: onInputChange, onInputValueStringChange, onDeleteTask }) => {
   const currentDate: Date = new Date();
-  const month: number = currentDate.getMonth();
-  const year: number = currentDate.getFullYear();
+  const month: number = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
+  const year: number = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
   const days = getDaysInMonth(month, year);
 
   return (

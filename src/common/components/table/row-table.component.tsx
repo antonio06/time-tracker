@@ -23,7 +23,9 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
   }
 
   const getNameDay = (dateId: number) => {
-    const currentDay = new Date(new Date().getFullYear(), new Date().getMonth(), dateId + 1);
+    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : new Date().getFullYear();
+    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : new Date().getMonth();
+    const currentDay = new Date(year, month, dateId + 1);
     return currentDay.toLocaleDateString('en-US', { weekday: 'short' });
   }
 

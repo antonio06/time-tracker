@@ -49,8 +49,10 @@ export const TimeTrackerPage: React.FC = () => {
 
   const addTask = () => {
     const currentDate = new Date();
+    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
+    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
     const newTask = {
-      ...createEmptyTrack(trackerList.length, getDaysInMonth(currentDate.getFullYear(), currentDate.getMonth()).length),
+      ...createEmptyTrack(trackerList.length, getDaysInMonth(year, month).length),
     }
     console.log(newTask);
     setTrackerList([...trackerList, newTask]);
@@ -66,7 +68,11 @@ export const TimeTrackerPage: React.FC = () => {
 
     const worksheet = workbook.addWorksheet('November 2026');
 
-    const days = getDaysOfMonth(2026, 10);
+    const currentDate = new Date();
+    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
+    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
+
+    const days = getDaysOfMonth(year, month);
 
     // Crear la cabecera
     const headers = ['Task', ...days, 'Total'];
