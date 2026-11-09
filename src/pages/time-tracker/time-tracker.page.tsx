@@ -7,6 +7,7 @@ import * as api from './api/api';
 import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
+import { getDaysInMonth } from '../../common/helpers';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
@@ -47,9 +48,11 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const addTask = () => {
+    const currentDate = new Date();
     const newTask = {
-      ...createEmptyTrack(trackerList.length, trackerList[0].workedHours.length),
+      ...createEmptyTrack(trackerList.length, getDaysInMonth(currentDate.getFullYear(), currentDate.getMonth()).length),
     }
+    console.log(newTask);
     setTrackerList([...trackerList, newTask]);
   }
 
@@ -151,7 +154,7 @@ export const TimeTrackerPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const month: number = 11;
+  const month: number = 10;
 
   return (
     <div className={classes.container}>

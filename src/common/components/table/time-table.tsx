@@ -13,15 +13,13 @@ interface Props {
 }
 
 export const TimeTable: React.FC<Props> = ({ trackerList, onInputValueNumberChange: onInputChange, onInputValueStringChange, onDeleteTask }) => {
-  const month: number = 11;
-  const year: number = new Date().getFullYear();
+  const currentDate: Date = new Date();
+  const month: number = currentDate.getMonth();
+  const year: number = currentDate.getFullYear();
   const days = getDaysInMonth(month, year);
-
 
   return (
     <div className={classes.tableWrapper}>
-
-
       <table className={classes.table}>
         <HeadTable days={days} />
         <BodyTable trackList={trackerList} days={days} onInputValueNumberChange={onInputChange} onInputValueStringChange={onInputValueStringChange} onDeleteTask={onDeleteTask} />

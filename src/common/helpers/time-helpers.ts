@@ -1,6 +1,8 @@
 export const getDaysInMonth = (month: number, year: number): Date[] => {
-  return new Array(31)
-    .fill('')
-    .map((v, i) => new Date(year, month - 1, i + 1))
-    .filter(v => v.getMonth() === month - 1)
+  const totalDays = new Date(year, month + 1, 0).getDate();
+
+  return Array.from(
+    { length: totalDays },
+    (_, index) => new Date(year, month, index + 1)
+  );
 }

@@ -22,6 +22,11 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
     onDeleteTask(taskId);
   }
 
+  const getNameDay = (dateId: number) => {
+    const currentDay = new Date(new Date().getFullYear(), new Date().getMonth(), dateId + 1);
+    return currentDay.toLocaleDateString('en-US', { weekday: 'short' });
+  }
+
   return (
     <tr>
       <td>
@@ -34,7 +39,7 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
       {
         track.workedHours.map((wh, i) => (
           <td key={i} className={classes.cell}>
-            <input key={i} value={wh.value} onChange={(e) => onchange(wh, e)} type="number" />
+            <input key={i} value={wh.value} onChange={(e) => onchange(wh, e)} type="number" disabled={getNameDay(wh.dateId) === 'Sat' || getNameDay(wh.dateId) === 'Sun'} />
           </td>
         ))
       }
