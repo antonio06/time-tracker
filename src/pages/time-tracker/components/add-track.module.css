@@ -4,6 +4,7 @@
   color: white;
   padding: 10px;
   cursor: pointer;
+  font-weight: bold;
   border-radius: 4px;
   font-size: 14px;
   margin-right: 10px;
@@ -14,6 +15,7 @@
   border: none;
   background-color: #40916c;
   color: white;
+  font-weight: bold;
   padding: 10px;
   cursor: pointer;
   border-radius: 4px;
