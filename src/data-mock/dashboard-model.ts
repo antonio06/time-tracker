@@ -4,7 +4,7 @@ export interface Dashboard {
   workedHours: WorkedHours[];
 }
 
-interface WorkedHours {
+export interface WorkedHours {
   value: number;
   taskId: number;
   dateId: number;

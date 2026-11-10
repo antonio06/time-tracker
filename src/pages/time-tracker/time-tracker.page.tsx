@@ -171,7 +171,7 @@ export const TimeTrackerPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const month: number = 10;
+  const month: number = import.meta.env.VITE_MONTH === 'true' ? 10 : new Date().getMonth();
 
   React.useEffect(() => {
     loadedTrackerList();

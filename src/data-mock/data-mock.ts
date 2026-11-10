@@ -1,4 +1,4 @@
-import * as vm from './dashboard-vm';
+import * as vm from './dashboard-model';
 
 export const dashboardData: vm.Dashboard[] = [
   {
