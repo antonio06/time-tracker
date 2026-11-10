@@ -3,7 +3,7 @@ import { Workbook } from 'exceljs';
 import { TimeTable } from '../../common/components'
 import { AddTrackComponent } from './components/add-track-component';
 import * as vm from '../../common/model';
-import * as api from './api/api';
+import * as api from './api';
 import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
@@ -13,12 +13,18 @@ import classes from './time-tracker.module.css';
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.Dashboard[]>([]);
 
-  React.useEffect(() => {
+  const loadedTrackerList = () => {
     api.getTrackerList().then((result) => {
-      const mappedData = mapToVm(result);
-      setTrackerList(mappedData);
+      if (result) {
+        const mappedData = mapToVm(result);
+        setTrackerList(mappedData);
+      } else {
+        console.error('Failed to load tracker list');
+      }
+    }).catch((error) => {
+      console.error('Error loading tracker list:', error);
     });
-  }, []);
+  }
 
   const handledInputValueNumberChange = (taskId: number, dateId: number, newValue: number) => {
     const updatedTrackerList = trackerList.map(track => {
@@ -58,9 +64,14 @@ export const TimeTrackerPage: React.FC = () => {
     setTrackerList([...trackerList, newTask]);
   }
 
-  const deleteTask = (taskId: number) => {
-    const updatedTrackerList = trackerList.filter(track => track.id !== taskId);
-    setTrackerList([...updatedTrackerList]);
+  const deleteTask = (taskId: number): void => {
+    api.deletedTask(taskId).then((isDeleted) => {
+      if (isDeleted) {
+        loadedTrackerList();
+      } else {
+        console.error('Failed to delete task');
+      }
+    });
   }
 
   const generateExcelFile = async () => {
@@ -161,6 +172,10 @@ export const TimeTrackerPage: React.FC = () => {
   };
 
   const month: number = 10;
+
+  React.useEffect(() => {
+    loadedTrackerList();
+  }, []);
 
   return (
     <div className={classes.container}>
