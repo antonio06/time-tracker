@@ -56,3 +56,24 @@ The app will be available at `http://localhost:5173`.
 | Variable | Values | Description |
 |---|---|---|
 | `VITE_IS_MOCK` | `true` / `false` | Use mock data instead of the real API |
+
+## Mock API Server
+
+The project includes a mock API server for development and testing.
+
+### Running the mock server
+
+```bash
+cd server-mock
+npm install
+npm run server
+```
+
+The server will run on `http://localhost:3001` and provides the following endpoints:
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/dashboard` | Retrieve all tasks with their worked hours |
+| `DELETE` | `/api/dashboard/:taskId` | Delete a task by ID |
+
+The mock server includes CORS support and serves static files from the `public` directory.
