@@ -8,7 +8,7 @@ import { dashboardData } from './mock-data';
 let dashboardDataCopy = [...dashboardData];
 
 const app = new Hono();
-app.use('/*', serveStatic({ root: './public' }));
+//app.use('/*', serveStatic({ root: './public' }));
 
 app.use(logger());
 app.use('/api/*', cors());
