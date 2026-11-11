@@ -22,7 +22,7 @@ export const getDaysOfMonth = (year: number, month: number): string[] => {
   return [];
 };
 
-export const getDailyTotals = (index: number, trackerList: vm.Dashboard[]) => (
+export const getDailyTotals = (index: number, trackerList: vm.DashboardVm[]) => (
   Array.isArray(trackerList) ? trackerList.reduce((total, tracker) => {
     const hours = tracker.workedHours
       .filter((workedHour) => workedHour.dateId === index)
@@ -37,7 +37,7 @@ export const getGrandTotal = (dailyTotals: number[]) => Array.isArray(dailyTotal
   0
 ) : 0;
 
-export const getWorkedHoursByDay = (index: number, tracker: vm.Dashboard) => Array.isArray(tracker.workedHours) ? tracker.workedHours
+export const getWorkedHoursByDay = (index: number, tracker: vm.DashboardVm) => Array.isArray(tracker.workedHours) ? tracker.workedHours
   .filter((workedHour) => workedHour.dateId === index)
   .reduce((total, workedHour) => total + workedHour.value, 0) : 0;
 

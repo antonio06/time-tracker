@@ -13,18 +13,24 @@ app.use('/*', serveStatic({ root: './public' }));
 app.use(logger());
 app.use('/api/*', cors());
 
-app.get('/api/dashboard', (c) => {
-  return c.json(dashboardDataCopy);
+app.get('/api/dashboard', (context) => {
+  return context.json(dashboardDataCopy);
 });
 
-app.delete('/api/dashboard/:taskId', (c) => {
-  const id = Number(c.req.param('taskId'));
+app.post('/api/dashboard', async (context) => {
+  const task = await context.req.json();
+  dashboardDataCopy = [...dashboardDataCopy, task];
+  return context.json(true);
+});
+
+app.delete('/api/dashboard/:taskId', (context) => {
+  const id = Number(context.req.param('taskId'));
   const index = dashboardDataCopy.findIndex(task => task.id === id);
   if (index !== -1) {
     dashboardDataCopy = dashboardDataCopy.filter(task => task.id !== id);
-    return c.json(true);
+    return context.json(true);
   }
-  return c.json(false);
+  return context.json(false);
 });
 
 serve({ fetch: app.fetch, port: 3001 }, (info) => {

@@ -6,7 +6,7 @@ import * as vm from '../../model';
 import classes from './table.module.css';
 
 interface Props {
-  trackerList: vm.Dashboard[];
+  trackerList: vm.DashboardVm[];
   onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
   onInputValueStringChange: (taskId: number, newValue: string) => void;
   onDeleteTask: (taskId: number) => void;

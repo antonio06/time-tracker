@@ -1,7 +1,7 @@
-import * as model from '../../data-mock';
+import * as model from '../../common';
 import * as vm from '../../common/model';
 
-export const mapToVm = (data: model.Dashboard[]): vm.Dashboard[] => {
+export const mapToVm = (data: model.DashboardModel[]): vm.DashboardVm[] => {
   return Array.isArray(data) ? data.map(item => ({
     id: item.id,
     task: item.task,
@@ -9,7 +9,7 @@ export const mapToVm = (data: model.Dashboard[]): vm.Dashboard[] => {
   })) : [];
 }
 
-const mapWorkdHoursToVm = (workedHours: model.WorkedHours[]): vm.WorkedHours[] => {
+const mapWorkdHoursToVm = (workedHours: model.WorkedHoursModel[]): vm.WorkedHoursVm[] => {
   return workedHours.map(wh => ({
     value: wh.value,
     taskId: wh.taskId,
@@ -17,7 +17,7 @@ const mapWorkdHoursToVm = (workedHours: model.WorkedHours[]): vm.WorkedHours[] =
   }));
 }
 
-export const createEmptyTrack = (numberOfTracks: number, numberOfDays: number): vm.Dashboard => ({
+export const createEmptyTrack = (numberOfTracks: number, numberOfDays: number): vm.DashboardVm => ({
   id: numberOfTracks + 1,
   task: '',
   workedHours: Array.from({ length: numberOfDays }, (_, i) => ({

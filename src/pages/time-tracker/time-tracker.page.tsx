@@ -11,7 +11,7 @@ import { getDaysInMonth } from '../../common/helpers';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
-  const [trackerList, setTrackerList] = React.useState<vm.Dashboard[]>([]);
+  const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
 
   const loadedTrackerList = () => {
     api.getTrackerList().then((result) => {
@@ -34,7 +34,7 @@ export const TimeTrackerPage: React.FC = () => {
     setTrackerList([...updatedTrackerList]);
   }
 
-  const updateWorkedHours = (track: vm.Dashboard, dateId: number, newValue: number): vm.WorkedHours[] => {
+  const updateWorkedHours = (track: vm.DashboardVm, dateId: number, newValue: number): vm.WorkedHoursVm[] => {
     const updateWorkedHours = track.workedHours.map((wh => {
       if (wh.dateId === dateId) {
         return { ...wh, value: newValue }
@@ -60,8 +60,16 @@ export const TimeTrackerPage: React.FC = () => {
     const newTask = {
       ...createEmptyTrack(trackerList.length, getDaysInMonth(year, month).length),
     }
-    console.log(newTask);
-    setTrackerList([...trackerList, newTask]);
+
+    api.saveTask(newTask).then((isSaved) => {
+      if (isSaved) {
+        setTrackerList([...trackerList, newTask]);
+      } else {
+        console.error('Failed to save task');
+      }
+    }).catch((error) => {
+      console.error('Error saving task:', error);
+    });
   }
 
   const deleteTask = (taskId: number): void => {

@@ -33,7 +33,7 @@ describe('time tracker business spec', () => {
     it('should return the total hours for each day', () => {
       // Arrange
       const index = 0;
-      const trackerList: vm.Dashboard[] = [
+      const trackerList: vm.DashboardVm[] = [
         { id: 1, task: 'Task 1', workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
         { id: 2, task: 'Task 2', workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
       ];
@@ -48,7 +48,7 @@ describe('time tracker business spec', () => {
     it('should return 0 when trackerList is empty', () => {
       // Arrange
       const index = 0;
-      const trackerList: vm.Dashboard[] = [];
+      const trackerList: vm.DashboardVm[] = [];
 
       // Act
       const result = getDailyTotals(index, trackerList);
@@ -61,7 +61,7 @@ describe('time tracker business spec', () => {
       // Arrange
       const index = 2; // Index not matching any worked hours
 
-      const trackerList: vm.Dashboard[] = [
+      const trackerList: vm.DashboardVm[] = [
         { id: 1, task: 'Task 1', workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
         { id: 2, task: 'Task 2', workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
       ];
@@ -102,7 +102,7 @@ describe('time tracker business spec', () => {
     it('should return the worked hours for a specific day', () => {
       // Arrange
       const index = 0;
-      const tracker: vm.Dashboard = {
+      const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }]
@@ -118,7 +118,7 @@ describe('time tracker business spec', () => {
     it('should return the worked hours for a specific day when multiple entries exist', () => {
       // Arrange
       const index = 0;
-      const tracker: vm.Dashboard = {
+      const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 0, value: 3, taskId: 2 }]
@@ -134,7 +134,7 @@ describe('time tracker business spec', () => {
     it('should return 0 when index not matching any worked hours', () => {
       // Arrange
       const index = 2; // Index not matching any worked hours
-      const tracker: vm.Dashboard = {
+      const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }]

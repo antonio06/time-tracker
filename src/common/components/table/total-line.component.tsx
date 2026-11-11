@@ -5,7 +5,7 @@ import classes from './total-line.module.css';
 
 interface Props {
   days: Date[];
-  trackList: vm.Dashboard[];
+  trackList: vm.DashboardVm[];
 }
 
 export const TotalLine: React.FC<Props> = ({ days, trackList }) => {

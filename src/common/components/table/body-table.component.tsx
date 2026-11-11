@@ -4,7 +4,7 @@ import { RowTable } from './row-table.component';
 import { TotalLine } from './total-line.component';
 
 interface Props {
-  trackList: vm.Dashboard[];
+  trackList: vm.DashboardVm[];
   days: Date[];
   onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
   onInputValueStringChange: (taskId: number, newValue: string) => void;

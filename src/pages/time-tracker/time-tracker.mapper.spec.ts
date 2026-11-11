@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import * as model from '../../data-mock';
+import * as model from '../../common';
 import * as vm from '../../common/model';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 
@@ -7,7 +7,7 @@ describe('time tracker mapper specs', () => {
   describe('mapToVm', () => {
     it('Should return a empty array when feed a empty array', () => {
       // Arrangemodel.Dashboard[]
-      const value: model.Dashboard[] = [];
+      const value: model.DashboardModel[] = [];
 
       // Act
       const result = mapToVm(value);
@@ -19,7 +19,7 @@ describe('time tracker mapper specs', () => {
     it('Should return a view model Dashboard array when feed a model Dashboard', () => {
       // Arrange
 
-      const dashboard: model.Dashboard[] = [
+      const dashboard: model.DashboardModel[] = [
         {
           id: 1,
           task: 'Task 1',
@@ -30,7 +30,7 @@ describe('time tracker mapper specs', () => {
         },
       ];
 
-      const expectedResult: vm.Dashboard[] = [
+      const expectedResult: vm.DashboardVm[] = [
         {
           id: 1,
           task: 'Task 1',
@@ -55,7 +55,7 @@ describe('time tracker mapper specs', () => {
       const numberOfTracks = 0;
       const numberOfDays = 1;
 
-      const expectedResult: vm.Dashboard = {
+      const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
         workedHours: [
@@ -75,7 +75,7 @@ describe('time tracker mapper specs', () => {
       const numberOfTracks = 2;
       const numberOfDays = 0;
 
-      const expectedResult: vm.Dashboard = {
+      const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
         workedHours: [],
@@ -93,7 +93,7 @@ describe('time tracker mapper specs', () => {
       const numberOfTracks = 2;
       const numberOfDays = 3;
 
-      const expectedResult: vm.Dashboard = {
+      const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
         workedHours: [

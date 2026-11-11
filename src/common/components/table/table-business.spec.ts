@@ -6,7 +6,7 @@ describe('table business specs', () => {
   describe('getTotalWorkedHoursPerTask', () => {
     it('Should return zero when feed a empty array', () => {
       // Arrange
-      const workedHours: vm.WorkedHours[] = [];
+      const workedHours: vm.WorkedHoursVm[] = [];
 
       // Act
       const result = getTotalWorkedHoursPerTask(workedHours);
@@ -17,7 +17,7 @@ describe('table business specs', () => {
 
     it('Should return the total worked hours for a non-empty array', () => {
       // Arrange
-      const workedHours: vm.WorkedHours[] = [
+      const workedHours: vm.WorkedHoursVm[] = [
         { value: 1.5, taskId: 1, dateId: 0 },
         { value: 2.0, taskId: 1, dateId: 1 },
       ];
@@ -34,7 +34,7 @@ describe('table business specs', () => {
     it('Should return zero when feed a empty array', () => {
       // Arrange
       const dayId = 0;
-      const workedHours: vm.Dashboard[] = [];
+      const workedHours: vm.DashboardVm[] = [];
 
       // Act
       const result = getTotalWorkedHoursPerDay(dayId, workedHours);
@@ -46,7 +46,7 @@ describe('table business specs', () => {
     it('Should return zero, when there are no day id that match with the given dayId', () => {
       // Arrange
       const dayId = 2;
-      const workedHours: vm.Dashboard[] = [
+      const workedHours: vm.DashboardVm[] = [
         {
           id: 1,
           task: 'Task 1',
@@ -67,7 +67,7 @@ describe('table business specs', () => {
     it('Should return the total worked hours for a non-empty array', () => {
       // Arrange
       const dayId = 1;
-      const workedHours: vm.Dashboard[] = [
+      const workedHours: vm.DashboardVm[] = [
         {
           id: 1,
           task: 'Task 1',
@@ -89,7 +89,7 @@ describe('table business specs', () => {
   describe('getTotalWorkedPerTotal', () => {
     it('Should return zero when feed a empty array', () => {
       // Arrange
-      const workedHours: vm.Dashboard[] = [];
+      const workedHours: vm.DashboardVm[] = [];
 
       // Act
       const result = getTotalWorkedPerTotal(workedHours);
@@ -100,7 +100,7 @@ describe('table business specs', () => {
 
     it('Should return the total worked hours for a non-empty array', () => {
       // Arrange
-      const workedHours: vm.Dashboard[] = [
+      const workedHours: vm.DashboardVm[] = [
         {
           id: 1,
           task: 'Task 1',

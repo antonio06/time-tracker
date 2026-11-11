@@ -5,7 +5,7 @@ import trashIcon from '../../../assets/trash.png';
 import classes from './row-table.module.css';
 
 interface Props {
-  track: vm.Dashboard;
+  track: vm.DashboardVm;
   index: number;
   onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
   onInputValueStringChange: (taskId: number, newValue: string) => void;
@@ -14,7 +14,7 @@ interface Props {
 
 export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
 
-  const onchange = (wh: vm.WorkedHours, e: React.ChangeEvent<HTMLInputElement>) => {
+  const onchange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
     onInputValueNumberChange(wh.taskId, wh.dateId, Number(e.target.value));
   }
 
