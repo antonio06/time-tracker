@@ -2,6 +2,7 @@ import React from 'react';
 import { Workbook } from 'exceljs';
 import { TimeTable } from '../../common/components'
 import { ActionsComponent } from './components/actions-component';
+import { Alert, useHideMessage } from '../../common/components/alert';
 import * as vm from '../../common/model';
 import * as api from './api';
 import { getMonthName } from '../../common/helpers';
@@ -12,6 +13,7 @@ import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
+  const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
 
   const loadedTrackerList = () => {
     api.getTrackerList().then((result) => {
@@ -19,10 +21,10 @@ export const TimeTrackerPage: React.FC = () => {
         const mappedData = mapToVm(result);
         setTrackerList(mappedData);
       } else {
-        console.error('Failed to load tracker list');
+        hideAlert('Failed to load tracker list', false, true);
       }
     }).catch((error) => {
-      console.error('Error loading tracker list:', error);
+      hideAlert(`Error loading tracker list: ${error}`, false, true);
     });
   }
 
@@ -65,10 +67,10 @@ export const TimeTrackerPage: React.FC = () => {
       if (isSaved) {
         setTrackerList([...trackerList, newTask]);
       } else {
-        console.error('Failed to save task');
+        hideAlert('Failed to save task', false, true);
       }
     }).catch((error) => {
-      console.error('Error saving task:', error);
+      hideAlert(`Error saving task: ${error}`, false, true);
     });
   }
 
@@ -77,13 +79,13 @@ export const TimeTrackerPage: React.FC = () => {
 
     api.saveDashboard(dashboardModel).then((isSaved) => {
       if (isSaved) {
-        console.log('Dashboard saved successfully');
+        hideAlert('Dashboard saved successfully', true, true);
         loadedTrackerList();
       } else {
-        console.error('Failed to save dashboard');
+        hideAlert('Failed to save dashboard', false, true);
       }
     }).catch((error) => {
-      console.error('Error saving dashboard:', error);
+      hideAlert(`Error saving dashboard: ${error}`, false, true);
     });
   }
 
@@ -91,9 +93,12 @@ export const TimeTrackerPage: React.FC = () => {
     api.deletedTask(taskId).then((isDeleted) => {
       if (isDeleted) {
         loadedTrackerList();
+        hideAlert('Task deleted successfully', true, true);
       } else {
-        console.error('Failed to delete task');
+        hideAlert('Failed to delete task', false, true);
       }
+    }).catch((error) => {
+      hideAlert(`Error deleting task: ${error}`, false, true);
     });
   }
 
@@ -210,6 +215,8 @@ export const TimeTrackerPage: React.FC = () => {
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />
+
+      <Alert message={message} isSuccess={isSuccess} isVisible={isVisible} />
     </div>
   );
 };
