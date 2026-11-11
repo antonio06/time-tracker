@@ -10,8 +10,10 @@ A web application to track working hours per task across a monthly calendar, wit
 - ✅ Add and delete tasks dynamically
 - ✏️ Edit task names and hours directly in the table
 - ➕ Per-day totals and grand total row
+- 💾 **Save dashboard changes** - Persist modifications to the backend
 - 📊 Export the timesheet to a formatted `.xlsx` Excel file
 - 🎨 Clean UI with the [Lato](https://fonts.google.com/specimen/Lato) typeface
+- ⚠️ Alert notifications for user feedback
 
 ## Tech stack
 
@@ -50,6 +52,7 @@ The app will be available at `http://localhost:5173`.
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run test` | Run unit tests |
 
 ## Environment variables
 
@@ -74,6 +77,7 @@ The server will run on `http://localhost:3001` and provides the following endpoi
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/dashboard` | Retrieve all tasks with their worked hours |
+| `POST` | `/api/dashboard` | Save or update dashboard tasks and hours |
 | `DELETE` | `/api/dashboard/:taskId` | Delete a task by ID |
 
 The mock server includes CORS support and serves static files from the `public` directory.
