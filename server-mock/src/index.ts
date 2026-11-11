@@ -23,6 +23,12 @@ app.post('/api/dashboard', async (context) => {
   return context.json(true);
 });
 
+app.put('/api/dashboard', async (context) => {
+  const updatedDashboard = await context.req.json();
+  dashboardDataCopy = [...updatedDashboard];
+  return context.json(true);
+});
+
 app.delete('/api/dashboard/:taskId', (context) => {
   const id = Number(context.req.param('taskId'));
   const index = dashboardDataCopy.findIndex(task => task.id === id);
