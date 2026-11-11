@@ -14,11 +14,11 @@ interface Props {
 
 export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
 
-  const onchange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
     onInputValueNumberChange(wh.taskId, wh.dateId, Number(e.target.value));
   }
 
-  const onClick = (taskId: number) => {
+  const handleDeleteTask = (taskId: number) => {
     onDeleteTask(taskId);
   }
 
@@ -32,7 +32,7 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
   return (
     <tr>
       <td>
-        <button className={classes.deleteButton} onClick={() => onClick(track.id)}><img src={trashIcon} alt="icon" /></button>
+        <button className={classes.deleteButton} onClick={() => handleDeleteTask(track.id)}><img src={trashIcon} alt="icon" /></button>
       </td>
       <td className={classes.cell}>
 
@@ -41,7 +41,7 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
       {
         track.workedHours.map((wh, i) => (
           <td key={i} className={classes.cell}>
-            <input key={i} value={wh.value} onChange={(e) => onchange(wh, e)} type="number" disabled={getNameDay(wh.dateId) === 'Sat' || getNameDay(wh.dateId) === 'Sun'} />
+            <input key={i} value={wh.value} onChange={(e) => handleInputChange(wh, e)} type="number" disabled={getNameDay(wh.dateId) === 'Sat' || getNameDay(wh.dateId) === 'Sun'} />
           </td>
         ))
       }

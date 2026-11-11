@@ -1,10 +1,11 @@
 .header {
-  padding: 16px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .title {
@@ -16,7 +17,6 @@
 .container {
   width: 100%;
   max-width: none;
-  padding: 16px;
   box-sizing: border-box;
   margin: 0;
 }

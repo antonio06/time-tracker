@@ -16,6 +16,16 @@ export const saveTaskMock = async (task: server.DashboardModel): Promise<boolean
   }).then(res => res.json());
 }
 
+export const saveDashboardMock = async (dashboard: server.DashboardModel[]): Promise<boolean> => {
+  return fetch(baseUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dashboard),
+  }).then(res => res.json());
+}
+
 export const deleteTaskMock = async (taskId: number): Promise<boolean> => {
   return fetch(`${baseUrl}/${taskId}`, {
     method: 'DELETE'

@@ -1,6 +1,6 @@
 import * as server from '../../../common';
-import { getTrackerListMock, deleteTaskMock, saveTaskMock } from './api-mock';
-import { getTrackerListReal, deleteTaskReal, saveTaskReal } from './api-real';
+import { getTrackerListMock, deleteTaskMock, saveTaskMock, saveDashboardMock } from './api-mock';
+import { getTrackerListReal, deleteTaskReal, saveTaskReal, saveDashboardReal } from './api-real';
 
 export const getTrackerList = async (): Promise<server.DashboardModel[]> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
@@ -15,6 +15,14 @@ export const saveTask = async (task: server.DashboardModel): Promise<boolean> =>
     return saveTaskMock(task);
   } else {
     return saveTaskReal(task);
+  }
+}
+
+export const saveDashboard = async (dashboard: server.DashboardModel[]): Promise<boolean> => {
+  if (import.meta.env.VITE_IS_MOCK === 'true') {
+    return saveDashboardMock(dashboard);
+  } else {
+    return saveDashboardReal(dashboard);
   }
 }
 

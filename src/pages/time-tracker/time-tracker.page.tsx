@@ -1,11 +1,11 @@
 import React from 'react';
 import { Workbook } from 'exceljs';
 import { TimeTable } from '../../common/components'
-import { AddTrackComponent } from './components/add-track-component';
+import { ActionsComponent } from './components/actions-component';
 import * as vm from '../../common/model';
 import * as api from './api';
 import { getMonthName } from '../../common/helpers';
-import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
+import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
 import { getDaysInMonth } from '../../common/helpers';
 import classes from './time-tracker.module.css';
@@ -69,6 +69,21 @@ export const TimeTrackerPage: React.FC = () => {
       }
     }).catch((error) => {
       console.error('Error saving task:', error);
+    });
+  }
+
+  const saveDashboard = () => {
+    const dashboardModel = mapToModel(trackerList);
+
+    api.saveDashboard(dashboardModel).then((isSaved) => {
+      if (isSaved) {
+        console.log('Dashboard saved successfully');
+        loadedTrackerList();
+      } else {
+        console.error('Failed to save dashboard');
+      }
+    }).catch((error) => {
+      console.error('Error saving dashboard:', error);
     });
   }
 
@@ -192,7 +207,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
         </div>
-        <AddTrackComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} />
+        <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />
     </div>
