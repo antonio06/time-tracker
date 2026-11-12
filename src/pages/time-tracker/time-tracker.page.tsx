@@ -102,6 +102,17 @@ export const TimeTrackerPage: React.FC = () => {
     });
   }
 
+  const changeMonth = (monthId: string) => {
+    if (monthId !== "") {
+      api.getTasksByMonth(monthId).then((data) => {
+        // PENDING to update the tracker list with the fetched data
+        console.log(`Fetched tasks for month: ${JSON.stringify(data)}`);
+      }).catch((error) => {
+        hideAlert(`Error fetching tasks for month: ${error}`, false, true);
+      });
+    }
+  }
+
   const generateExcelFile = async () => {
     const workbook = new Workbook();
 
@@ -212,7 +223,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
         </div>
-        <MonthSelector />
+        <MonthSelector onMonthChange={changeMonth} />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />

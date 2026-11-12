@@ -9,7 +9,7 @@
     "test": "vitest",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:api-server": "cd api-server && npm run mock-server"
+    "start:api-server": "cd server-mock && npm run server"
   },
   "dependencies": {
     "exceljs": "^4.4.0",

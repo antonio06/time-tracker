@@ -12,6 +12,10 @@ export const saveDashboardReal = async (dashboard: server.DashboardModel[]): Pro
   throw new Error('Not implemented ' + JSON.stringify(dashboard));
 }
 
+export const getTasksByMonthReal = async (monthId: string): Promise<{ monthId: string }> => {
+  throw new Error('Not implemented ' + monthId);
+}
+
 export const deleteTaskReal = async (taskId: number): Promise<boolean> => {
   throw new Error('Not implemented ' + taskId);
 }

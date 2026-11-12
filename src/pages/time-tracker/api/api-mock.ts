@@ -26,6 +26,10 @@ export const saveDashboardMock = async (dashboard: server.DashboardModel[]): Pro
   }).then(res => res.json());
 }
 
+export const getTasksByMonthMock = async (monthId: string): Promise<{ monthId: string }> => {
+  return fetch(`${baseUrl}/${monthId}`).then(res => res.json());
+}
+
 export const deleteTaskMock = async (taskId: number): Promise<boolean> => {
   return fetch(`${baseUrl}/${taskId}`, {
     method: 'DELETE'

@@ -37,6 +37,12 @@ app.delete('/api/dashboard/:taskId', (context) => {
   return context.json(false);
 });
 
+app.get('/api/dashboard/:monthId', (context) => {
+  const monthId = context.req.param('monthId');
+  console.log(`Selected month: ${monthId}`);
+  return context.json({ monthId });
+});
+
 serve({ fetch: app.fetch, port: 3001 }, (info) => {
   console.log(`API running on ${info.port}`);
 });
