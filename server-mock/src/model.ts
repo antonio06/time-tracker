@@ -1,6 +1,14 @@
+interface Worker {
+  id: number;
+  name: string;
+  dashboard: Dashboard[];
+}
+
 export interface Dashboard {
   id: number;
   task: string;
+  monthId?: number;
+  yearId?: number;
   workedHours: WorkedHours[];
 }
 

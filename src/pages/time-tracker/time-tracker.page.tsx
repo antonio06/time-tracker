@@ -1,7 +1,7 @@
 import React from 'react';
 import { Workbook } from 'exceljs';
 import { TimeTable } from '../../common/components'
-import { ActionsComponent } from './components/actions-component';
+import { ActionsComponent, MonthSelector } from './components';
 import { Alert, useHideMessage } from '../../common/components/alert';
 import * as vm from '../../common/model';
 import * as api from './api';
@@ -212,6 +212,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
         </div>
+        <MonthSelector />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />
