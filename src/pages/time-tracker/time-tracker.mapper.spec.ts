@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as model from '../../common';
 import * as vm from '../../common/model';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
@@ -54,25 +54,38 @@ describe('time tracker mapper specs', () => {
   });
 
   describe('createEmptyTrack', () => {
+    const mockTimestamp = 1704067200000;
+    const mockRandom = 0.5;
+
+    beforeEach(() => {
+      vi.spyOn(Date, 'now').mockReturnValue(mockTimestamp);
+      vi.spyOn(Math, 'random').mockReturnValue(mockRandom);
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('Should create an empty track with one day when number of days is one', () => {
       // Arrange
-      const numberOfTracks = 0;
       const numberOfDays = 1;
       const month = 1;
       const year = 2024;
 
+      const expectedId = mockTimestamp + mockRandom;
+
       const expectedResult: vm.DashboardVm = {
-        id: numberOfTracks + 1,
+        id: expectedId,
         task: '',
         monthId: 1,
         yearId: 2024,
         workedHours: [
-          { value: 0.00, taskId: numberOfTracks + 1, dateId: 0 },
+          { value: 0.00, taskId: expectedId, dateId: 0 },
         ],
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
+      const result = createEmptyTrack(numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);
@@ -80,13 +93,14 @@ describe('time tracker mapper specs', () => {
 
     it('Should create an empty track with zero days when number of days is zero', () => {
       // Arrange
-      const numberOfTracks = 2;
       const numberOfDays = 0;
       const month = 1;
       const year = 2024;
 
+      const expectedId = mockTimestamp + mockRandom;
+
       const expectedResult: vm.DashboardVm = {
-        id: numberOfTracks + 1,
+        id: expectedId,
         task: '',
         monthId: month,
         yearId: year,
@@ -94,7 +108,7 @@ describe('time tracker mapper specs', () => {
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
+      const result = createEmptyTrack(numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);
@@ -102,28 +116,30 @@ describe('time tracker mapper specs', () => {
 
     it('Should create an empty track with the specified number of days', () => {
       // Arrange
-      const numberOfTracks = 2;
       const numberOfDays = 3;
       const month = 1;
       const year = 2024;
 
+      const expectedId = mockTimestamp + mockRandom;
+
       const expectedResult: vm.DashboardVm = {
-        id: numberOfTracks + 1,
+        id: expectedId,
         task: '',
         monthId: month,
         yearId: year,
         workedHours: [
-          { value: 0.00, taskId: numberOfTracks + 1, dateId: 0 },
-          { value: 0.00, taskId: numberOfTracks + 1, dateId: 1 },
-          { value: 0.00, taskId: numberOfTracks + 1, dateId: 2 },
+          { value: 0.00, taskId: expectedId, dateId: 0 },
+          { value: 0.00, taskId: expectedId, dateId: 1 },
+          { value: 0.00, taskId: expectedId, dateId: 2 },
         ],
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
+      const result = createEmptyTrack(numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);
     });
   });
 });
+

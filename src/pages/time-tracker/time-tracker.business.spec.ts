@@ -7,10 +7,10 @@ describe('time tracker business spec', () => {
     it('should return an array of days with weekdays for the given month and year', () => {
       // Arrange
       const year = 2024;
-      const month = 5; // June
+      const month = 6; // June (1-based)
 
       // Act
-      const result = getDaysOfMonth(year, month); // June 2024
+      const result = getDaysOfMonth(month, year); // June 2024
 
       // Assert
       expect(result.length).toBe(30);
@@ -22,7 +22,7 @@ describe('time tracker business spec', () => {
       const month = 13; // Invalid month
 
       // Act
-      const result = getDaysOfMonth(year, month);
+      const result = getDaysOfMonth(month, year);
 
       // Assert
       expect(result).toEqual([]);
@@ -34,8 +34,8 @@ describe('time tracker business spec', () => {
       // Arrange
       const index = 0;
       const trackerList: vm.DashboardVm[] = [
-        { id: 1, task: 'Task 1', workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
-        { id: 2, task: 'Task 2', workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
+        { id: 1, task: 'Task 1', monthId: 6, yearId: 2024, workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
+        { id: 2, task: 'Task 2', monthId: 6, yearId: 2024, workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
       ];
 
       // Act
@@ -62,8 +62,8 @@ describe('time tracker business spec', () => {
       const index = 2; // Index not matching any worked hours
 
       const trackerList: vm.DashboardVm[] = [
-        { id: 1, task: 'Task 1', workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
-        { id: 2, task: 'Task 2', workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
+        { id: 1, task: 'Task 1', monthId: 6, yearId: 2024, workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }] },
+        { id: 2, task: 'Task 2', monthId: 6, yearId: 2024, workedHours: [{ dateId: 0, value: 4, taskId: 3 }, { dateId: 1, value: 1, taskId: 4 }] },
       ];
 
       // Act
@@ -105,6 +105,8 @@ describe('time tracker business spec', () => {
       const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
+        monthId: 6,
+        yearId: 2024,
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }]
       };
 
@@ -121,6 +123,8 @@ describe('time tracker business spec', () => {
       const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
+        monthId: 6,
+        yearId: 2024,
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 0, value: 3, taskId: 2 }]
       };
 
@@ -137,6 +141,8 @@ describe('time tracker business spec', () => {
       const tracker: vm.DashboardVm = {
         id: 1,
         task: 'Task 1',
+        monthId: 6,
+        yearId: 2024,
         workedHours: [{ dateId: 0, value: 2, taskId: 1 }, { dateId: 1, value: 3, taskId: 2 }]
       };
 

@@ -1,10 +1,10 @@
 import * as model from './model';
 
-export const dashboardData: model.Dashboard[] = [
+const dashboardData: model.Dashboard[] = [
   {
     id: 1,
     task: 'Task 1',
-    monthId: 10,
+    monthId: 11,
     yearId: 2026,
     workedHours: [
       { value: 0.00, taskId: 1, dateId: 0 },
@@ -42,7 +42,7 @@ export const dashboardData: model.Dashboard[] = [
   {
     id: 2,
     task: 'Task 2',
-    monthId: 10,
+    monthId: 11,
     yearId: 2026,
     workedHours: [
       { value: 4.50, taskId: 2, dateId: 0 },
@@ -77,6 +77,45 @@ export const dashboardData: model.Dashboard[] = [
       { value: 9.00, taskId: 2, dateId: 29 },
     ],
   },
+  {
+    id: 3,
+    task: 'Task 3',
+    monthId: 1,
+    yearId: 2026,
+    workedHours: [
+      { value: 4.50, taskId: 2, dateId: 0 },
+      { value: 7.00, taskId: 2, dateId: 1 },
+      { value: 6.00, taskId: 2, dateId: 2 },
+      { value: 5.50, taskId: 2, dateId: 3 },
+      { value: 0.00, taskId: 2, dateId: 4 },
+      { value: 0.00, taskId: 2, dateId: 5 },
+      { value: 7.00, taskId: 2, dateId: 6 },
+      { value: 0.00, taskId: 2, dateId: 7 },
+      { value: 3.50, taskId: 2, dateId: 8 },
+      { value: 7.00, taskId: 2, dateId: 9 },
+      { value: 5.50, taskId: 2, dateId: 10 },
+      { value: 0.00, taskId: 2, dateId: 11 },
+      { value: 0.00, taskId: 2, dateId: 12 },
+      { value: 6.00, taskId: 2, dateId: 13 },
+      { value: 5.50, taskId: 2, dateId: 14 },
+      { value: 6.00, taskId: 2, dateId: 15 },
+      { value: 4.50, taskId: 2, dateId: 16 },
+      { value: 6.50, taskId: 2, dateId: 17 },
+      { value: 0.00, taskId: 2, dateId: 18 },
+      { value: 0.00, taskId: 2, dateId: 19 },
+      { value: 3.00, taskId: 2, dateId: 20 },
+      { value: 2.00, taskId: 2, dateId: 21 },
+      { value: 5.50, taskId: 2, dateId: 22 },
+      { value: 7.50, taskId: 2, dateId: 23 },
+      { value: 0.00, taskId: 2, dateId: 24 },
+      { value: 0.00, taskId: 2, dateId: 25 },
+      { value: 0.00, taskId: 2, dateId: 26 },
+      { value: 6.00, taskId: 2, dateId: 27 },
+      { value: 7.50, taskId: 2, dateId: 28 },
+      { value: 9.00, taskId: 2, dateId: 29 },
+      { value: 0.00, taskId: 2, dateId: 30 },
+    ],
+  }
 ];
 
 export const workerData: model.Worker = {

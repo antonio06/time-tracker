@@ -2,6 +2,7 @@ import React from 'react';
 import * as vm from '../../model';
 import { getTotalWorkedHoursPerTask, getRoundPerTwoDigits } from './table-business';
 import trashIcon from '../../../assets/trash.png';
+import { useTimeContext } from '../../context';
 import classes from './row-table.module.css';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
+  const { month, year } = useTimeContext();
 
   const handleInputChange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
     onInputValueNumberChange(wh.taskId, wh.dateId, Number(e.target.value));
@@ -23,9 +25,7 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
   }
 
   const getNameDay = (dateId: number) => {
-    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : new Date().getFullYear();
-    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : new Date().getMonth();
-    const currentDay = new Date(year, month, dateId + 1);
+    const currentDay = new Date(year, month - 1, dateId + 1);
     return currentDay.toLocaleDateString('en-US', { weekday: 'short' });
   }
 

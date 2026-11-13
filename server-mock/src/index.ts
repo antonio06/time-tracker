@@ -2,9 +2,7 @@ import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
-import { dashboardData, workerData } from './mock-data';
-
-let dashboardDataCopy = [...dashboardData];
+import { workerData } from './mock-data';
 let workerDataCopy = { ...workerData };
 
 const app = new Hono();
@@ -24,7 +22,7 @@ app.delete('/api/dashboard/:taskId', (context) => {
   const index = workerDataCopy.dashboard.findIndex(task => task.id === id);
   if (index !== -1) {
     const filteredData = filterWorkerDashboard(monthId, yearId);
-    workerDataCopy.dashboard = filteredData.filter(task => task.id !== id);
+    workerDataCopy.dashboard = workerDataCopy.dashboard.filter(task => task.id !== id);
     return context.json(true);
   }
   return context.json(false);
@@ -54,12 +52,6 @@ app.put('/api/dashboard', async (context) => {
 
   workerDataCopy.dashboard = [...workerDataCopy.dashboard, ...updatedDashboard];
   return context.json(true);
-});
-
-app.get('/api/dashboard/:monthId', (context) => {
-  const monthId = context.req.param('monthId');
-  console.log(`Selected month: ${monthId}`);
-  return context.json({ monthId });
 });
 
 serve({ fetch: app.fetch, port: 3001 }, (info) => {

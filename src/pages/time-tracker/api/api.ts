@@ -1,6 +1,6 @@
 import * as server from '../../../common';
-import { getTrackerListMock, deleteTaskMock, saveTaskMock, saveDashboardMock, getTasksByMonthMock } from './api-mock';
-import { getTrackerListReal, deleteTaskReal, saveTaskReal, saveDashboardReal, getTasksByMonthReal } from './api-real';
+import { getTrackerListMock, deleteTaskMock, saveTaskMock, saveDashboardMock } from './api-mock';
+import { getTrackerListReal, deleteTaskReal, saveTaskReal, saveDashboardReal } from './api-real';
 
 export const getTrackerList = async (monthId: number, yearId: number): Promise<server.DashboardModel[]> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
@@ -23,14 +23,6 @@ export const saveDashboard = async (monthId: number, yearId: number, dashboard: 
     return saveDashboardMock(monthId, yearId, dashboard);
   } else {
     return saveDashboardReal(monthId, yearId, dashboard);
-  }
-}
-
-export const getTasksByMonth = async (monthId: string): Promise<{ monthId: string }> => {
-  if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return getTasksByMonthMock(monthId);
-  } else {
-    return getTasksByMonthReal(monthId);
   }
 }
 

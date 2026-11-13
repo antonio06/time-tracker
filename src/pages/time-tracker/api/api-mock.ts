@@ -26,12 +26,8 @@ export const saveDashboardMock = async (monthId: number, yearId: number, dashboa
   }).then(res => res.json());
 }
 
-export const getTasksByMonthMock = async (monthId: string): Promise<{ monthId: string }> => {
-  return fetch(`${baseUrl}/${monthId}`).then(res => res.json());
-}
-
 export const deleteTaskMock = async (monthId: number, yearId: number, taskId: number): Promise<boolean> => {
-  return fetch(`${baseUrl}?monthId=${monthId}&yearId=${yearId}&taskId=${taskId}`, {
+  return fetch(`${baseUrl}/${taskId}?monthId=${monthId}&yearId=${yearId}`, {
     method: 'DELETE'
   }).then(res => res.json());
 }

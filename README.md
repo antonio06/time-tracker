@@ -8,6 +8,7 @@ A modern web application to track working hours per task across a monthly calend
 
 ### Core Functionality
 - 📅 **Monthly calendar view** with all days of the month as columns
+- 🗓️ **Month selector** - Navigate between different months with context management
 - ✅ **Add and delete tasks** dynamically
 - ✏️ **Edit task names and hours** directly in the table
 - ➕ **Per-day totals and grand total row** calculated in real-time
@@ -25,6 +26,7 @@ A modern web application to track working hours per task across a monthly calend
 - 🏗️ **Clean architecture** with separation of concerns (components, business logic, mappers, helpers)
 - 🔌 **Flexible API integration** - Supports both mock and real API backends
 - 🧪 **Type-safe** with full TypeScript support
+- 🌍 **Global state management** with React Context API for month/year navigation
 
 ## Tech stack
 
@@ -162,7 +164,219 @@ To run tests in watch mode:
 npm run test -- --watch
 ```
 
-## Environment variables
+## State Management with Context
+
+The application uses **React Context API** to manage global state for month and year navigation:
+
+### TimeContext (`src/common/context/time-context.tsx`)
+
+```typescript
+interface TimeContextProps {
+  month: number;        // Range: 1-12 (not 0-11)
+  year: number;
+  setMonth: (month: number) => void;
+  setYear: (year: number) => void;
+}
+```
+
+### Using the Context
+
+```typescript
+import { useTimeContext } from '../../common/context';
+
+const MyComponent = () => {
+  const { month, year, setMonth, setYear } = useTimeContext();
+  
+  // month ranges from 1-12 (1 = January, 12 = December)
+  return <div>{month}/{year}</div>;
+};
+```
+
+**Important:** Month values range from **1-12**, not 0-11. This is different from JavaScript's `Date.getMonth()` which returns 0-11.
+
+## Data Models
+
+### DashboardModel & DashboardVm
+
+```typescript
+interface DashboardModel {
+  id: number | string;           // Unique task identifier
+  task: string;                  // Task name/description
+  monthId: number;               // Month (1-12)
+  yearId: number;                // Year
+  workedHours: WorkedHoursModel[];
+}
+
+interface DashboardVm {
+  id: number | string;
+  task: string;
+  monthId: number;
+  yearId: number;
+  workedHours: WorkedHoursVm[];
+}
+```
+
+### WorkedHoursModel & WorkedHoursVm
+
+```typescript
+interface WorkedHoursModel {
+  value: number;        // Hours worked (e.g., 8.5)
+  taskId: number | string; // Reference to task
+  dateId: number;       // Day of month (0-based index, 0 = 1st day)
+}
+
+interface WorkedHoursVm {
+  value: number;
+  taskId: number | string;
+  dateId: number;
+}
+```
+
+### Example Task Structure
+
+```json
+{
+  "id": 1699858123456,
+  "task": "Development",
+  "monthId": 11,
+  "yearId": 2026,
+  "workedHours": [
+    { "value": 8, "taskId": 1699858123456, "dateId": 0 },
+    { "value": 8.5, "taskId": 1699858123456, "dateId": 1 },
+    { "value": 0, "taskId": 1699858123456, "dateId": 2 }
+  ]
+}
+```
+
+## API Endpoints
+
+### GET /api/dashboard
+
+Retrieve all tasks for a specific month and year.
+
+**Query Parameters:**
+- `monthId` (required): Month number (1-12)
+- `yearId` (required): Year number
+
+**Request:**
+```bash
+GET /api/dashboard?monthId=11&yearId=2026
+```
+
+**Response:**
+```json
+[
+  {
+    "id": 1699858123456,
+    "task": "Development",
+    "monthId": 11,
+    "yearId": 2026,
+    "workedHours": [
+      { "value": 8, "taskId": 1699858123456, "dateId": 0 },
+      { "value": 8.5, "taskId": 1699858123456, "dateId": 1 }
+    ]
+  }
+]
+```
+
+### POST /api/dashboard
+
+Save or update dashboard tasks and hours.
+
+**Query Parameters:**
+- `monthId` (required): Month number (1-12)
+- `yearId` (required): Year number
+
+**Request Body:**
+```json
+[
+  {
+    "id": 1699858123456,
+    "task": "Development",
+    "monthId": 11,
+    "yearId": 2026,
+    "workedHours": [
+      { "value": 8, "taskId": 1699858123456, "dateId": 0 }
+    ]
+  }
+]
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Dashboard saved successfully"
+}
+```
+
+### DELETE /api/dashboard/:taskId
+
+Delete a specific task.
+
+**Query Parameters:**
+- `monthId` (required): Month number (1-12)
+- `yearId` (required): Year number
+
+**Request:**
+```bash
+DELETE /api/dashboard/1699858123456?monthId=11&yearId=2026
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Task deleted successfully"
+}
+```
+
+## Known Gotchas & Important Notes
+
+### ⚠️ Month Range (1-12, not 0-11)
+
+The application uses **1-based month indexing** (1 = January, 12 = December) throughout, different from JavaScript's `Date.getMonth()` which returns 0-11.
+
+- **TimeContext:** `month` ranges from 1-12
+- **getDaysInMonth():** Expects (month, year) with month as 1-12
+- **getMonthName():** Expects month as 1-12
+- **API:** All `monthId` parameters should be 1-12
+
+**Example:**
+```typescript
+// ✅ Correct
+getDaysInMonth(11, 2026)  // November 2026
+getMonthName(1)           // "January"
+
+// ❌ Wrong
+getDaysInMonth(0, 2026)   // Invalid!
+getMonthName(0)           // ""
+```
+
+### 📅 Date Indexing in workedHours
+
+The `dateId` field in `WorkedHoursModel` is **0-based**:
+- `dateId: 0` = 1st day of the month
+- `dateId: 1` = 2nd day of the month
+- `dateId: 29` = 30th day of the month (if the month has 30+ days)
+
+### 🔄 Creating Empty Tracks
+
+When adding a new task, use `createEmptyTrack()` to ensure the correct number of days:
+
+```typescript
+import { createEmptyTrack } from './time-tracker.mapper';
+import { getDaysInMonth } from '../../common/helpers';
+
+const month = 11;  // November
+const year = 2026;
+const daysCount = getDaysInMonth(month, year).length;
+
+const newTask = createEmptyTrack(daysCount, month, year);
+// Results in 30 workedHours entries (November has 30 days)
+```
+
+## Environment Variables
 
 | Variable | Values | Description |
 |---|---|---|
@@ -187,14 +401,6 @@ cd server-mock
 npm install
 npm run server
 ```
-
-### API Endpoints
-
-| Method | Endpoint | Description | Response |
-|---|---|---|---|
-| `GET` | `/api/dashboard` | Retrieve all tasks with their worked hours | Array of task objects with daily hours |
-| `POST` | `/api/dashboard` | Save or update dashboard tasks and hours | Confirmation response |
-| `DELETE` | `/api/dashboard/:taskId` | Delete a task by ID | Success/error response |
 
 ### Features
 

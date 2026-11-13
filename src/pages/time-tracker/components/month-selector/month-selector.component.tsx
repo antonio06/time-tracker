@@ -1,27 +1,27 @@
 import React from "react";
-import { months } from "./moths";
+import { months } from "./months";
+import { useTimeContext } from "../../../../common/context";
 import classes from "./month-selector.module.css";
 
-interface Props {
-	onMonthChange: (monthId: string) => void;
-}
+export const MonthSelector: React.FC = () => {
+	const { setMonth, month } = useTimeContext();
 
-export const MonthSelector: React.FC<Props> = ({ onMonthChange }) => {
-	const [selectedMonth, setSelectedMonth] = React.useState("");
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		const montId = event.target.value;
-		setSelectedMonth(montId);
-		onMonthChange(montId);
+		const monthId = event.target.value;
+		if (monthId) {
+			const monthNum = Number(monthId);
+			setMonth(monthNum);
+		}
 	};
 
 	return (
 		<>
-			<select className={classes.monthSelector} value={selectedMonth} onChange={handleChange}>
+			<select className={classes.monthSelector} value={String(month)} onChange={handleChange}>
 				<option value="">Select month</option>
 				{
-					months.map(month => (
-						<option key={month.value} value={month.value}>
-							{month.label}
+					months.map(m => (
+						<option key={m.value} value={String(m.value)}>
+							{m.label}
 						</option>
 					))
 				}

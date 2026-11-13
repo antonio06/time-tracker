@@ -1,13 +1,14 @@
 import * as vm from '../../common/model';
 
-export const getDaysOfMonth = (year: number, month: number): string[] => {
-  const currentDate = new Date(year, month + 1, 0);
+export const getDaysOfMonth = (month: number, year: number): string[] => {
+  const jsMonth = month - 1;
+  const currentDate = new Date(year, jsMonth + 1, 0);
 
-  if (month >= 0 && month <= 11) {
+  if (jsMonth >= 0 && jsMonth <= 11) {
     const totalDays = currentDate.getDate();
 
     return Array.from({ length: totalDays }, (_, index) => {
-      const date = new Date(year, month, index + 1);
+      const date = new Date(year, jsMonth, index + 1);
 
       const day = date.getDate();
 

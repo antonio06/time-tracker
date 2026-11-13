@@ -9,16 +9,18 @@ import { getMonthName } from '../../common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
 import { getDaysInMonth } from '../../common/helpers';
+import { useTimeContext } from '../../common/context';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
   const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
-  const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : new Date().getMonth();
-  const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : new Date().getFullYear();
+  const { month, year } = useTimeContext();
 
   const loadedTrackerList = () => {
+
     api.getTrackerList(month, year).then((result) => {
+      console.log(month)
       if (result) {
         const mappedData = mapToVm(result);
         setTrackerList(mappedData);
@@ -59,8 +61,10 @@ export const TimeTrackerPage: React.FC = () => {
 
   const addTask = () => {
     const newTask = {
-      ...createEmptyTrack(trackerList.length, getDaysInMonth(year, month).length, month, year),
+      ...createEmptyTrack(getDaysInMonth(month, year).length, month, year),
     }
+
+    console.log(newTask);
 
     api.saveTask(newTask).then((isSaved) => {
       if (isSaved) {
@@ -101,23 +105,12 @@ export const TimeTrackerPage: React.FC = () => {
     });
   }
 
-  const changeMonth = (monthId: string) => {
-    if (monthId !== "") {
-      api.getTasksByMonth(monthId).then((data) => {
-        // PENDING to update the tracker list with the fetched data
-        console.log(`Fetched tasks for month: ${JSON.stringify(data)}`);
-      }).catch((error) => {
-        hideAlert(`Error fetching tasks for month: ${error}`, false, true);
-      });
-    }
-  }
-
   const generateExcelFile = async () => {
     const workbook = new Workbook();
-
+    console.log(month)
     const worksheet = workbook.addWorksheet(`${getMonthName(month)} ${year}`);
 
-    const days = getDaysOfMonth(year, month);
+    const days = getDaysOfMonth(month, year);
 
     // Crear la cabecera
     const headers = ['Task', ...days, 'Total'];
@@ -196,7 +189,7 @@ export const TimeTrackerPage: React.FC = () => {
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'time-tracker-november.xlsx';
+    link.download = `time-tracker-${getMonthName(month).toLowerCase()}.xlsx`;
 
     document.body.appendChild(link);
     link.click();
@@ -207,7 +200,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   React.useEffect(() => {
     loadedTrackerList();
-  }, []);
+  }, [month]);
 
   return (
     <div className={classes.container}>
@@ -216,7 +209,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {year}</h2>
         </div>
-        <MonthSelector onMonthChange={changeMonth} />
+        <MonthSelector />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />

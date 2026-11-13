@@ -50,6 +50,8 @@ describe('table business specs', () => {
         {
           id: 1,
           task: 'Task 1',
+          monthId: 10,
+          yearId: 2026,
           workedHours: [
             { value: 0.00, taskId: 1, dateId: 0 },
             { value: 0.50, taskId: 1, dateId: 1 },
@@ -70,6 +72,8 @@ describe('table business specs', () => {
       const workedHours: vm.DashboardVm[] = [
         {
           id: 1,
+          monthId: 10,
+          yearId: 2026,
           task: 'Task 1',
           workedHours: [
             { value: 0.00, taskId: 1, dateId: 0 },
@@ -103,6 +107,8 @@ describe('table business specs', () => {
       const workedHours: vm.DashboardVm[] = [
         {
           id: 1,
+          monthId: 10,
+          yearId: 2026,
           task: 'Task 1',
           workedHours: [
             { value: 1.5, taskId: 1, dateId: 0 },

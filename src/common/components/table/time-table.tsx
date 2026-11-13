@@ -3,6 +3,7 @@ import { HeadTable } from './head-table.component';
 import { BodyTable } from './body-table.component';
 import { getDaysInMonth } from '../../helpers';
 import * as vm from '../../model';
+import { useTimeContext } from '../../context';
 import classes from './table.module.css';
 
 interface Props {
@@ -13,9 +14,7 @@ interface Props {
 }
 
 export const TimeTable: React.FC<Props> = ({ trackerList, onInputValueNumberChange: onInputChange, onInputValueStringChange, onDeleteTask }) => {
-  const currentDate: Date = new Date();
-  const month: number = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
-  const year: number = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
+  const { month, year } = useTimeContext();
   const days = getDaysInMonth(month, year);
 
   return (

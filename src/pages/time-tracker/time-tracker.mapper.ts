@@ -19,15 +19,18 @@ const mapWorkdHoursToVm = (workedHours: model.WorkedHoursModel[]): vm.WorkedHour
   }));
 }
 
-export const createEmptyTrack = (numberOfTracks: number, numberOfDays: number, month: number, year: number): vm.DashboardVm => ({
-  id: numberOfTracks + 1,
-  task: '',
-  monthId: month,
-  yearId: year,
-  workedHours: Array.from({ length: numberOfDays }, (_, i) => ({
-    value: 0.00, taskId: numberOfTracks + 1, dateId: i
-  }))
-});
+export const createEmptyTrack = (numberOfDays: number, month: number, year: number): vm.DashboardVm => {
+  const uniqueId = Date.now() + Math.random();
+  return {
+    id: uniqueId,
+    task: '',
+    monthId: month,
+    yearId: year,
+    workedHours: Array.from({ length: numberOfDays }, (_, i) => ({
+      value: 0.00, taskId: uniqueId, dateId: i
+    }))
+  };
+};
 
 export const mapToModel = (data: vm.DashboardVm[]): model.DashboardModel[] => {
   return Array.isArray(data) ? data.map(item => ({

@@ -1,9 +1,12 @@
-import { TimeTrackerPage } from './pages'
+import { TimeTrackerPage } from './pages';
+import { TimeProvider } from './common/context/time-context';
 
 function App() {
 
   return (
-    <TimeTrackerPage />
+    <TimeProvider>
+      <TimeTrackerPage />
+    </TimeProvider>
   )
 }
 
