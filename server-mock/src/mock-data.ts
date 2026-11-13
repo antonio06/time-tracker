@@ -4,6 +4,8 @@ export const dashboardData: model.Dashboard[] = [
   {
     id: 1,
     task: 'Task 1',
+    monthId: 10,
+    yearId: 2026,
     workedHours: [
       { value: 0.00, taskId: 1, dateId: 0 },
       { value: 0.50, taskId: 1, dateId: 1 },
@@ -40,6 +42,8 @@ export const dashboardData: model.Dashboard[] = [
   {
     id: 2,
     task: 'Task 2',
+    monthId: 10,
+    yearId: 2026,
     workedHours: [
       { value: 4.50, taskId: 2, dateId: 0 },
       { value: 7.00, taskId: 2, dateId: 1 },
@@ -74,3 +78,9 @@ export const dashboardData: model.Dashboard[] = [
     ],
   },
 ];
+
+export const workerData: model.Worker = {
+  id: 1,
+  name: "Mock User",
+  dashboard: dashboardData,
+}

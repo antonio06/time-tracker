@@ -1,6 +1,8 @@
 export interface DashboardModel {
   id: number;
   task: string;
+  monthId: number;
+  yearId: number;
   workedHours: WorkedHoursModel[];
 }
 

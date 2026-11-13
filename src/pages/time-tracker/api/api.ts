@@ -2,11 +2,11 @@ import * as server from '../../../common';
 import { getTrackerListMock, deleteTaskMock, saveTaskMock, saveDashboardMock, getTasksByMonthMock } from './api-mock';
 import { getTrackerListReal, deleteTaskReal, saveTaskReal, saveDashboardReal, getTasksByMonthReal } from './api-real';
 
-export const getTrackerList = async (): Promise<server.DashboardModel[]> => {
+export const getTrackerList = async (monthId: number, yearId: number): Promise<server.DashboardModel[]> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return getTrackerListMock();
+    return getTrackerListMock(monthId, yearId);
   } else {
-    return getTrackerListReal();
+    return getTrackerListReal(monthId, yearId);
   }
 }
 
@@ -18,11 +18,11 @@ export const saveTask = async (task: server.DashboardModel): Promise<boolean> =>
   }
 }
 
-export const saveDashboard = async (dashboard: server.DashboardModel[]): Promise<boolean> => {
+export const saveDashboard = async (monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return saveDashboardMock(dashboard);
+    return saveDashboardMock(monthId, yearId, dashboard);
   } else {
-    return saveDashboardReal(dashboard);
+    return saveDashboardReal(monthId, yearId, dashboard);
   }
 }
 
@@ -34,10 +34,10 @@ export const getTasksByMonth = async (monthId: string): Promise<{ monthId: strin
   }
 }
 
-export const deletedTask = async (taskId: number): Promise<boolean> => {
+export const deletedTask = async (monthId: number, yearId: number, taskId: number): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return deleteTaskMock(taskId);
+    return deleteTaskMock(monthId, yearId, taskId);
   } else {
-    return deleteTaskReal(taskId);
+    return deleteTaskReal(monthId, yearId, taskId);
   }
 }

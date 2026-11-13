@@ -1,6 +1,8 @@
 export interface DashboardVm {
   id: number;
   task: string;
+  monthId: number;
+  yearId: number;
   workedHours: WorkedHoursVm[];
 }
 

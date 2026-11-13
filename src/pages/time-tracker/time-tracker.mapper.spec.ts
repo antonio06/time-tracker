@@ -23,6 +23,8 @@ describe('time tracker mapper specs', () => {
         {
           id: 1,
           task: 'Task 1',
+          monthId: 1,
+          yearId: 2024,
           workedHours: [
             { value: 0.00, taskId: 1, dateId: 0 },
             { value: 0.50, taskId: 1, dateId: 1 },
@@ -34,6 +36,8 @@ describe('time tracker mapper specs', () => {
         {
           id: 1,
           task: 'Task 1',
+          monthId: 1,
+          yearId: 2024,
           workedHours: [
             { value: 0.00, taskId: 1, dateId: 0 },
             { value: 0.50, taskId: 1, dateId: 1 },
@@ -54,17 +58,21 @@ describe('time tracker mapper specs', () => {
       // Arrange
       const numberOfTracks = 0;
       const numberOfDays = 1;
+      const month = 1;
+      const year = 2024;
 
       const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
+        monthId: 1,
+        yearId: 2024,
         workedHours: [
           { value: 0.00, taskId: numberOfTracks + 1, dateId: 0 },
         ],
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays);
+      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);
@@ -74,15 +82,19 @@ describe('time tracker mapper specs', () => {
       // Arrange
       const numberOfTracks = 2;
       const numberOfDays = 0;
+      const month = 1;
+      const year = 2024;
 
       const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
+        monthId: month,
+        yearId: year,
         workedHours: [],
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays);
+      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);
@@ -92,10 +104,14 @@ describe('time tracker mapper specs', () => {
       // Arrange
       const numberOfTracks = 2;
       const numberOfDays = 3;
+      const month = 1;
+      const year = 2024;
 
       const expectedResult: vm.DashboardVm = {
         id: numberOfTracks + 1,
         task: '',
+        monthId: month,
+        yearId: year,
         workedHours: [
           { value: 0.00, taskId: numberOfTracks + 1, dateId: 0 },
           { value: 0.00, taskId: numberOfTracks + 1, dateId: 1 },
@@ -104,7 +120,7 @@ describe('time tracker mapper specs', () => {
       };
 
       // Act
-      const result = createEmptyTrack(numberOfTracks, numberOfDays);
+      const result = createEmptyTrack(numberOfTracks, numberOfDays, month, year);
 
       // Assert
       expect(result).toEqual(expectedResult);

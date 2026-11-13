@@ -14,9 +14,11 @@ import classes from './time-tracker.module.css';
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
   const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
+  const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : new Date().getMonth();
+  const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : new Date().getFullYear();
 
   const loadedTrackerList = () => {
-    api.getTrackerList().then((result) => {
+    api.getTrackerList(month, year).then((result) => {
       if (result) {
         const mappedData = mapToVm(result);
         setTrackerList(mappedData);
@@ -56,11 +58,8 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const addTask = () => {
-    const currentDate = new Date();
-    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
-    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
     const newTask = {
-      ...createEmptyTrack(trackerList.length, getDaysInMonth(year, month).length),
+      ...createEmptyTrack(trackerList.length, getDaysInMonth(year, month).length, month, year),
     }
 
     api.saveTask(newTask).then((isSaved) => {
@@ -77,7 +76,7 @@ export const TimeTrackerPage: React.FC = () => {
   const saveDashboard = () => {
     const dashboardModel = mapToModel(trackerList);
 
-    api.saveDashboard(dashboardModel).then((isSaved) => {
+    api.saveDashboard(month, year, dashboardModel).then((isSaved) => {
       if (isSaved) {
         hideAlert('Dashboard saved successfully', true, true);
         loadedTrackerList();
@@ -90,7 +89,7 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const deleteTask = (taskId: number): void => {
-    api.deletedTask(taskId).then((isDeleted) => {
+    api.deletedTask(month, year, taskId).then((isDeleted) => {
       if (isDeleted) {
         loadedTrackerList();
         hideAlert('Task deleted successfully', true, true);
@@ -116,11 +115,7 @@ export const TimeTrackerPage: React.FC = () => {
   const generateExcelFile = async () => {
     const workbook = new Workbook();
 
-    const worksheet = workbook.addWorksheet('November 2026');
-
-    const currentDate = new Date();
-    const year = import.meta.env.VITE_IS_MOCK === 'true' ? 2026 : currentDate.getFullYear();
-    const month = import.meta.env.VITE_IS_MOCK === 'true' ? 10 : currentDate.getMonth();
+    const worksheet = workbook.addWorksheet(`${getMonthName(month)} ${year}`);
 
     const days = getDaysOfMonth(year, month);
 
@@ -210,8 +205,6 @@ export const TimeTrackerPage: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const month: number = import.meta.env.VITE_MONTH === 'true' ? 10 : new Date().getMonth();
-
   React.useEffect(() => {
     loadedTrackerList();
   }, []);
@@ -221,7 +214,7 @@ export const TimeTrackerPage: React.FC = () => {
       <div className={classes.header}>
         <div>
           <h1 className={classes.title}>Monthly Timesheet</h1>
-          <h2>{getMonthName(month)} {new Date().getFullYear()}</h2>
+          <h2>{getMonthName(month)} {year}</h2>
         </div>
         <MonthSelector onMonthChange={changeMonth} />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />

@@ -1,4 +1,4 @@
-interface Worker {
+export interface Worker {
   id: number;
   name: string;
   dashboard: Dashboard[];
@@ -7,8 +7,8 @@ interface Worker {
 export interface Dashboard {
   id: number;
   task: string;
-  monthId?: number;
-  yearId?: number;
+  monthId: number;
+  yearId: number;
   workedHours: WorkedHours[];
 }
 
