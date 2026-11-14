@@ -2,7 +2,7 @@
 
 A modern web application to track working hours per task across a monthly calendar, with Excel export support and a fully tested architecture.
 
-![Time Tracker screenshot](./docs/image1.png)
+![Time Tracker screenshot](./docs/image.png)
 
 ## Features
 
