@@ -1,4 +1,4 @@
-import * as model from './model';
+import * as model from './api-model';
 
 const dashboardData: model.Dashboard[] = [
   {

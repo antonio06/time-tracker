@@ -20,7 +20,6 @@ export const TimeTrackerPage: React.FC = () => {
   const loadedTrackerList = () => {
 
     api.getTrackerList(month, year).then((result) => {
-      console.log(month)
       if (result) {
         const mappedData = mapToVm(result);
         setTrackerList(mappedData);
@@ -64,8 +63,6 @@ export const TimeTrackerPage: React.FC = () => {
       ...createEmptyTrack(getDaysInMonth(month, year).length, month, year),
     }
 
-    console.log(newTask);
-
     api.saveTask(newTask).then((isSaved) => {
       if (isSaved) {
         setTrackerList([...trackerList, newTask]);
@@ -107,7 +104,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   const generateExcelFile = async () => {
     const workbook = new Workbook();
-    console.log(month)
+
     const worksheet = workbook.addWorksheet(`${getMonthName(month)} ${year}`);
 
     const days = getDaysOfMonth(month, year);
