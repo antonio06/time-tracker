@@ -48,20 +48,45 @@ src/
 ├── common/
 │   ├── components/          # Reusable UI components
 │   │   ├── alert/          # Alert notification system
+│   │   ├── header/         # Application header with user info
+│   │   ├── footer/         # Application footer
 │   │   └── table/          # Time table display
+│   ├── context/            # Global state management
+│   │   ├── time-context.tsx   # Month/year navigation context
+│   │   └── user-context.tsx   # User information context
 │   ├── helpers/            # Utility functions for time & data manipulation
 │   └── model/              # Data models & view models
+├── layouts/
+│   └── app-layout.tsx      # Main application layout wrapper
 ├── pages/
 │   └── time-tracker/       # Main page & features
 │       ├── api/            # API integration (mock & real)
 │       ├── components/     # Page-specific components
 │       ├── business/       # Business logic & calculations
 │       └── mapper/         # Data transformation layer
-├── App.tsx                 # Main app component
+├── App.tsx                 # Main app component with context providers
 └── main.tsx               # React entry point
 ```
 
-### Key Components
+### Layout & Shell Components
+
+#### **AppLayout** (`src/layouts/app-layout.tsx`)
+The main application layout component that wraps the entire app with:
+- **Header** - Top navigation bar with user information and logout functionality
+- **Footer** - Bottom footer with copyright information
+- **Children** - Main content area where pages are rendered
+
+#### **Header** (`src/common/components/header/`)
+Displays:
+- User profile information with user icon
+- User name (from UserContext)
+- Logout button with icon
+
+#### **Footer** (`src/common/components/footer/`)
+Displays:
+- Copyright notice (© 2026 Time Tracker)
+
+### Page & Feature Components
 
 #### **TimeTrackerPage** (`src/pages/time-tracker/time-tracker.page.tsx`)
 The main page component that orchestrates:
@@ -166,9 +191,11 @@ npm run test -- --watch
 
 ## State Management with Context
 
-The application uses **React Context API** to manage global state for month and year navigation:
+The application uses **React Context API** to manage global state:
 
 ### TimeContext (`src/common/context/time-context.tsx`)
+
+Manages month and year navigation across the application.
 
 ```typescript
 interface TimeContextProps {
@@ -179,20 +206,65 @@ interface TimeContextProps {
 }
 ```
 
-### Using the Context
+### UserContext (`src/common/context/user-context.tsx`)
+
+Manages user information and authentication state.
 
 ```typescript
-import { useTimeContext } from '../../common/context';
+interface User {
+  id: number;
+  name: string;
+}
+
+interface UserContextProps {
+  user: User;
+  setUser: (user: User) => void;
+}
+```
+
+Default user value:
+```typescript
+{
+  id: 0,
+  name: 'Mock User'
+}
+```
+
+### Using the Contexts
+
+```typescript
+import { useTimeContext, useUserContext } from '../../common/context';
 
 const MyComponent = () => {
+  // Time context
   const { month, year, setMonth, setYear } = useTimeContext();
   
-  // month ranges from 1-12 (1 = January, 12 = December)
-  return <div>{month}/{year}</div>;
+  // User context
+  const { user, setUser } = useUserContext();
+  
+  return (
+    <div>
+      <p>{user.name} - {month}/{year}</p>
+    </div>
+  );
 };
 ```
 
 **Important:** Month values range from **1-12**, not 0-11. This is different from JavaScript's `Date.getMonth()` which returns 0-11.
+
+### Provider Hierarchy
+
+Both contexts are wrapped in the `App.tsx` component:
+
+```typescript
+<UserProvider>
+  <TimeProvider>
+    <AppLayout>
+      <TimeTrackerPage />
+    </AppLayout>
+  </TimeProvider>
+</UserProvider>
+```
 
 ## Data Models
 
