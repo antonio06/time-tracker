@@ -2,7 +2,7 @@
 
 A modern web application to track working hours per task across a monthly calendar, with Excel export support and a fully tested architecture.
 
-![Time Tracker screenshot](./docs/image.png)
+![Time Tracker screenshot](./docs/image1.png)
 
 ## Features
 
@@ -238,10 +238,10 @@ import { useTimeContext, useUserContext } from '../../common/context';
 const MyComponent = () => {
   // Time context
   const { month, year, setMonth, setYear } = useTimeContext();
-  
+
   // User context
   const { user, setUser } = useUserContext();
-  
+
   return (
     <div>
       <p>{user.name} - {month}/{year}</p>
