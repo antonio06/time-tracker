@@ -1,11 +1,14 @@
 import { TimeTrackerPage } from './pages';
 import { TimeProvider } from './common/context/time-context';
+import AppLayout from './layouts/app-layout';
 
 function App() {
 
   return (
     <TimeProvider>
-      <TimeTrackerPage />
+      <AppLayout>
+        <TimeTrackerPage />
+      </AppLayout>
     </TimeProvider>
   )
 }

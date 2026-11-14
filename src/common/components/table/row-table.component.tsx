@@ -1,7 +1,7 @@
 import React from 'react';
 import * as vm from '../../model';
 import { getTotalWorkedHoursPerTask, getRoundPerTwoDigits } from './table-business';
-import trashIcon from '../../../assets/trash.png';
+import trashIcon from '../../../assets/trash.svg';
 import { useTimeContext } from '../../context';
 import classes from './row-table.module.css';
 

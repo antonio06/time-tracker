@@ -1,0 +1,21 @@
+.header {
+	width: 100%;
+	background-color: #219ebc;
+	color: #f8f9fa;
+	padding: 1rem;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.user {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.icon {
+	color: #f8f9fa;
+	filter: invert(1) brightness(2);
+}
