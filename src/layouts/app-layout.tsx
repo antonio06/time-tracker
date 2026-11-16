@@ -4,16 +4,15 @@ import classes from './app-layout.module.css';
 
 interface Props {
 	children: React.ReactNode;
+	isLoggedIn: boolean;
 }
 
-const AppLayout: React.FC<Props> = ({ children }) => {
+export const AppLayout: React.FC<Props> = ({ children, isLoggedIn }) => {
 	return (
 		<div className={classes.appLayout}>
-			<Header />
+			{!isLoggedIn && <Header />}
 			{children}
 			<Footer />
 		</div>
 	);
 };
-
-export default AppLayout;
