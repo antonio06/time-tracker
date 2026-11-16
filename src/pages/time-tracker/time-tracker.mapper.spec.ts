@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as model from '../../common';
-import * as vm from '../../common/model';
+import * as model from '@./common';
+import * as vm from '@/common/model';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 
 describe('time tracker mapper specs', () => {

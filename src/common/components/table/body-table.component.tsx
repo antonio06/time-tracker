@@ -1,5 +1,5 @@
 import React from 'react';
-import * as vm from '../../model';
+import * as vm from '@/common/model';
 import { RowTable } from './row-table.component';
 import { TotalLine } from './total-line.component';
 

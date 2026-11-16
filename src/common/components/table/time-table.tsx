@@ -1,9 +1,9 @@
 import React from 'react';
 import { HeadTable } from './head-table.component';
 import { BodyTable } from './body-table.component';
-import { getDaysInMonth } from '../../helpers';
-import * as vm from '../../model';
-import { useTimeContext } from '../../context';
+import { getDaysInMonth } from '@/common/helpers';
+import * as vm from '@/common/model';
+import { useTimeContext } from '@/common/context';
 import classes from './table.module.css';
 
 interface Props {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
-import * as vm from '../../common/model';
+import * as vm from '@/common/model';
 
 describe('time tracker business spec', () => {
   describe('getDaysOfMonth', () => {

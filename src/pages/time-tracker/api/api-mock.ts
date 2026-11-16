@@ -1,4 +1,4 @@
-import * as server from '../../../common';
+import * as server from '@/common';
 
 const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/dashboard`;
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import * as vm from '../../model';
+import * as vm from '@/common/model';
 import { getTotalWorkedHoursPerTask, getTotalWorkedHoursPerDay, getTotalWorkedPerTotal, getRoundPerTwoDigits } from './table-business';
 
 describe('table business specs', () => {

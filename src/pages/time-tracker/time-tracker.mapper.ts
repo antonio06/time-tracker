@@ -1,5 +1,5 @@
-import * as model from '../../common';
-import * as vm from '../../common/model';
+import * as model from '@/common';
+import * as vm from '@/common/model';
 
 export const mapToVm = (data: model.DashboardModel[]): vm.DashboardVm[] => {
   return Array.isArray(data) ? data.map(item => ({

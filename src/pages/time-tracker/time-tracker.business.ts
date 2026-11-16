@@ -1,4 +1,4 @@
-import * as vm from '../../common/model';
+import * as vm from '@/common/model';
 
 export const getDaysOfMonth = (month: number, year: number): string[] => {
   const jsMonth = month - 1;

@@ -1,8 +1,8 @@
 import React from 'react';
-import * as vm from '../../model';
+import * as vm from '@/common/model';
 import { getTotalWorkedHoursPerTask, getRoundPerTwoDigits } from './table-business';
-import trashIcon from '../../../assets/trash.svg';
-import { useTimeContext } from '../../context';
+import trashIcon from '@/assets/trash.svg';
+import { useTimeContext } from '@/common/context';
 import classes from './row-table.module.css';
 
 interface Props {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTotalWorkedHoursPerDay, getTotalWorkedPerTotal, getRoundPerTwoDigits } from './table-business';
-import * as vm from '../../model';
+import * as vm from '@/common/model';
 import classes from './total-line.module.css';
 
 interface Props {

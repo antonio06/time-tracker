@@ -1,15 +1,15 @@
 import React from 'react';
 import { Workbook } from 'exceljs';
-import { TimeTable } from '../../common/components'
+import { TimeTable } from '@/common/components'
 import { ActionsComponent, MonthSelector } from './components';
-import { Alert, useHideMessage } from '../../common/components/alert';
-import * as vm from '../../common/model';
+import { Alert, useHideMessage } from '@/common/components/alert';
+import * as vm from '@/common/model';
 import * as api from './api';
-import { getMonthName } from '../../common/helpers';
+import { getMonthName } from '@/common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
-import { getDaysInMonth } from '../../common/helpers';
-import { useTimeContext } from '../../common/context';
+import { getDaysInMonth } from '@/common/helpers';
+import { useTimeContext } from '@/common/context';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {

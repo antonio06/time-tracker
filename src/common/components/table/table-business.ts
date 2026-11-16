@@ -1,4 +1,4 @@
-import * as vm from '../../model';
+import * as vm from '@/common/model';
 
 export const getTotalWorkedHoursPerTask = (workedHours: vm.WorkedHoursVm[]): number => {
   return Array.isArray(workedHours) ? workedHours.reduce((total, workHour) => {

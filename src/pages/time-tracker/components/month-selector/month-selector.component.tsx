@@ -1,6 +1,6 @@
 import React from "react";
 import { months } from "./months";
-import { useTimeContext } from "../../../../common/context";
+import { useTimeContext } from "@/common/context";
 import classes from "./month-selector.module.css";
 
 export const MonthSelector: React.FC = () => {
