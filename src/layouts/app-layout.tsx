@@ -11,7 +11,9 @@ export const AppLayout: React.FC<Props> = ({ children, isLoggedIn }) => {
 	return (
 		<div className={classes.appLayout}>
 			{!isLoggedIn && <Header />}
-			{children}
+			<main className={classes.content}>
+				{children}
+			</main>
 			<Footer />
 		</div>
 	);
