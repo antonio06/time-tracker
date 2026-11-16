@@ -3,6 +3,7 @@ import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
 import { workerData } from './mock-data';
+import * as model from './api-model';
 let workerDataCopy = { ...workerData };
 
 const app = new Hono();
@@ -28,6 +29,15 @@ app.delete('/api/dashboard/:taskId', (context) => {
   return context.json(false);
 });
 
+app.post('/api/login', async (context) => {
+  const credentials = await context.req.json<model.UserCredentials>();
+
+  if (credentials.name === 'mockUser' && credentials.password === 'admin') {
+    return context.json(true);
+  }
+  return context.json(false);
+})
+
 app.get('/api/dashboard', (context) => {
   const monthId = Number(context.req.query('monthId'));
   const yearId = Number(context.req.query('yearId'));
@@ -37,14 +47,14 @@ app.get('/api/dashboard', (context) => {
 });
 
 app.post('/api/dashboard', async (context) => {
-  const task = await context.req.json();
+  const task = await context.req.json<model.Dashboard>();
 
   workerDataCopy.dashboard = [...workerDataCopy.dashboard, task];
   return context.json(true);
 });
 
 app.put('/api/dashboard', async (context) => {
-  const updatedDashboard = await context.req.json();
+  const updatedDashboard = await context.req.json<model.Dashboard[]>();
   const monthId = Number(context.req.query('monthId'));
   const yearId = Number(context.req.query('yearId'));
 

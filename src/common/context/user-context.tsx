@@ -13,7 +13,7 @@ interface UserContextProps {
 const getDefaultUser = (): User => {
 	return {
 		id: 0,
-		name: 'Mock User'
+		name: ''
 	}
 }
 

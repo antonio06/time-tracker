@@ -10,7 +10,7 @@ interface Props {
 export const AppLayout: React.FC<Props> = ({ children, isLoggedIn }) => {
 	return (
 		<div className={classes.appLayout}>
-			{!isLoggedIn && <Header />}
+			{isLoggedIn && <Header />}
 			<main className={classes.content}>
 				{children}
 			</main>

@@ -4,7 +4,7 @@ import { TimeProvider, UserProvider } from '@/common/context';
 import { AppLayout } from '@/layouts';
 
 export const TimeTrackerScene: React.FC = () => {
-	const isLoggedIn = false; // Replace with actual login state
+	const isLoggedIn = true;
 	return (<AppLayout isLoggedIn={isLoggedIn}>
 		<UserProvider>
 			<TimeProvider>

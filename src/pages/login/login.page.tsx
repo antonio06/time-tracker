@@ -1,26 +1,45 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LoginForm } from './component/login-form.component';
 import * as vm from './login.vm';
+import { login } from './api/api';
+import { mapUserToUserCredencials } from './login.mappers';
+import { Alert, useHideMessage } from '@/common/components/alert';
+import { useUserContext } from '@/common/context/user-context';
 import classes from './login.module.css';
 
 export const LoginPage: React.FC = () => {
-	const [user, setUser] = React.useState<vm.User>(vm.emptyUser);
+	const [userCredentials, setUserCredentials] = React.useState<vm.User>(vm.emptyUser);
+	const { setUser } = useUserContext();
+	const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
+	const navigate = useNavigate();
 
 	const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setUser({ ...user, [name]: value });
+		setUserCredentials({ ...userCredentials, [name]: value });
 	};
 
 	const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(user);
+		const modelCredentials = mapUserToUserCredencials(userCredentials);
 		// Add login logic here
+		login(modelCredentials).then((success) => {
+			if (success) {
+				navigate('/time-tracker');
+				setUser({ id: 0, name: userCredentials.username });
+			} else {
+				hideAlert('Login failed', false, true);
+			}
+		});
 	};
 
 	return (
-		<div className={classes.login}>
-			<h1>Login</h1>
-			<LoginForm user={user} onUserChange={handleUserChange} onSubmit={handleLogin} />
-		</div>
+		<>
+			<div className={classes.login}>
+				<h1>Login</h1>
+				<LoginForm user={userCredentials} onUserChange={handleUserChange} onSubmit={handleLogin} />
+			</div>
+			<Alert message={message} isSuccess={isSuccess} isVisible={isVisible} />
+		</>
 	);
 };

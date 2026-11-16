@@ -1,3 +1,8 @@
+export interface UserCredentials {
+  name: string;
+  password: string;
+}
+
 export interface Worker {
   id: number;
   name: string;
