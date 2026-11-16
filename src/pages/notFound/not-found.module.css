@@ -12,4 +12,15 @@
 	background-color: #ff595e;
 	color: #f8f9fa;
 	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.goToHome {
+	font-size: 18px;
+	color: #007bff;
+	text-decoration: none;
+}
+
+.goToHome:hover {
+	text-decoration: underline;
 }
