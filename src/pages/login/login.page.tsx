@@ -28,8 +28,10 @@ export const LoginPage: React.FC = () => {
 				navigate('/time-tracker');
 				setUser({ id: 0, name: userCredentials.username });
 			} else {
-				hideAlert('Login failed', false, true);
+				hideAlert('Wrong credentials', false, true);
 			}
+		}).catch((error) => {
+			hideAlert(`An error occurred: ${error.message}`, false, true);
 		});
 	};
 

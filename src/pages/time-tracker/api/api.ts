@@ -26,10 +26,10 @@ export const saveDashboard = async (monthId: number, yearId: number, dashboard: 
   }
 }
 
-export const deletedTask = async (monthId: number, yearId: number, taskId: number): Promise<boolean> => {
+export const deletedTask = async (taskId: number): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return deleteTaskMock(monthId, yearId, taskId);
+    return deleteTaskMock(taskId);
   } else {
-    return deleteTaskReal(monthId, yearId, taskId);
+    return deleteTaskReal(taskId);
   }
 }

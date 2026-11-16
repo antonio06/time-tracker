@@ -1,5 +1,4 @@
 import React from "react";
-import { UserProvider } from '@/common/context';
 import { AppLayout } from '@/layouts';
 import { LoginPage } from '@/pages';
 

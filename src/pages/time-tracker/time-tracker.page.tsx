@@ -90,7 +90,7 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const deleteTask = (taskId: number): void => {
-    api.deletedTask(month, year, taskId).then((isDeleted) => {
+    api.deletedTask(taskId).then((isDeleted) => {
       if (isDeleted) {
         loadedTrackerList();
         hideAlert('Task deleted successfully', true, true);

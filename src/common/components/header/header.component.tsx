@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context';
 import classes from './header.module.css';
 import userIcon from '@/assets/user.svg';
@@ -7,8 +8,10 @@ import logoutIcon from '@/assets/logout.svg';
 export const Header: React.FC = () => {
 	const userContext = useUserContext();
 
+	const navigate = useNavigate();
 	const logout = () => {
-		console.log('Logout clicked');
+		userContext.setUser({ id: 0, name: '' });
+		navigate('/');
 	}
 	return (
 		<div className={classes.header}>
