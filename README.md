@@ -226,7 +226,7 @@ Default user value:
 ```typescript
 {
   id: 0,
-  name: 'Mock User'
+  name: ''
 }
 ```
 
@@ -254,17 +254,115 @@ const MyComponent = () => {
 
 ### Provider Hierarchy
 
-Both contexts are wrapped in the `App.tsx` component:
+Both contexts are wrapped in the `RouterComponent`:
 
 ```typescript
 <UserProvider>
-  <TimeProvider>
-    <AppLayout>
-      <TimeTrackerPage />
-    </AppLayout>
-  </TimeProvider>
+  <Router>
+    <Routes>
+      {/* Routes here */}
+    </Routes>
+  </Router>
 </UserProvider>
 ```
+
+## Authentication & Routing
+
+### Login Flow
+
+The application implements a simple authentication system:
+
+1. **Login Page** (`src/pages/login/`) - User enters username and password
+2. **Authentication** - Credentials are validated against the mock API (`/api/login`)
+3. **User Context** - On successful login, user information is stored in `UserContext`
+4. **Navigation** - User is redirected to the time-tracker dashboard
+
+**Login Credentials (Mock API):**
+- Username: `user1`
+- Password: `test`
+
+### Protected Routes
+
+The application uses a **ProtectedRoute** component (`src/core/router/protected-route.tsx`) to prevent unauthorized access:
+
+```typescript
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
+  const { user } = useUserContext();
+
+  // If user is not logged in, redirect to login
+  if (!user.name) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Otherwise, render the protected page
+  return element;
+};
+```
+
+**Usage in Router:**
+```typescript
+<Route 
+  path="/time-tracker" 
+  element={<ProtectedRoute element={<TimeTrackerScene />} />} 
+/>
+```
+
+### Route Structure
+
+- **`/`** (LoginScene) - Public login page
+- **`/time-tracker`** (TimeTrackerScene) - Protected dashboard, requires authentication
+- **`*`** (NotFoundScene) - Catch-all for undefined routes
+
+### Header Visibility
+
+The header is conditionally rendered based on the `isLoggedIn` prop:
+- **When logged in** (`/time-tracker`) - Header shows user name and logout button
+- **When logged out** (`/`) - Header is hidden, only login form is visible
+
+## Path Aliases
+
+The project uses **path aliases** configured with Vite for cleaner imports:
+
+### Configuration
+
+**tsconfig.json & tsconfig.app.json:**
+```json
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    }
+  }
+}
+```
+
+**vite.config.ts:**
+```typescript
+import tsconfigPaths from "vite-tsconfig-paths";
+
+export default defineConfig({
+  plugins: [tsconfigPaths(), react()],
+});
+```
+
+### Benefits
+
+- ✅ Cleaner imports without relative paths (`../../common/components`)
+- ✅ Easier refactoring - no need to update relative paths
+- ✅ Better IDE autocomplete and navigation
+
+**Examples:**
+
+```typescript
+// ❌ Before (relative paths)
+import { Header } from '../../../common/components/header';
+
+// ✅ After (path aliases)
+import { Header } from '@/common/components/header';
+```
+
+## State Management with Context
 
 ## Data Models
 
@@ -322,6 +420,32 @@ interface WorkedHoursVm {
 
 ## API Endpoints
 
+### POST /api/login
+
+Authenticate a user with username and password.
+
+**Request Body:**
+```json
+{
+  "name": "user1",
+  "password": "test"
+}
+```
+
+**Response (Success):**
+```json
+true
+```
+
+**Response (Failure):**
+```json
+false
+```
+
+**Mock Credentials:**
+- Username: `user1`
+- Password: `test`
+
 ### GET /api/dashboard
 
 Retrieve all tasks for a specific month and year.
@@ -353,7 +477,31 @@ GET /api/dashboard?monthId=11&yearId=2026
 
 ### POST /api/dashboard
 
-Save or update dashboard tasks and hours.
+Add a new task to the dashboard.
+
+**Request Body:**
+```json
+{
+  "id": 1699858123456,
+  "task": "Development",
+  "monthId": 11,
+  "yearId": 2026,
+  "workedHours": [
+    { "value": 0, "taskId": 1699858123456, "dateId": 0 },
+    { "value": 0, "taskId": 1699858123456, "dateId": 1 },
+    { "value": 0, "taskId": 1699858123456, "dateId": 2 }
+  ]
+}
+```
+
+**Response:**
+```json
+true
+```
+
+### PUT /api/dashboard
+
+Save or update all dashboard tasks and hours for a specific month.
 
 **Query Parameters:**
 - `monthId` (required): Month number (1-12)
@@ -368,7 +516,8 @@ Save or update dashboard tasks and hours.
     "monthId": 11,
     "yearId": 2026,
     "workedHours": [
-      { "value": 8, "taskId": 1699858123456, "dateId": 0 }
+      { "value": 8, "taskId": 1699858123456, "dateId": 0 },
+      { "value": 8.5, "taskId": 1699858123456, "dateId": 1 }
     ]
   }
 ]
@@ -376,31 +525,24 @@ Save or update dashboard tasks and hours.
 
 **Response:**
 ```json
-{
-  "success": true,
-  "message": "Dashboard saved successfully"
-}
+true
 ```
 
 ### DELETE /api/dashboard/:taskId
 
 Delete a specific task.
 
-**Query Parameters:**
-- `monthId` (required): Month number (1-12)
-- `yearId` (required): Year number
+**Path Parameters:**
+- `taskId` (required): The ID of the task to delete
 
 **Request:**
 ```bash
-DELETE /api/dashboard/1699858123456?monthId=11&yearId=2026
+DELETE /api/dashboard/1699858123456
 ```
 
 **Response:**
 ```json
-{
-  "success": true,
-  "message": "Task deleted successfully"
-}
+true
 ```
 
 ## Known Gotchas & Important Notes
