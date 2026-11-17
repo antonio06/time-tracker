@@ -1,11 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginForm } from './component/login-form.component';
 import * as vm from './login.vm';
 import { login } from './api/api';
 import { mapUserToUserCredencials } from './login.mappers';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import { useUserContext } from '@/common/context/user-context';
+import { switchRoutes } from '@/core/router';
 import classes from './login.module.css';
 
 export const LoginPage: React.FC = () => {
@@ -40,6 +41,7 @@ export const LoginPage: React.FC = () => {
 			<div className={classes.login}>
 				<h1>Login</h1>
 				<LoginForm user={userCredentials} onUserChange={handleUserChange} onSubmit={handleLogin} />
+				<Link to={switchRoutes.createAccount} className={classes.createAccountLink}>Create Account</Link>
 			</div>
 			<Alert message={message} isSuccess={isSuccess} isVisible={isVisible} />
 		</>
