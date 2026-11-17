@@ -15,7 +15,7 @@ export const CreateAccountPage: React.FC = () => {
 		event.preventDefault();
 		const errors = validateUserCredentials(userCredentials);
 		if (Object.keys(errors).length > 0) {
-			hideAlert('Please fix the errors', false, true);
+			hideAlert(errors, false, true);
 		} else {
 			const userCredentialsMapped = mapUserToUserCredentials(userCredentials);
 			createAccount(userCredentialsMapped)
