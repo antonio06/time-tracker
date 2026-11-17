@@ -662,3 +662,8 @@ VITE_IS_MOCK=true
    ```bash
    npm run build
    ```
+
+## 📝 Work Log
+
+### 2026-11-17
+- **Fixed alert component line breaks** - Added `white-space: pre-wrap;` CSS property to `.message` class in `alert.module.css` to properly render `\n` escape sequences as visible line breaks in alert messages
