@@ -1,6 +1,6 @@
-export interface User {
+export interface UserCredentials {
 	username: string;
 	password: string;
 }
 
-export const emptyUser: User = { username: '', password: '' };
+export const emptyUser: UserCredentials = { username: '', password: '' };

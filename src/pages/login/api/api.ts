@@ -1,4 +1,4 @@
-import * as server from './api.model';
+import * as server from './api-model';
 import { loginMock } from './api-mock';
 import { loginReal } from './api-real';
 

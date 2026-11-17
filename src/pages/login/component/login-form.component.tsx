@@ -3,7 +3,7 @@ import * as vm from '../login.vm';
 import classes from './login-form.module.css';
 
 interface Props {
-	user: vm.User;
+	user: vm.UserCredentials;
 	onUserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }

@@ -1,4 +1,4 @@
-import * as model from './api.model';
+import * as model from './api-model';
 
 const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/login`;
 

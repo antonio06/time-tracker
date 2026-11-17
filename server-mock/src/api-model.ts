@@ -22,3 +22,12 @@ interface WorkedHours {
   taskId: number;
   dateId: number;
 }
+
+export const createEmptyWorker = (userName: string): Worker => {
+  const uniqueId = Date.now() + Math.random();
+  return {
+    id: uniqueId,
+    name: userName,
+    dashboard: []
+  };
+};

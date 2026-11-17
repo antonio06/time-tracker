@@ -63,6 +63,14 @@ app.put(routes.baseUrl, async (context) => {
   return context.json(true);
 });
 
+app.post(routes.createAccount, async (context) => {
+  const user = await context.req.json<model.UserCredentials>();
+  const newWorker = model.createEmptyWorker(user.name);
+  workerDataCopy = { ...workerDataCopy, ...newWorker };
+  console.log(workerDataCopy);
+  return context.json(true);
+});
+
 serve({ fetch: app.fetch, port: 3001 }, (info) => {
   console.log(`API running on ${info.port}`);
 });
