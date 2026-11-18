@@ -3,13 +3,18 @@ import { CreateAccountForm } from './component/create-account-form.component';
 import { validateUserCredentials } from './create-account.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import * as vm from './create-account.vm';
-import { mapUserToUserCredentials } from './create-account.mapper';
+import { mapUserToUserCredentials, mapUserModelToUserVm } from './create-account.mapper';
 import { createAccount } from './api';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '@/common/context';
+import { switchRoutes } from '@/core/router'
 import classes from './create-account.module.css';
 
 export const CreateAccountPage: React.FC = () => {
 	const [userCredentials, setUserCredentials] = React.useState<vm.UserCredentials>(vm.createAccountInitialValues);
 	const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
+	const navigate = useNavigate();
+	const { setUser } = useUserContext();
 
 	const handleCreateAccount = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -20,7 +25,8 @@ export const CreateAccountPage: React.FC = () => {
 			const userCredentialsMapped = mapUserToUserCredentials(userCredentials);
 			createAccount(userCredentialsMapped)
 				.then((result) => {
-					hideAlert('Account created successfully', true, true);
+					setUser(mapUserModelToUserVm(result));
+					navigate(switchRoutes.timeTracker);
 				})
 				.catch((error) => {
 					hideAlert(`Failed to create account: ${error.message}`, false, true);

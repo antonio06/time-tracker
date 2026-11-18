@@ -3,7 +3,7 @@ import * as model from './api-model';
 const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/create-account`;
 
 
-export const createAccountMock = async (credentials: model.UserCredentials): Promise<boolean> => {
+export const createAccountMock = async (credentials: model.UserCredentials): Promise<model.User> => {
 	// Implement the real API call here
 	const response = await fetch(baseUrl, {
 		method: 'POST',

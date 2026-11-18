@@ -7,17 +7,12 @@ import * as model from './api-model';
 import { routes } from './routes';
 import { mapWorkerToUser } from './mappers';
 
-let workerDataCopy = { ...workerData };
-let workerDataListCopy: model.Worker[] = [workerDataCopy];
+let workerDataListCopy: model.Worker[] = [{ ...workerData }];
 
 const app = new Hono();
 
 app.use(logger());
 app.use('/api/*', cors());
-
-const filterWorkerDashboard = (monthId: number, yearId: number) => {
-  return workerDataCopy.dashboard.filter(task => task.monthId === monthId && task.yearId === yearId);
-};
 
 app.delete(`${routes.baseUrl}/:taskId`, (context) => {
   const taskId = Number(context.req.param('taskId'));
@@ -74,10 +69,15 @@ app.put(routes.baseUrl, async (context) => {
   const updatedDashboard = await context.req.json<model.Dashboard[]>();
   const monthId = Number(context.req.query('monthId'));
   const yearId = Number(context.req.query('yearId'));
+  const userId = Number(context.req.query('userId'));
+  const workerDataCopy = workerDataListCopy.find(user => user.id === userId);
+  if (!workerDataCopy) {
+    return context.json(false);
+  }
 
   workerDataCopy.dashboard = workerDataCopy.dashboard.filter(task => task.monthId !== monthId || task.yearId !== yearId);
-
   workerDataCopy.dashboard = [...workerDataCopy.dashboard, ...updatedDashboard];
+  workerDataListCopy = workerDataListCopy.map(u => u.id === userId ? workerDataCopy : u);
   return context.json(true);
 });
 
@@ -85,7 +85,8 @@ app.post(routes.createAccount, async (context) => {
   const user = await context.req.json<model.UserCredentials>();
   const newWorker = model.createEmptyWorker(user.name, user.password);
   workerDataListCopy = [...workerDataListCopy, newWorker];
-  return context.json(true);
+  const userMapped = mapWorkerToUser(newWorker);
+  return context.json(userMapped);
 });
 
 serve({ fetch: app.fetch, port: 3001 }, (info) => {

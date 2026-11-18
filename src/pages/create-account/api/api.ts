@@ -3,7 +3,7 @@ import { createAccountMock } from './api-mock';
 import * as model from './api-model';
 
 
-export const createAccount = async (credentials: model.UserCredentials): Promise<boolean> => {
+export const createAccount = async (credentials: model.UserCredentials): Promise<model.User> => {
 	if (import.meta.env.VITE_IS_MOCK === 'true') {
 		return createAccountMock(credentials);
 	} else {

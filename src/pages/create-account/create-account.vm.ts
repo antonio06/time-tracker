@@ -4,6 +4,11 @@ export interface UserCredentials {
 	confirmPassword: string;
 }
 
+export interface User {
+	id: number;
+	name: string;
+}
+
 export const createAccountInitialValues: UserCredentials = {
 	username: '',
 	password: '',
