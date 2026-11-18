@@ -10,26 +10,26 @@ export const getTrackerList = async (monthId: number, yearId: number, userId: nu
   }
 }
 
-export const saveTask = async (task: server.DashboardModel): Promise<boolean> => {
+export const saveTask = async (userId: number, task: server.DashboardModel): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return saveTaskMock(task);
+    return saveTaskMock(userId, task);
   } else {
-    return saveTaskReal(task);
+    return saveTaskReal(userId, task);
   }
 }
 
-export const saveDashboard = async (monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
+export const saveDashboard = async (userId: number, monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return saveDashboardMock(monthId, yearId, dashboard);
+    return saveDashboardMock(userId, monthId, yearId, dashboard);
   } else {
-    return saveDashboardReal(monthId, yearId, dashboard);
+    return saveDashboardReal(userId, monthId, yearId, dashboard);
   }
 }
 
-export const deletedTask = async (taskId: number): Promise<boolean> => {
+export const deletedTask = async (taskId: number, userId: number): Promise<boolean> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return deleteTaskMock(taskId);
+    return deleteTaskMock(taskId, userId);
   } else {
-    return deleteTaskReal(taskId);
+    return deleteTaskReal(taskId, userId);
   }
 }

@@ -6,8 +6,8 @@ export const getTrackerListMock = async (monthId: number, yearId: number, userId
   return fetch(`${baseUrl}?monthId=${monthId}&yearId=${yearId}&userId=${userId}`).then(res => res.json());
 }
 
-export const saveTaskMock = async (task: server.DashboardModel): Promise<boolean> => {
-  return fetch(baseUrl, {
+export const saveTaskMock = async (userId: number, task: server.DashboardModel): Promise<boolean> => {
+  return fetch(`${baseUrl}?userId=${userId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -16,8 +16,8 @@ export const saveTaskMock = async (task: server.DashboardModel): Promise<boolean
   }).then(res => res.json());
 }
 
-export const saveDashboardMock = async (monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
-  return fetch(`${baseUrl}?monthId=${monthId}&yearId=${yearId}`, {
+export const saveDashboardMock = async (userId: number, monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
+  return fetch(`${baseUrl}?userId=${userId}&monthId=${monthId}&yearId=${yearId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export const saveDashboardMock = async (monthId: number, yearId: number, dashboa
   }).then(res => res.json());
 }
 
-export const deleteTaskMock = async (taskId: number): Promise<boolean> => {
-  return fetch(`${baseUrl}/${taskId}`, {
+export const deleteTaskMock = async (taskId: number, userId: number): Promise<boolean> => {
+  return fetch(`${baseUrl}/${taskId}?userId=${userId}`, {
     method: 'DELETE'
   }).then(res => res.json());
 }

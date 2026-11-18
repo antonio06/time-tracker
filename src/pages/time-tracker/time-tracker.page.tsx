@@ -63,7 +63,7 @@ export const TimeTrackerPage: React.FC = () => {
       ...createEmptyTrack(getDaysInMonth(month, year).length, month, year),
     }
 
-    api.saveTask(newTask).then((isSaved) => {
+    api.saveTask(user.id, newTask).then((isSaved) => {
       if (isSaved) {
         setTrackerList([...trackerList, newTask]);
       } else {
@@ -77,7 +77,7 @@ export const TimeTrackerPage: React.FC = () => {
   const saveDashboard = () => {
     const dashboardModel = mapToModel(trackerList);
 
-    api.saveDashboard(month, year, dashboardModel).then((isSaved) => {
+    api.saveDashboard(user.id, month, year, dashboardModel).then((isSaved) => {
       if (isSaved) {
         hideAlert('Dashboard saved successfully', true, true);
         loadedTrackerList();
@@ -90,7 +90,7 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const deleteTask = (taskId: number): void => {
-    api.deletedTask(taskId).then((isDeleted) => {
+    api.deletedTask(taskId, user.id).then((isDeleted) => {
       if (isDeleted) {
         loadedTrackerList();
         hideAlert('Task deleted successfully', true, true);

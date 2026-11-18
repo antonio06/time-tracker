@@ -4,14 +4,14 @@ export const getTrackerListReal = async (monthId: number, yearId: number, userId
   throw new Error('Not implemented ' + JSON.stringify([]));
 }
 
-export const saveTaskReal = async (task: server.DashboardModel): Promise<boolean> => {
+export const saveTaskReal = async (userId: number, task: server.DashboardModel): Promise<boolean> => {
   throw new Error('Not implemented ' + JSON.stringify(task));
 }
 
-export const saveDashboardReal = async (monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
+export const saveDashboardReal = async (userId: number, monthId: number, yearId: number, dashboard: server.DashboardModel[]): Promise<boolean> => {
   throw new Error('Not implemented ' + JSON.stringify(dashboard));
 }
 
-export const deleteTaskReal = async (taskId: number): Promise<boolean> => {
-  throw new Error('Not implemented ' + JSON.stringify({ taskId }));
+export const deleteTaskReal = async (taskId: number, userId: number): Promise<boolean> => {
+  throw new Error('Not implemented ' + JSON.stringify({ taskId, userId }));
 }

@@ -20,11 +20,18 @@ const filterWorkerDashboard = (monthId: number, yearId: number) => {
 };
 
 app.delete(`${routes.baseUrl}/:taskId`, (context) => {
-  const id = Number(context.req.param('taskId'));
+  const taskId = Number(context.req.param('taskId'));
+  console.log(taskId);
+  const userId = Number(context.req.query('userId'));
+  const filteredWorker = workerDataListCopy.find(user => user.id === userId);
 
-  const index = workerDataCopy.dashboard.findIndex(task => task.id === id);
+  if (!filteredWorker) {
+    return context.json(false);
+  }
+  const index = filteredWorker.dashboard.findIndex(task => task.id === taskId);
+  console.log(index)
   if (index !== -1) {
-    workerDataCopy.dashboard = workerDataCopy.dashboard.filter(task => task.id !== id);
+    workerDataListCopy = workerDataListCopy.map(u => u.id === userId ? { ...u, dashboard: filteredWorker.dashboard.filter(task => task.id !== taskId) } : u);
     return context.json(true);
   }
   return context.json(false);
@@ -52,8 +59,14 @@ app.get(routes.baseUrl, (context) => {
 
 app.post(routes.baseUrl, async (context) => {
   const task = await context.req.json<model.Dashboard>();
+  const userId = Number(context.req.query('userId'));
 
-  workerDataCopy.dashboard = [...workerDataCopy.dashboard, task];
+  const user = workerDataListCopy.find(user => user.id === userId);
+  if (!user) {
+    return context.json(false);
+  }
+  user.dashboard = [...user.dashboard, task];
+  workerDataListCopy = workerDataListCopy.map(u => u.id === userId ? user : u);
   return context.json(true);
 });
 
