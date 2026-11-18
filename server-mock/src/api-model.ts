@@ -6,6 +6,7 @@ export interface UserCredentials {
 export interface Worker {
   id: number;
   name: string;
+  password: string;
   dashboard: Dashboard[];
 }
 
@@ -23,11 +24,17 @@ interface WorkedHours {
   dateId: number;
 }
 
-export const createEmptyWorker = (userName: string): Worker => {
-  const uniqueId = Date.now() + Math.random();
+export interface User {
+  id: number;
+  name: string;
+}
+
+export const createEmptyWorker = (userName: string, password: string): Worker => {
+  const uniqueId = Math.floor(Date.now() + Math.random() * 1000);
   return {
     id: uniqueId,
     name: userName,
+    password: password,
     dashboard: []
   };
 };

@@ -2,11 +2,11 @@ import * as server from '@/common';
 import { getTrackerListMock, deleteTaskMock, saveTaskMock, saveDashboardMock } from './api-mock';
 import { getTrackerListReal, deleteTaskReal, saveTaskReal, saveDashboardReal } from './api-real';
 
-export const getTrackerList = async (monthId: number, yearId: number): Promise<server.DashboardModel[]> => {
+export const getTrackerList = async (monthId: number, yearId: number, userId: number): Promise<server.DashboardModel[]> => {
   if (import.meta.env.VITE_IS_MOCK === 'true') {
-    return getTrackerListMock(monthId, yearId);
+    return getTrackerListMock(monthId, yearId, userId);
   } else {
-    return getTrackerListReal(monthId, yearId);
+    return getTrackerListReal(monthId, yearId, userId);
   }
 }
 

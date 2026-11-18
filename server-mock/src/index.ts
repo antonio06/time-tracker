@@ -5,8 +5,10 @@ import { serve } from '@hono/node-server';
 import { workerData } from './mock-data';
 import * as model from './api-model';
 import { routes } from './routes';
+import { mapWorkerToUser } from './mappers';
 
 let workerDataCopy = { ...workerData };
+let workerDataListCopy: model.Worker[] = [workerDataCopy];
 
 const app = new Hono();
 
@@ -31,17 +33,20 @@ app.delete(`${routes.baseUrl}/:taskId`, (context) => {
 app.post(routes.login, async (context) => {
   const credentials = await context.req.json<model.UserCredentials>();
 
-  if (credentials.name === 'user1' && credentials.password === 'test') {
-    return context.json(true);
+  const filteredUser = workerDataListCopy.find(user => user.name === credentials.name && user.password === credentials.password);
+  if (filteredUser) {
+    const user = mapWorkerToUser(filteredUser);
+    return context.json(user);
   }
-  return context.json(false);
+  return context.json(null);
 })
 
 app.get(routes.baseUrl, (context) => {
   const monthId = Number(context.req.query('monthId'));
   const yearId = Number(context.req.query('yearId'));
+  const userId = Number(context.req.query('userId'));
 
-  const filteredData = filterWorkerDashboard(monthId, yearId);
+  const filteredData = workerDataListCopy.filter(user => user.id === userId).flatMap(user => user.dashboard.filter(task => task.monthId === monthId && task.yearId === yearId));
   return context.json(filteredData);
 });
 
@@ -65,9 +70,8 @@ app.put(routes.baseUrl, async (context) => {
 
 app.post(routes.createAccount, async (context) => {
   const user = await context.req.json<model.UserCredentials>();
-  const newWorker = model.createEmptyWorker(user.name);
-  workerDataCopy = { ...workerDataCopy, ...newWorker };
-  console.log(workerDataCopy);
+  const newWorker = model.createEmptyWorker(user.name, user.password);
+  workerDataListCopy = [...workerDataListCopy, newWorker];
   return context.json(true);
 });
 

@@ -9,17 +9,17 @@ import { getMonthName } from '@/common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
 import { getDaysInMonth } from '@/common/helpers';
-import { useTimeContext } from '@/common/context';
+import { useTimeContext, useUserContext } from '@/common/context';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
   const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
   const { month, year } = useTimeContext();
+  const { user } = useUserContext();
 
   const loadedTrackerList = () => {
-
-    api.getTrackerList(month, year).then((result) => {
+    api.getTrackerList(month, year, user.id).then((result) => {
       if (result) {
         const mappedData = mapToVm(result);
         setTrackerList(mappedData);
@@ -197,7 +197,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   React.useEffect(() => {
     loadedTrackerList();
-  }, [month]);
+  }, [month, user.id]);
 
   return (
     <div className={classes.container}>

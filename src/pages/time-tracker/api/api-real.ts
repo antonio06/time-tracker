@@ -1,6 +1,6 @@
 import * as server from '@/common';
 
-export const getTrackerListReal = async (monthId: number, yearId: number): Promise<server.DashboardModel[]> => {
+export const getTrackerListReal = async (monthId: number, yearId: number, userId: number): Promise<server.DashboardModel[]> => {
   throw new Error('Not implemented ' + JSON.stringify([]));
 }
 

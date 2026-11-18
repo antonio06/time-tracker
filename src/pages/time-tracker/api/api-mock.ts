@@ -2,8 +2,8 @@ import * as server from '@/common';
 
 const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/dashboard`;
 
-export const getTrackerListMock = async (monthId: number, yearId: number): Promise<server.DashboardModel[]> => {
-  return fetch(`${baseUrl}?monthId=${monthId}&yearId=${yearId}`).then(res => res.json());
+export const getTrackerListMock = async (monthId: number, yearId: number, userId: number): Promise<server.DashboardModel[]> => {
+  return fetch(`${baseUrl}?monthId=${monthId}&yearId=${yearId}&userId=${userId}`).then(res => res.json());
 }
 
 export const saveTaskMock = async (task: server.DashboardModel): Promise<boolean> => {

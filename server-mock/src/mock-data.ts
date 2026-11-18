@@ -120,6 +120,7 @@ const dashboardData: model.Dashboard[] = [
 
 export const workerData: model.Worker = {
   id: 1,
-  name: "Mock User",
+  name: "user1",
+  password: 'test',
   dashboard: dashboardData,
 }

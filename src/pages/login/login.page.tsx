@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LoginForm } from './component/login-form.component';
 import * as vm from './login.vm';
 import { login } from './api/api';
-import { mapUserToUserCredencials } from './login.mappers';
+import { mapUserToUserCredencials, mapUserModelToUserVm } from './login.mappers';
 import { validateUserCredentials } from './login.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import { useUserContext } from '@/common/context/user-context';
@@ -29,10 +29,11 @@ export const LoginPage: React.FC = () => {
 		} else {
 			const modelCredentials = mapUserToUserCredencials(userCredentials);
 
-			login(modelCredentials).then((success) => {
-				if (success) {
+			login(modelCredentials).then((apiUser) => {
+				if (apiUser) {
+					const userVm = mapUserModelToUserVm(apiUser);
+					setUser(userVm);
 					navigate('/time-tracker');
-					setUser({ id: 0, name: userCredentials.username });
 				} else {
 					hideAlert('Wrong credentials', false, true);
 				}

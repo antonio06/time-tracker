@@ -3,7 +3,7 @@ import * as model from './api-model';
 const baseUrl = `${import.meta.env.VITE_BASE_URL}/api/login`;
 
 
-export const loginMock = async (credentials: model.UserCredentials): Promise<boolean> => {
+export const loginMock = async (credentials: model.UserCredentials): Promise<model.User | null> => {
 	// Implement the real API call here
 	const response = await fetch(baseUrl, {
 		method: 'POST',
@@ -12,5 +12,5 @@ export const loginMock = async (credentials: model.UserCredentials): Promise<boo
 		},
 		body: JSON.stringify(credentials),
 	});
-	return response.ok && (await response.json());
+	return response.ok ? (await response.json()) : null;
 };
