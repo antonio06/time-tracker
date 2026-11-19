@@ -1,17 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../context';
+import { useUserContext, useUnsavedChangesContext } from '../../context';
 import classes from './header.module.css';
 import userIcon from '@/assets/user.svg';
 import logoutIcon from '@/assets/logout.svg';
+import { switchRoutes } from '@/core/router';
 
 export const Header: React.FC = () => {
 	const userContext = useUserContext();
+	const { isDirty, setIsDirty } = useUnsavedChangesContext();
 
 	const navigate = useNavigate();
 	const logout = () => {
+		if (isDirty && !window.confirm('You have unsaved changes. Do you want to log out anyway?')) {
+			return;
+		}
+		setIsDirty(false);
 		userContext.setUser({ id: 0, name: '' });
-		navigate('/');
+		navigate(switchRoutes.root);
 	}
 	return (
 		<div className={classes.header}>

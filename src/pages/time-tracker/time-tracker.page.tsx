@@ -9,7 +9,7 @@ import { getMonthName } from '@/common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
 import { getDaysInMonth } from '@/common/helpers';
-import { useTimeContext, useUserContext } from '@/common/context';
+import { useTimeContext, useUserContext, useUnsavedChangesContext } from '@/common/context';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
@@ -17,7 +17,7 @@ export const TimeTrackerPage: React.FC = () => {
   const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
   const { month, year, setMonth } = useTimeContext();
   const { user } = useUserContext();
-  const [isDirty, setIsDirty] = React.useState<boolean>(false);
+  const { isDirty, setIsDirty } = useUnsavedChangesContext();
 
   const loadedTrackerList = () => {
     api.getTrackerList(month, year, user.id).then((result) => {
