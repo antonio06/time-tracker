@@ -9,7 +9,3 @@ export const switchRoutes: SwitchRoutes = {
 	timeTracker: "/time-tracker",
 	createAccount: "/create-account",
 };
-
-export const routes: SwitchRoutes = {
-	...switchRoutes,
-};

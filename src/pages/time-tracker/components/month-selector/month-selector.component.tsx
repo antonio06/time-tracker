@@ -3,14 +3,18 @@ import { months } from "./months";
 import { useTimeContext } from "@/common/context";
 import classes from "./month-selector.module.css";
 
-export const MonthSelector: React.FC = () => {
-	const { setMonth, month } = useTimeContext();
+interface Props {
+	onMonthChange: (newMonth: number) => void;
+}
+
+export const MonthSelector: React.FC<Props> = ({ onMonthChange }) => {
+	const { month } = useTimeContext();
 
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		const monthId = event.target.value;
 		if (monthId) {
 			const monthNum = Number(monthId);
-			setMonth(monthNum);
+			onMonthChange(monthNum);
 		}
 	};
 

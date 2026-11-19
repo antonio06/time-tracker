@@ -12,5 +12,9 @@ export const loginMock = async (credentials: model.UserCredentials): Promise<mod
 		},
 		body: JSON.stringify(credentials),
 	});
-	return response.ok ? (await response.json()) : null;
+
+	if (!response.ok) {
+		throw new Error(`Failed to login: ${response.status}`);
+	}
+	return response.json();
 };

@@ -83,6 +83,16 @@ app.put(routes.baseUrl, async (context) => {
 
 app.post(routes.createAccount, async (context) => {
   const user = await context.req.json<model.UserCredentials>();
+
+  if (!user.name || !user.password) {
+    return context.json({ error: 'Name and password are required' }, 400);
+  }
+
+  const exists = workerDataListCopy.some(w => w.name === user.name);
+  if (exists) {
+    return context.json({ error: 'User already exists' }, 409);
+  }
+
   const newWorker = model.createEmptyWorker(user.name, user.password);
   workerDataListCopy = [...workerDataListCopy, newWorker];
   const userMapped = mapWorkerToUser(newWorker);

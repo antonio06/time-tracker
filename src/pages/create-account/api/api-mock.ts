@@ -12,5 +12,10 @@ export const createAccountMock = async (credentials: model.UserCredentials): Pro
 		},
 		body: JSON.stringify(credentials),
 	});
-	return response.ok && (await response.json());
+
+	if (!response.ok) {
+		const body = await response.json().catch(() => null);
+		throw new Error(body?.error ?? `Status ${response.status}`);
+	}
+	return response.json();
 };

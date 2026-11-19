@@ -15,8 +15,9 @@ import classes from './time-tracker.module.css';
 export const TimeTrackerPage: React.FC = () => {
   const [trackerList, setTrackerList] = React.useState<vm.DashboardVm[]>([]);
   const { message, isSuccess, isVisible, hideAlert } = useHideMessage();
-  const { month, year } = useTimeContext();
+  const { month, year, setMonth } = useTimeContext();
   const { user } = useUserContext();
+  const [isDirty, setIsDirty] = React.useState<boolean>(false);
 
   const loadedTrackerList = () => {
     api.getTrackerList(month, year, user.id).then((result) => {
@@ -37,7 +38,16 @@ export const TimeTrackerPage: React.FC = () => {
     })
 
     setTrackerList([...updatedTrackerList]);
+    setIsDirty(true);
   }
+
+  const handleMonthChange = (newMonth: number) => {
+    if (isDirty) {
+      hideAlert('You have unsaved changes. Please save before changing the month.', false, true);
+      return;
+    }
+    setMonth(newMonth);
+  };
 
   const updateWorkedHours = (track: vm.DashboardVm, dateId: number, newValue: number): vm.WorkedHoursVm[] => {
     const updateWorkedHours = track.workedHours.map((wh => {
@@ -56,6 +66,7 @@ export const TimeTrackerPage: React.FC = () => {
     })
 
     setTrackerList([...updatedTrackerList]);
+    setIsDirty(true);
   }
 
   const addTask = () => {
@@ -76,9 +87,9 @@ export const TimeTrackerPage: React.FC = () => {
 
   const saveDashboard = () => {
     const dashboardModel = mapToModel(trackerList);
-
     api.saveDashboard(user.id, month, year, dashboardModel).then((isSaved) => {
       if (isSaved) {
+        setIsDirty(false);
         hideAlert('Dashboard saved successfully', true, true);
         loadedTrackerList();
       } else {
@@ -92,7 +103,7 @@ export const TimeTrackerPage: React.FC = () => {
   const deleteTask = (taskId: number): void => {
     api.deletedTask(taskId, user.id).then((isDeleted) => {
       if (isDeleted) {
-        loadedTrackerList();
+        setTrackerList(prev => prev.filter(track => track.id !== taskId));
         hideAlert('Task deleted successfully', true, true);
       } else {
         hideAlert('Failed to delete task', false, true);
@@ -206,7 +217,7 @@ export const TimeTrackerPage: React.FC = () => {
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {year}</h2>
         </div>
-        <MonthSelector />
+        <MonthSelector onMonthChange={handleMonthChange} />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
       </div>
       <TimeTable trackerList={trackerList} onInputValueNumberChange={handledInputValueNumberChange} onInputValueStringChange={handledInputValueStringChange} onDeleteTask={deleteTask} />

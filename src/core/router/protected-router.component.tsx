@@ -5,8 +5,8 @@ import { useUserContext } from "@/common/context";
 
 export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const { user } = useUserContext();
-	if (!user || user.name === '') {
-		return <Navigate to={switchRoutes.root} />;
+	if (!user?.name || !user?.id) {
+		return <Navigate to={switchRoutes.root} replace />;
 	}
 	return <>{children}</>;
 };
