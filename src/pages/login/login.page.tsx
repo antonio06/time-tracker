@@ -33,7 +33,7 @@ export const LoginPage: React.FC = () => {
 				if (apiUser) {
 					const userVm = mapUserModelToUserVm(apiUser);
 					setUser(userVm);
-					navigate('/time-tracker');
+					navigate(switchRoutes.timeTracker);
 				} else {
 					hideAlert('Wrong credentials', false, true);
 				}
