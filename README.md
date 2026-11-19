@@ -1,158 +1,80 @@
 # Time Tracker — Monthly Timesheet
 
-A modern web application to track working hours per task across a monthly calendar, with Excel export support and a fully tested architecture.
+A web application to track working hours per task across a monthly calendar, with Excel export and unit-tested business logic.
 
 ![Time Tracker screenshot](./docs/image.png)
 
 ## Features
 
-### Core Functionality
-- 📅 **Monthly calendar view** with all days of the month as columns
-- 🗓️ **Month selector** - Navigate between different months with context management
-- ✅ **Add and delete tasks** dynamically
-- ✏️ **Edit task names and hours** directly in the table
-- ➕ **Per-day totals and grand total row** calculated in real-time
-- 💾 **Save dashboard changes** - Persist modifications to the backend
-- 📊 **Export to Excel** - Generate formatted `.xlsx` files with the timesheet
-
-### User Experience
-- 🎨 **Clean, modern UI** with the [Lato](https://fonts.google.com/specimen/Lato) typeface
-- ⚠️ **Alert notifications** for user feedback (success/error messages)
-- 🔄 **Real-time updates** when editing tasks and hours
-- 🌐 **Responsive design** optimized for different screen sizes
-
-### Technical Features
-- ✅ **Comprehensive test coverage** with unit tests for business logic
-- 🏗️ **Clean architecture** with separation of concerns (components, business logic, mappers, helpers)
-- 🔌 **Flexible API integration** - Supports both mock and real API backends
-- 🧪 **Type-safe** with full TypeScript support
-- 🌍 **Global state management** with React Context API for month/year navigation
+- 🔐 **Login and account creation** with protected routes
+- 📅 **Monthly calendar view** with one column per day of the month
+- 🗓️ **Month selector** to navigate between months
+- ✅ **Add, rename and delete tasks** directly in the table
+- ⏱️ **Edit worked hours per day** (weekends are disabled)
+- ➕ **Per-task, per-day and grand totals**, recalculated as you type
+- 💾 **Save changes** to the backend
+- ⚠️ **Unsaved changes protection**: you get a warning when you change month, log out or close the tab with unsaved changes
+- 📊 **Export to Excel**: generates a formatted `.xlsx` file of the current month
+- 🔔 **Alert notifications** for success and error feedback
+- 🔌 **Mock / real API switch** via environment variable
 
 ## Tech stack
 
 | Technology | Version | Purpose |
 |---|---|---|
 | [React](https://react.dev/) | 19 | UI framework |
+| [React Router](https://reactrouter.com/) | 7 | Routing |
 | [TypeScript](https://www.typescriptlang.org/) | 6 | Type safety |
-| [Vite](https://vite.dev/) | 8 | Build tool & dev server |
+| [Vite](https://vite.dev/) | 8 | Build tool and dev server |
 | [ExcelJS](https://github.com/exceljs/exceljs) | 4 | Excel file generation |
 | [Vitest](https://vitest.dev/) | 5 | Unit testing |
-| [ESLint](https://eslint.org/) | 10 | Code quality |
-
-## Project Architecture
-
-### Directory Structure
-
-```
-src/
-├── common/
-│   ├── components/          # Reusable UI components
-│   │   ├── alert/          # Alert notification system
-│   │   ├── header/         # Application header with user info
-│   │   ├── footer/         # Application footer
-│   │   └── table/          # Time table display
-│   ├── context/            # Global state management
-│   │   ├── time-context.tsx   # Month/year navigation context
-│   │   └── user-context.tsx   # User information context
-│   ├── helpers/            # Utility functions for time & data manipulation
-│   └── model/              # Data models & view models
-├── layouts/
-│   └── app-layout.tsx      # Main application layout wrapper
-├── pages/
-│   └── time-tracker/       # Main page & features
-│       ├── api/            # API integration (mock & real)
-│       ├── components/     # Page-specific components
-│       ├── business/       # Business logic & calculations
-│       └── mapper/         # Data transformation layer
-├── App.tsx                 # Main app component with context providers
-└── main.tsx               # React entry point
-```
-
-### Layout & Shell Components
-
-#### **AppLayout** (`src/layouts/app-layout.tsx`)
-The main application layout component that wraps the entire app with:
-- **Header** - Top navigation bar with user information and logout functionality
-- **Footer** - Bottom footer with copyright information
-- **Children** - Main content area where pages are rendered
-
-#### **Header** (`src/common/components/header/`)
-Displays:
-- User profile information with user icon
-- User name (from UserContext)
-- Logout button with icon
-
-#### **Footer** (`src/common/components/footer/`)
-Displays:
-- Copyright notice (© 2026 Time Tracker)
-
-### Page & Feature Components
-
-#### **TimeTrackerPage** (`src/pages/time-tracker/time-tracker.page.tsx`)
-The main page component that orchestrates:
-- Month navigation and selection
-- Task list management (add/delete/edit)
-- Hours input and validation
-- Dashboard persistence
-- Excel export functionality
-
-#### **TimeTable** (`src/common/components/table/time-table.tsx`)
-Renders the interactive timesheet table with:
-- Calendar columns for each day of the month
-- Task rows with editable hours
-- Daily totals column
-- Grand total row
-
-#### **MonthSelector** (`src/pages/time-tracker/components/month-selector/`)
-Allows users to navigate between different months
-
-#### **ActionsComponent** (`src/pages/time-tracker/components/actions/`)
-Provides action buttons for:
-- Adding new tasks
-- Saving changes
-- Exporting to Excel
-- Deleting tasks
-
-#### **Alert System** (`src/common/components/alert/`)
-Displays user feedback with customizable success/error messages and auto-hide functionality
-
-### Business Logic Layer
-
-#### **time-tracker.business.ts**
-Core calculations for:
-- Extracting days from month dates
-- Computing daily totals
-- Calculating grand total hours
-- Working hours aggregation by day
-
-#### **time-tracker.mapper.ts**
-Transforms data between:
-- API response format → View Model (VM)
-- View Model → Backend model for saving
-
-#### **Common Helpers**
-- **time-helpers.ts**: Date manipulation and formatting
-- **common-helpers.ts**: General utility functions
+| [ESLint](https://eslint.org/) | 10 | Linting |
+| [Hono](https://hono.dev/) | 4 | Mock API server |
 
 ## Getting started
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js `^20.19.0` or `>=22.12.0` (required by Vite 8)
 
-### Installation
+### 1. Install dependencies
+
+The frontend and the mock server have separate dependencies:
 
 ```bash
 npm install
+cd server-mock && npm install && cd ..
 ```
 
-### Running locally
+### 2. Configure environment variables
+
+Copy `.env-example` to `.env` and set the mock server URL:
 
 ```bash
+VITE_IS_MOCK=true
+VITE_BASE_URL=http://localhost:3001
+```
+
+| Variable | Values | Description |
+|---|---|---|
+| `VITE_IS_MOCK` | `true` / `false` | `true` uses the mock server. `false` uses the real API (not implemented yet) |
+| `VITE_BASE_URL` | URL | Base URL of the API, e.g. `http://localhost:3001` |
+
+> When `VITE_IS_MOCK=true`, the default month is **November 2026** to match the mock data. Otherwise, the current month is used.
+
+### 3. Run the app
+
+In two terminals:
+
+```bash
+# Terminal 1: mock API at http://localhost:3001
+npm run start:api-server
+
+# Terminal 2: frontend at http://localhost:5173
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`.
+**Mock credentials:** username `user1`, password `test`. You can also create a new account from the login page.
 
 ## Available scripts
 
@@ -161,509 +83,209 @@ The app will be available at `http://localhost:5173`.
 | `npm run dev` | Start the development server at `http://localhost:5173` |
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint for code quality checks |
-| `npm run test` | Run all unit tests with Vitest |
-| `npm run start:api-server` | Start the mock API server from `server-mock` directory |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run unit tests with Vitest (watch mode) |
+| `npx vitest run` | Run unit tests once (e.g. for CI) |
+| `npm run start:api-server` | Start the mock API server (`server-mock/`) |
 
-## Testing
+## Project structure
 
-The project includes comprehensive unit tests for critical business logic:
-
-### Test Coverage
-
-- **time-tracker.business.spec.ts** - Tests for calculations (totals, aggregations)
-- **time-tracker.mapper.spec.ts** - Tests for data transformations
-- **table-business.spec.ts** - Tests for table-related logic
-- **time-helpers.spec.ts** - Tests for date/time utilities
-- **common-helpers.spec.ts** - Tests for common utility functions
-
-### Running Tests
-
-```bash
-npm run test
+```
+├── server-mock/                  # Mock API (Hono, in-memory data)
+│   └── src/
+│       ├── index.ts              # Endpoints
+│       ├── mock-data.ts          # Initial data (user1)
+│       ├── api-model.ts
+│       ├── mappers.ts
+│       └── routes.ts
+└── src/
+    ├── common/
+    │   ├── components/           # Shared UI: alert, header, footer, table
+    │   ├── context/              # React contexts (see below)
+    │   ├── helpers/              # Date and general utilities
+    │   └── model/                # Dashboard models shared across pages
+    ├── core/
+    │   └── router/               # Routes, router and ProtectedRoute
+    ├── layouts/                  # AppLayout (header + content + footer)
+    ├── pages/                    # One folder per page
+    │   ├── login/
+    │   ├── create-account/
+    │   ├── time-tracker/
+    │   └── notFound/
+    ├── scenes/                   # Page + layout + providers for each route
+    ├── App.tsx
+    └── main.tsx
 ```
 
-To run tests in watch mode:
+### Page anatomy
 
-```bash
-npm run test -- --watch
+Every page follows the same layered structure:
+
+```
+pages/time-tracker/
+├── api/
+│   ├── api.ts                    # Public API: picks mock or real based on VITE_IS_MOCK
+│   ├── api-mock.ts               # Calls the mock server
+│   ├── api-real.ts               # Real API (not implemented yet)
+│   └── api-model.ts              # Shapes returned by the API
+├── components/                   # Page-specific components
+├── *.page.tsx                    # Page component (state and orchestration)
+├── *.vm.ts                       # View models used by the UI
+├── *.mapper.ts                   # API model ⇄ view model conversion
+├── *.business.ts                 # Pure logic (calculations)
+├── *.validations.ts              # Form validations
+└── *.spec.ts                     # Unit tests
 ```
 
-## State Management with Context
+The UI never consumes API models directly. Data always goes through a mapper, so a change in the API only affects the mapper.
 
-The application uses **React Context API** to manage global state:
+## Routing
 
-### TimeContext (`src/common/context/time-context.tsx`)
+| Path | Scene | Access |
+|---|---|---|
+| `/` | `LoginScene` | Public |
+| `/create-account` | `CreateAccountScene` | Public |
+| `/time-tracker` | `TimeTrackerScene` | Protected |
+| `*` | `NotFoundScene` | Public |
 
-Manages month and year navigation across the application.
+Protected routes are wrapped in `ProtectedRoute` (`src/core/router/protected-router.component.tsx`), which redirects to `/` when there is no logged-in user:
 
-```typescript
-interface TimeContextProps {
-  month: number;        // Range: 1-12 (not 0-11)
-  year: number;
-  setMonth: (month: number) => void;
-  setYear: (year: number) => void;
-}
-```
-
-### UserContext (`src/common/context/user-context.tsx`)
-
-Manages user information and authentication state.
-
-```typescript
-interface User {
-  id: number;
-  name: string;
-}
-
-interface UserContextProps {
-  user: User;
-  setUser: (user: User) => void;
-}
-```
-
-Default user value:
-```typescript
-{
-  id: 0,
-  name: ''
-}
-```
-
-### Using the Contexts
-
-```typescript
-import { useTimeContext, useUserContext } from '../../common/context';
-
-const MyComponent = () => {
-  // Time context
-  const { month, year, setMonth, setYear } = useTimeContext();
-
-  // User context
-  const { user, setUser } = useUserContext();
-
-  return (
-    <div>
-      <p>{user.name} - {month}/{year}</p>
-    </div>
-  );
-};
-```
-
-**Important:** Month values range from **1-12**, not 0-11. This is different from JavaScript's `Date.getMonth()` which returns 0-11.
-
-### Provider Hierarchy
-
-Both contexts are wrapped in the `RouterComponent`:
-
-```typescript
-<UserProvider>
-  <Router>
-    <Routes>
-      {/* Routes here */}
-    </Routes>
-  </Router>
-</UserProvider>
-```
-
-## Authentication & Routing
-
-### Login Flow
-
-The application implements a simple authentication system:
-
-1. **Login Page** (`src/pages/login/`) - User enters username and password
-2. **Authentication** - Credentials are validated against the mock API (`/api/login`)
-3. **User Context** - On successful login, user information is stored in `UserContext`
-4. **Navigation** - User is redirected to the time-tracker dashboard
-
-**Login Credentials (Mock API):**
-- Username: `user1`
-- Password: `test`
-
-### Protected Routes
-
-The application uses a **ProtectedRoute** component (`src/core/router/protected-route.tsx`) to prevent unauthorized access:
-
-```typescript
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
-  const { user } = useUserContext();
-
-  // If user is not logged in, redirect to login
-  if (!user.name) {
-    return <Navigate to="/" replace />;
-  }
-
-  // Otherwise, render the protected page
-  return element;
-};
-```
-
-**Usage in Router:**
-```typescript
-<Route 
-  path="/time-tracker" 
-  element={<ProtectedRoute element={<TimeTrackerScene />} />} 
+```tsx
+<Route
+  path={switchRoutes.timeTracker}
+  element={<ProtectedRoute><TimeTrackerScene /></ProtectedRoute>}
 />
 ```
 
-### Route Structure
+The header (user name and logout) is only shown on the time tracker scene.
 
-- **`/`** (LoginScene) - Public login page
-- **`/time-tracker`** (TimeTrackerScene) - Protected dashboard, requires authentication
-- **`*`** (NotFoundScene) - Catch-all for undefined routes
+> The user is kept in memory only, so **reloading the page logs you out**.
 
-### Header Visibility
+## State management
 
-The header is conditionally rendered based on the `isLoggedIn` prop:
-- **When logged in** (`/time-tracker`) - Header shows user name and logout button
-- **When logged out** (`/`) - Header is hidden, only login form is visible
+Global state uses the React Context API. Each context is split into two files: `*-context.ts` holds the context and its hook, and `*-provider.tsx` holds the provider component. This keeps Vite's Fast Refresh working.
 
-## Path Aliases
+| Context | Hook | Provided in | Holds |
+|---|---|---|---|
+| `UserContext` | `useUserContext()` | `RouterComponent` (whole app) | Logged-in user `{ id, name }` |
+| `TimeContext` | `useTimeContext()` | `TimeTrackerScene` | Selected `month` (1–12) and `year` |
+| `UnsavedChangesContext` | `useUnsavedChangesContext()` | `TimeTrackerScene` | `isDirty` flag for unsaved changes |
 
-The project uses **path aliases** configured with Vite for cleaner imports:
+```tsx
+import { useTimeContext, useUserContext } from '@/common/context';
 
-### Configuration
-
-**tsconfig.json & tsconfig.app.json:**
-```json
-{
-  "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    }
-  }
-}
+const { month, year, setMonth } = useTimeContext();
+const { user, setUser } = useUserContext();
 ```
 
-**vite.config.ts:**
-```typescript
-import tsconfigPaths from "vite-tsconfig-paths";
+Each hook returns safe defaults when used outside its provider. For example, `isDirty` is `false`.
 
-export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
-});
+`UnsavedChangesContext` sits above `AppLayout` so that both the page and the header can read it:
+
+```
+UnsavedChangesProvider
+└── AppLayout
+    ├── Header              ← asks for confirmation on logout if isDirty
+    └── TimeProvider
+        └── TimeTrackerPage ← sets isDirty when hours or task names change
 ```
 
-### Benefits
-
-- ✅ Cleaner imports without relative paths (`../../common/components`)
-- ✅ Easier refactoring - no need to update relative paths
-- ✅ Better IDE autocomplete and navigation
-
-**Examples:**
-
-```typescript
-// ❌ Before (relative paths)
-import { Header } from '../../../common/components/header';
-
-// ✅ After (path aliases)
-import { Header } from '@/common/components/header';
-```
-
-## State Management with Context
-
-## Data Models
-
-### DashboardModel & DashboardVm
+## Data model
 
 ```typescript
 interface DashboardModel {
-  id: number | string;           // Unique task identifier
-  task: string;                  // Task name/description
-  monthId: number;               // Month (1-12)
-  yearId: number;                // Year
+  id: number;                     // Task id
+  task: string;                   // Task name
+  monthId: number;                // 1–12
+  yearId: number;
   workedHours: WorkedHoursModel[];
 }
 
-interface DashboardVm {
-  id: number | string;
-  task: string;
-  monthId: number;
-  yearId: number;
-  workedHours: WorkedHoursVm[];
-}
-```
-
-### WorkedHoursModel & WorkedHoursVm
-
-```typescript
 interface WorkedHoursModel {
-  value: number;        // Hours worked (e.g., 8.5)
-  taskId: number | string; // Reference to task
-  dateId: number;       // Day of month (0-based index, 0 = 1st day)
-}
-
-interface WorkedHoursVm {
-  value: number;
-  taskId: number | string;
-  dateId: number;
+  value: number;                  // Hours worked (e.g. 7.5)
+  taskId: number;                 // Id of the task it belongs to
+  dateId: number;                 // 0-based day index (0 = 1st of the month)
 }
 ```
 
-### Example Task Structure
+## Mock API
 
-```json
-{
-  "id": 1699858123456,
-  "task": "Development",
-  "monthId": 11,
-  "yearId": 2026,
-  "workedHours": [
-    { "value": 8, "taskId": 1699858123456, "dateId": 0 },
-    { "value": 8.5, "taskId": 1699858123456, "dateId": 1 },
-    { "value": 0, "taskId": 1699858123456, "dateId": 2 }
-  ]
-}
-```
+The mock server (`server-mock/`) runs on `http://localhost:3001` with CORS enabled. Data is kept **in memory**: changes are lost when the server restarts.
 
-## API Endpoints
+| Method | Endpoint | Body | Response |
+|---|---|---|---|
+| `POST` | `/api/login` | `{ name, password }` | `{ id, name }`, or `null` if credentials are wrong |
+| `POST` | `/api/create-account` | `{ name, password }` | `{ id, name }`. `400` if fields are missing, `409` if the user already exists |
+| `GET` | `/api/dashboard?userId=&monthId=&yearId=` | — | `DashboardModel[]` for that user and month |
+| `POST` | `/api/dashboard?userId=` | `DashboardModel` | `true` / `false` |
+| `PUT` | `/api/dashboard?userId=&monthId=&yearId=` | `DashboardModel[]` | `true` / `false`. Replaces all tasks of that month |
+| `DELETE` | `/api/dashboard/:taskId?userId=` | — | `true` / `false` |
 
-### POST /api/login
+Example `GET /api/dashboard?userId=1&monthId=11&yearId=2026`:
 
-Authenticate a user with username and password.
-
-**Request Body:**
-```json
-{
-  "name": "user1",
-  "password": "test"
-}
-```
-
-**Response (Success):**
-```json
-true
-```
-
-**Response (Failure):**
-```json
-false
-```
-
-**Mock Credentials:**
-- Username: `user1`
-- Password: `test`
-
-### GET /api/dashboard
-
-Retrieve all tasks for a specific month and year.
-
-**Query Parameters:**
-- `monthId` (required): Month number (1-12)
-- `yearId` (required): Year number
-
-**Request:**
-```bash
-GET /api/dashboard?monthId=11&yearId=2026
-```
-
-**Response:**
 ```json
 [
   {
-    "id": 1699858123456,
-    "task": "Development",
+    "id": 1,
+    "task": "Task 1",
     "monthId": 11,
     "yearId": 2026,
     "workedHours": [
-      { "value": 8, "taskId": 1699858123456, "dateId": 0 },
-      { "value": 8.5, "taskId": 1699858123456, "dateId": 1 }
+      { "value": 0, "taskId": 1, "dateId": 0 },
+      { "value": 0.5, "taskId": 1, "dateId": 1 }
     ]
   }
 ]
 ```
 
-### POST /api/dashboard
+> ⚠️ The mock has no real authentication: any `userId` can be queried. A real backend needs tokens, hashed passwords and input validation.
 
-Add a new task to the dashboard.
+## Testing
 
-**Request Body:**
-```json
-{
-  "id": 1699858123456,
-  "task": "Development",
-  "monthId": 11,
-  "yearId": 2026,
-  "workedHours": [
-    { "value": 0, "taskId": 1699858123456, "dateId": 0 },
-    { "value": 0, "taskId": 1699858123456, "dateId": 1 },
-    { "value": 0, "taskId": 1699858123456, "dateId": 2 }
-  ]
-}
-```
+Unit tests cover the pure logic of the app:
 
-**Response:**
-```json
-true
-```
+| Spec | Covers |
+|---|---|
+| `time-tracker.business.spec.ts` | Totals and day calculations for the Excel export |
+| `time-tracker.mapper.spec.ts` | API model ⇄ view model mapping |
+| `table-business.spec.ts` | Table totals and rounding |
+| `time-helpers.spec.ts` | Date utilities |
+| `common-helpers.spec.ts` | Month names |
+| `login.validations.spec.ts` | Login form validation |
+| `create-account.validations.spec.ts` | Create account form validation |
 
-### PUT /api/dashboard
-
-Save or update all dashboard tasks and hours for a specific month.
-
-**Query Parameters:**
-- `monthId` (required): Month number (1-12)
-- `yearId` (required): Year number
-
-**Request Body:**
-```json
-[
-  {
-    "id": 1699858123456,
-    "task": "Development",
-    "monthId": 11,
-    "yearId": 2026,
-    "workedHours": [
-      { "value": 8, "taskId": 1699858123456, "dateId": 0 },
-      { "value": 8.5, "taskId": 1699858123456, "dateId": 1 }
-    ]
-  }
-]
-```
-
-**Response:**
-```json
-true
-```
-
-### DELETE /api/dashboard/:taskId
-
-Delete a specific task.
-
-**Path Parameters:**
-- `taskId` (required): The ID of the task to delete
-
-**Request:**
 ```bash
-DELETE /api/dashboard/1699858123456
+npm run test        # watch mode
+npx vitest run      # single run
 ```
 
-**Response:**
-```json
-true
-```
+## Path aliases
 
-## Known Gotchas & Important Notes
-
-### ⚠️ Month Range (1-12, not 0-11)
-
-The application uses **1-based month indexing** (1 = January, 12 = December) throughout, different from JavaScript's `Date.getMonth()` which returns 0-11.
-
-- **TimeContext:** `month` ranges from 1-12
-- **getDaysInMonth():** Expects (month, year) with month as 1-12
-- **getMonthName():** Expects month as 1-12
-- **API:** All `monthId` parameters should be 1-12
-
-**Example:**
-```typescript
-// ✅ Correct
-getDaysInMonth(11, 2026)  // November 2026
-getMonthName(1)           // "January"
-
-// ❌ Wrong
-getDaysInMonth(0, 2026)   // Invalid!
-getMonthName(0)           // ""
-```
-
-### 📅 Date Indexing in workedHours
-
-The `dateId` field in `WorkedHoursModel` is **0-based**:
-- `dateId: 0` = 1st day of the month
-- `dateId: 1` = 2nd day of the month
-- `dateId: 29` = 30th day of the month (if the month has 30+ days)
-
-### 🔄 Creating Empty Tracks
-
-When adding a new task, use `createEmptyTrack()` to ensure the correct number of days:
+`@/` points to `src/`, configured in `tsconfig.app.json` (`baseUrl` + `paths`) and resolved by `vite-tsconfig-paths`:
 
 ```typescript
-import { createEmptyTrack } from './time-tracker.mapper';
-import { getDaysInMonth } from '../../common/helpers';
+// ❌ Relative path
+import { Header } from '../../../common/components/header';
 
-const month = 11;  // November
-const year = 2026;
-const daysCount = getDaysInMonth(month, year).length;
-
-const newTask = createEmptyTrack(daysCount, month, year);
-// Results in 30 workedHours entries (November has 30 days)
+// ✅ Alias
+import { Header } from '@/common/components/header';
 ```
 
-## Environment Variables
+## Gotchas
 
-| Variable | Values | Description |
-|---|---|---|
-| `VITE_IS_MOCK` | `true` / `false` | Use mock data instead of the real API |
+- **Months are 1-based** (1 = January) everywhere in the app and the API, unlike JavaScript's `Date.getMonth()`, which returns 0–11.
+- **`dateId` is 0-based**: `dateId: 0` is the 1st of the month.
+- **New tasks** must have one `workedHours` entry per day. Use `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`.
 
-## Mock API Server
+## Work log
 
-The project includes a mock API server for development and testing purposes.
-
-### Running the mock server
-
-```bash
-npm run start:api-server
-```
-
-The server will run on `http://localhost:3001`.
-
-Alternatively, you can run it manually:
-
-```bash
-cd server-mock
-npm install
-npm run server
-```
-
-### Features
-
-- ✅ CORS support enabled for cross-origin requests
-- ✅ Static file serving from the `public` directory
-- ✅ Persistent mock data for development
-- ✅ Predictable responses for testing UI flows
-
-### Environment Setup
-
-To use the mock API, set the environment variable:
-
-```bash
-VITE_IS_MOCK=true
-```
-
-Or create a `.env` file:
-
-```
-VITE_IS_MOCK=true
-```
-
-## Development Workflow
-
-1. **Start the mock server** (optional, for API testing):
-   ```bash
-   npm run start:api-server
-   ```
-
-2. **Start the development server**:
-   ```bash
-   npm run dev
-   ```
-
-3. **View the app** at `http://localhost:5173`
-
-4. **Make changes** - The dev server will hot-reload your changes
-
-5. **Run tests** as needed:
-   ```bash
-   npm run test
-   ```
-
-6. **Build for production**:
-   ```bash
-   npm run build
-   ```
-
-## 📝 Work Log
+### 2026-11-18 / 2026-11-19
+- Fixed the build (`tsconfig.json` paths, unused parameters in `api-real.ts`).
+- Fixed users being logged in when account creation failed. API errors now throw and show the server message.
+- Mock server: `create-account` validates fields and rejects duplicate users (`400` / `409`).
+- Deleting a task no longer discards unsaved edits.
+- Added unsaved changes protection (month change, logout, closing the tab) through `UnsavedChangesContext`.
+- Split contexts into `*-context.ts` and `*-provider.tsx` to fix Fast Refresh lint errors.
 
 ### 2026-11-17
-- **Fixed alert component line breaks** - Added `white-space: pre-wrap;` CSS property to `.message` class in `alert.module.css` to properly render `\n` escape sequences as visible line breaks in alert messages
+- Fixed line breaks in alert messages (`white-space: pre-wrap` in `alert.module.css`).
