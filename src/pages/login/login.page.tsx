@@ -6,7 +6,7 @@ import { login } from './api/api';
 import { mapUserToUserCredencials, mapUserModelToUserVm } from './login.mappers';
 import { validateUserCredentials } from './login.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
-import { useUserContext } from '@/common/context/user-context';
+import { useUserContext } from '@/common/context';
 import { switchRoutes } from '@/core/router';
 import classes from './login.module.css';
 

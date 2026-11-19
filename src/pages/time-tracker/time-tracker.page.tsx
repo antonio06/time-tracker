@@ -208,7 +208,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   React.useEffect(() => {
     loadedTrackerList();
-  }, [month, user.id]);
+  }, [month, year, user.id]);
 
   return (
     <div className={classes.container}>
