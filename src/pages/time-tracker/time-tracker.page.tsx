@@ -70,19 +70,9 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const addTask = () => {
-    const newTask = {
-      ...createEmptyTrack(getDaysInMonth(month, year).length, month, year),
-    }
-
-    api.saveTask(user.id, newTask).then((isSaved) => {
-      if (isSaved) {
-        setTrackerList([...trackerList, newTask]);
-      } else {
-        hideAlert('Failed to save task', false, true);
-      }
-    }).catch((error) => {
-      hideAlert(`Error saving task: ${error}`, false, true);
-    });
+    const newTask = createEmptyTrack(getDaysInMonth(month, year).length, month, year);
+    setTrackerList(prev => [...prev, newTask]);
+    setIsDirty(true);
   }
 
   const saveDashboard = () => {
@@ -101,16 +91,8 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const deleteTask = (taskId: number): void => {
-    api.deletedTask(taskId, user.id).then((isDeleted) => {
-      if (isDeleted) {
-        setTrackerList(prev => prev.filter(track => track.id !== taskId));
-        hideAlert('Task deleted successfully', true, true);
-      } else {
-        hideAlert('Failed to delete task', false, true);
-      }
-    }).catch((error) => {
-      hideAlert(`Error deleting task: ${error}`, false, true);
-    });
+    setTrackerList(prev => prev.filter(track => track.id !== taskId));
+    setIsDirty(true);
   }
 
   const generateExcelFile = async () => {

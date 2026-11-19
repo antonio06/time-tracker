@@ -14,24 +14,6 @@ const app = new Hono();
 app.use(logger());
 app.use('/api/*', cors());
 
-app.delete(`${routes.baseUrl}/:taskId`, (context) => {
-  const taskId = Number(context.req.param('taskId'));
-  console.log(taskId);
-  const userId = Number(context.req.query('userId'));
-  const filteredWorker = workerDataListCopy.find(user => user.id === userId);
-
-  if (!filteredWorker) {
-    return context.json(false);
-  }
-  const index = filteredWorker.dashboard.findIndex(task => task.id === taskId);
-  console.log(index)
-  if (index !== -1) {
-    workerDataListCopy = workerDataListCopy.map(u => u.id === userId ? { ...u, dashboard: filteredWorker.dashboard.filter(task => task.id !== taskId) } : u);
-    return context.json(true);
-  }
-  return context.json(false);
-});
-
 app.post(routes.login, async (context) => {
   const credentials = await context.req.json<model.UserCredentials>();
 
@@ -50,19 +32,6 @@ app.get(routes.baseUrl, (context) => {
 
   const filteredData = workerDataListCopy.filter(user => user.id === userId).flatMap(user => user.dashboard.filter(task => task.monthId === monthId && task.yearId === yearId));
   return context.json(filteredData);
-});
-
-app.post(routes.baseUrl, async (context) => {
-  const task = await context.req.json<model.Dashboard>();
-  const userId = Number(context.req.query('userId'));
-
-  const user = workerDataListCopy.find(user => user.id === userId);
-  if (!user) {
-    return context.json(false);
-  }
-  user.dashboard = [...user.dashboard, task];
-  workerDataListCopy = workerDataListCopy.map(u => u.id === userId ? user : u);
-  return context.json(true);
 });
 
 app.put(routes.baseUrl, async (context) => {

@@ -12,7 +12,7 @@ A web application to track working hours per task across a monthly calendar, wit
 - ✅ **Add, rename and delete tasks** directly in the table
 - ⏱️ **Edit worked hours per day** (weekends are disabled)
 - ➕ **Per-task, per-day and grand totals**, recalculated as you type
-- 💾 **Save changes** to the backend
+- 💾 **Save changes** to the backend. All edits (adding, renaming and deleting tasks, and changing hours) stay local until you press **Save**
 - ⚠️ **Unsaved changes protection**: you get a warning when you change month, log out or close the tab with unsaved changes
 - 📊 **Export to Excel**: generates a formatted `.xlsx` file of the current month
 - 🔔 **Alert notifications** for success and error feedback
@@ -187,8 +187,12 @@ UnsavedChangesProvider
 └── AppLayout
     ├── Header              ← asks for confirmation on logout if isDirty
     └── TimeProvider
-        └── TimeTrackerPage ← sets isDirty when hours or task names change
+        └── TimeTrackerPage ← sets isDirty on any edit, resets it after a successful save
 ```
+
+### Saving model
+
+The time tracker page works like a document: every change is applied to local state only, and pressing **Save** sends the whole month to the server in a single `PUT`. The server replaces all tasks of that month, which also creates new tasks and removes deleted ones. The page then reloads the month from the server.
 
 ## Data model
 
@@ -217,9 +221,7 @@ The mock server (`server-mock/`) runs on `http://localhost:3001` with CORS enabl
 | `POST` | `/api/login` | `{ name, password }` | `{ id, name }`, or `null` if credentials are wrong |
 | `POST` | `/api/create-account` | `{ name, password }` | `{ id, name }`. `400` if fields are missing, `409` if the user already exists |
 | `GET` | `/api/dashboard?userId=&monthId=&yearId=` | — | `DashboardModel[]` for that user and month |
-| `POST` | `/api/dashboard?userId=` | `DashboardModel` | `true` / `false` |
-| `PUT` | `/api/dashboard?userId=&monthId=&yearId=` | `DashboardModel[]` | `true` / `false`. Replaces all tasks of that month |
-| `DELETE` | `/api/dashboard/:taskId?userId=` | — | `true` / `false` |
+| `PUT` | `/api/dashboard?userId=&monthId=&yearId=` | `DashboardModel[]` | `true` / `false`. Replaces all tasks of that month (creates, updates and deletes) |
 
 Example `GET /api/dashboard?userId=1&monthId=11&yearId=2026`:
 
@@ -276,6 +278,7 @@ import { Header } from '@/common/components/header';
 - **Months are 1-based** (1 = January) everywhere in the app and the API, unlike JavaScript's `Date.getMonth()`, which returns 0–11.
 - **`dateId` is 0-based**: `dateId: 0` is the 1st of the month.
 - **New tasks** must have one `workedHours` entry per day. Use `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`.
+- **Task ids for new tasks are generated on the client** (`Date.now() + Math.random()`). That's fine for the mock, but a real backend should assign ids when saving.
 
 ## Work log
 
@@ -286,6 +289,7 @@ import { Header } from '@/common/components/header';
 - Deleting a task no longer discards unsaved edits.
 - Added unsaved changes protection (month change, logout, closing the tab) through `UnsavedChangesContext`.
 - Split contexts into `*-context.ts` and `*-provider.tsx` to fix Fast Refresh lint errors.
+- Adding and deleting tasks is now local until **Save**, consistent with editing hours. Removed the `POST /api/dashboard` and `DELETE /api/dashboard/:taskId` endpoints and their API functions.
 
 ### 2026-11-17
 - Fixed line breaks in alert messages (`white-space: pre-wrap` in `alert.module.css`).
