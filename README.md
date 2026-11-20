@@ -96,7 +96,7 @@ npm run dev
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
 | `npm run test` | Run unit tests with Vitest (watch mode) |
-| `npx vitest run` | Run unit tests once (e.g. for CI) |
+| `npm run test:run` | Run unit tests once (e.g. for CI). Wraps `vitest run` and normalizes the drive letter of the cwd to uppercase, because on Windows a lowercase one (`d:\`) makes Vitest fail |
 | `npm run start:api-server` | Start the mock API server (`server-mock/`) |
 
 ## Project structure
@@ -269,7 +269,7 @@ Unit tests cover the pure logic of the app:
 
 ```bash
 npm run test        # watch mode
-npx vitest run      # single run
+npm run test:run    # single run
 ```
 
 ## Path aliases
@@ -298,6 +298,7 @@ import { Header } from '@/common/components/header';
 ## Work log
 
 ### 2026-11-20
+- Added the `test:run` script (`scripts/run-vitest.mjs`): runs `vitest run` with the cwd drive letter normalized to uppercase, which fixes the "Cannot read properties of undefined (reading 'config')" failure on Windows. The Stop hook, `CLAUDE.md` and the README now use it.
 - Added the `dev:all` script (with the `concurrently` dev dependency) to start the frontend and the mock API with one command. README updated.
 - Fixed the `react-hooks/exhaustive-deps` warning in `time-tracker.page.tsx`: `hideAlert` in `useHideMessage` is now memoized with `React.useCallback`, `loadedTrackerList` is wrapped in `React.useCallback`, and the reload effect depends on `[loadedTrackerList]`.
 - Fixed swapped contents of `dashboard-model.ts` and `dashboard-vm.ts` in `src/common/model`: the API models are now in `dashboard-model.ts` and the view models in `dashboard-vm.ts`.

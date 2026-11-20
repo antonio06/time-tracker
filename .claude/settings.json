@@ -3,6 +3,8 @@
     "allow": [
       "Bash(npm run lint)",
       "Bash(npm run build)",
+      "Bash(npm run test:run)",
+      "Bash(npm run test:run *)",
       "Bash(npx vitest run)",
       "Bash(npx vitest run *)",
       "Bash(git status)",
@@ -12,6 +14,19 @@
     "deny": [
       "Read(./.env)",
       "Bash(git push *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/run-tests-on-stop.mjs",
+            "timeout": 120
+          }
+        ]
+      }
     ]
   }
 }

@@ -13,13 +13,13 @@ La documentación completa (estructura, modelo de datos, endpoints, contextos) e
 - `npm run dev:all`: arranca frontend y mock API a la vez (con `concurrently`). Es un proceso de larga duración: ejecútalo en segundo plano.
 - `npm run dev`: frontend en http://localhost:5173
 - `npm run start:api-server`: mock API en http://localhost:3001 (datos en memoria)
-- `npx vitest run`: tests una sola vez. **No uses `npm run test`**, que se queda en modo watch.
+- `npm run test:run`: tests una sola vez. **No uses `npm run test`**, que se queda en modo watch. Úsalo en vez de `npx vitest run`: en Windows, con la letra de unidad en minúscula (`d:`), Vitest falla con «Cannot read properties of undefined (reading 'config')», y el script la normaliza a mayúscula.
 - `npm run lint`: ESLint
 - `npm run build`: `tsc -b` + build de Vite. Es el typecheck real del proyecto.
 
 ## Antes de dar una tarea por terminada
 1. `npm run lint` sin errores
-2. `npx vitest run` en verde
+2. `npm run test:run` en verde
 3. `npm run build` sin errores
 Si cambias lógica de `*.business.ts`, `*.mapper.ts`, `*.validations.ts` o `common/helpers`, añade o actualiza su `*.spec.ts`.
 

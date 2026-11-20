@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest",
+    "test:run": "node scripts/run-vitest.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "start:api-server": "cd server-mock && npm run server",
