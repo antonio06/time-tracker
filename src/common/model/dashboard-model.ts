@@ -1,12 +1,12 @@
-export interface DashboardVm {
+export interface DashboardModel {
   id: number;
   task: string;
   monthId: number;
   yearId: number;
-  workedHours: WorkedHoursVm[];
+  workedHours: WorkedHoursModel[];
 }
 
-export interface WorkedHoursVm {
+export interface WorkedHoursModel {
   value: number;
   taskId: number;
   dateId: number;

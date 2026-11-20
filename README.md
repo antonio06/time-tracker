@@ -280,7 +280,14 @@ import { Header } from '@/common/components/header';
 - **New tasks** must have one `workedHours` entry per day. Use `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`.
 - **Task ids for new tasks are generated on the client** (`Date.now() + Math.random()`). That's fine for the mock, but a real backend should assign ids when saving.
 
+## Backlog
+
+- [ ] Move `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, to follow the page anatomy (see [Page anatomy](#page-anatomy)). `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them. This changes the folder structure, so propose it in plan mode first.
+
 ## Work log
+
+### 2026-11-20
+- Fixed swapped contents of `dashboard-model.ts` and `dashboard-vm.ts` in `src/common/model`: the API models are now in `dashboard-model.ts` and the view models in `dashboard-vm.ts`.
 
 ### 2026-11-18 / 2026-11-19
 - Fixed the build (`tsconfig.json` paths, unused parameters in `api-real.ts`).
