@@ -30,6 +30,7 @@ A web application to track working hours per task across a monthly calendar, wit
 | [Vitest](https://vitest.dev/) | 5 | Unit testing |
 | [ESLint](https://eslint.org/) | 10 | Linting |
 | [Hono](https://hono.dev/) | 4 | Mock API server |
+| [concurrently](https://github.com/open-cli-tools/concurrently) | 10 | Runs the frontend and the mock API with a single command |
 
 ## Getting started
 
@@ -64,7 +65,16 @@ VITE_BASE_URL=http://localhost:3001
 
 ### 3. Run the app
 
-In two terminals:
+Start the frontend and the mock API together with a single command:
+
+```bash
+# Frontend at http://localhost:5173 + mock API at http://localhost:3001
+npm run dev:all
+```
+
+The output of both processes shares the same terminal, prefixed with `web` (frontend) and `api` (mock server).
+
+Or, if you prefer to run them separately, use two terminals:
 
 ```bash
 # Terminal 1: mock API at http://localhost:3001
@@ -81,6 +91,7 @@ npm run dev
 | Script | Description |
 |---|---|
 | `npm run dev` | Start the development server at `http://localhost:5173` |
+| `npm run dev:all` | Start the frontend (`dev`) and the mock API (`start:api-server`) at once, using `concurrently` |
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
@@ -287,6 +298,7 @@ import { Header } from '@/common/components/header';
 ## Work log
 
 ### 2026-11-20
+- Added the `dev:all` script (with the `concurrently` dev dependency) to start the frontend and the mock API with one command. README updated.
 - Fixed the `react-hooks/exhaustive-deps` warning in `time-tracker.page.tsx`: `hideAlert` in `useHideMessage` is now memoized with `React.useCallback`, `loadedTrackerList` is wrapped in `React.useCallback`, and the reload effect depends on `[loadedTrackerList]`.
 - Fixed swapped contents of `dashboard-model.ts` and `dashboard-vm.ts` in `src/common/model`: the API models are now in `dashboard-model.ts` and the view models in `dashboard-vm.ts`.
 
