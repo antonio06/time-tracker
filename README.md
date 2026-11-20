@@ -283,11 +283,11 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Move `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, to follow the page anatomy (see [Page anatomy](#page-anatomy)). `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them. This changes the folder structure, so propose it in plan mode first.
-- [ ] Fix the `react-hooks/exhaustive-deps` warning in `time-tracker.page.tsx`: the `useEffect` that reloads the month calls `loadedTrackerList` without listing it as a dependency. Note: `hideAlert` from `useHideMessage` is NOT stable (recreated on every render), so adding it as a dependency would cause an infinite reload loop. Propose options in plan mode (e.g. memoize `hideAlert` with `useCallback`, or move the fetch logic inside the effect) before changing anything.
 
 ## Work log
 
 ### 2026-11-20
+- Fixed the `react-hooks/exhaustive-deps` warning in `time-tracker.page.tsx`: `hideAlert` in `useHideMessage` is now memoized with `React.useCallback`, `loadedTrackerList` is wrapped in `React.useCallback`, and the reload effect depends on `[loadedTrackerList]`.
 - Fixed swapped contents of `dashboard-model.ts` and `dashboard-vm.ts` in `src/common/model`: the API models are now in `dashboard-model.ts` and the view models in `dashboard-vm.ts`.
 
 ### 2026-11-18 / 2026-11-19

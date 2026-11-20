@@ -19,7 +19,7 @@ export const TimeTrackerPage: React.FC = () => {
   const { user } = useUserContext();
   const { isDirty, setIsDirty } = useUnsavedChangesContext();
 
-  const loadedTrackerList = () => {
+  const loadedTrackerList = React.useCallback(() => {
     api.getTrackerList(month, year, user.id).then((result) => {
       if (result) {
         const mappedData = mapToVm(result);
@@ -30,7 +30,7 @@ export const TimeTrackerPage: React.FC = () => {
     }).catch((error) => {
       hideAlert(`Error loading tracker list: ${error}`, false, true);
     });
-  }
+  }, [month, year, user.id, hideAlert]);
 
   const handledInputValueNumberChange = (taskId: number, dateId: number, newValue: number) => {
     const updatedTrackerList = trackerList.map(track => {
@@ -190,7 +190,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   React.useEffect(() => {
     loadedTrackerList();
-  }, [month, year, user.id]);
+  }, [loadedTrackerList]);
 
   return (
     <div className={classes.container}>
