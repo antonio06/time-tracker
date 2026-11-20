@@ -10,6 +10,7 @@ La documentación completa (estructura, modelo de datos, endpoints, contextos) e
 - Respóndeme en español. El código, los nombres, los comentarios y los mensajes de commit van en inglés.
 
 ## Comandos
+- `npm run dev:all`: arranca frontend y mock API a la vez (con `concurrently`). Es un proceso de larga duración: ejecútalo en segundo plano.
 - `npm run dev`: frontend en http://localhost:5173
 - `npm run start:api-server`: mock API en http://localhost:3001 (datos en memoria)
 - `npx vitest run`: tests una sola vez. **No uses `npm run test`**, que se queda en modo watch.
