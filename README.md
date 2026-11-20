@@ -283,6 +283,7 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Move `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, to follow the page anatomy (see [Page anatomy](#page-anatomy)). `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them. This changes the folder structure, so propose it in plan mode first.
+- [ ] Fix the `react-hooks/exhaustive-deps` lint warning in `src/pages/time-tracker/time-tracker.page.tsx` (line ~193): the `React.useEffect` that reloads the month calls `loadedTrackerList` but only lists `[month, year, user.id]` as dependencies. Wrap `loadedTrackerList` in `React.useCallback` (its dependencies are `month`, `year`, `user.id` and `hideAlert`, so check that `hideAlert` is stable to avoid reload loops) and add it to the effect's dependency array, instead of silencing the rule.
 
 ## Work log
 
