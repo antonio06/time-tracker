@@ -1,5 +1,4 @@
 import React from 'react';
-import { Workbook } from 'exceljs';
 import { TimeTable } from '@/common/components'
 import { ActionsComponent, MonthSelector } from './components';
 import { Alert, useHideMessage } from '@/common/components/alert';
@@ -96,7 +95,16 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const generateExcelFile = async () => {
-    const workbook = new Workbook();
+    // Load exceljs on demand so it is not part of the main bundle
+    let exceljs: typeof import('exceljs');
+    try {
+      exceljs = await import('exceljs');
+    } catch (error) {
+      hideAlert(`Error loading Excel library: ${error}`, false, true);
+      return;
+    }
+
+    const workbook = new exceljs.Workbook();
 
     const worksheet = workbook.addWorksheet(`${getMonthName(month)} ${year}`);
 
