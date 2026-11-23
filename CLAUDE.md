@@ -53,3 +53,4 @@ Si cambias lógica de `*.business.ts`, `*.mapper.ts`, `*.validations.ts` o `comm
 - No hagas commits ni push salvo que te lo pida.
 - No cambies la arquitectura de carpetas sin proponérmelo primero en plan mode.
 - Al terminar una tarea relevante, añade una línea al "Work log" del README.
+- No arranques servidores en segundo plano (`npm run dev`, `vite`, `preview`...) ni pares procesos. Para comprobar algo en el navegador, dime qué probar y lo hago yo.

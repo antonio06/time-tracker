@@ -274,7 +274,7 @@ npm run test:run    # single run
 
 ## Path aliases
 
-`@/` points to `src/`, configured in `tsconfig.app.json` (`baseUrl` + `paths`) and resolved by `vite-tsconfig-paths`:
+`@/` points to `src/`, configured in `tsconfig.app.json` (`baseUrl` + `paths`) and resolved by Vite's native `resolve.tsconfigPaths` option (enabled in `vite.config.ts`):
 
 ```typescript
 // ❌ Relative path
@@ -293,12 +293,12 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Remove `vite-tsconfig-paths` and use Vite's `resolve.tsconfigPaths` to resolve the `@/` alias. Update the "Path aliases" section when done.
 - [ ] Cancel the previous `setTimeout` in `hideAlert` of `useHideMessage` (`clearTimeout`), so a new alert is not hidden by the timer of the previous one.
 
 ## Work log
 
 ### 2026-11-23
+- Removed the `vite-tsconfig-paths` dev dependency: the `@/` alias is now resolved by Vite's native `resolve.tsconfigPaths: true` in `vite.config.ts`. No tsconfig changes were needed. README "Path aliases" section updated and the backlog item removed.
 - `exceljs` is now loaded with a dynamic `import('exceljs')` inside `generateExcelFile` (`time-tracker.page.tsx`), so it is no longer in the main bundle: the main chunk went from 1,205 kB to 278 kB and `exceljs` is a separate ~929 kB chunk downloaded on the first export. If the chunk fails to load, an error alert is shown. The build still warns about that lazy chunk, which is expected.
 - Moved `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, following the page anatomy. `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them.
 
