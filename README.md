@@ -293,7 +293,6 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Remove the unused `src/core/router/protected-route.tsx` (the app uses `protected-router.component.tsx`).
 - [ ] Unify file naming: `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, `login/component/` → `login/components/`. Update imports.
 - [ ] Fix the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts` (should be `// Arrange`).
 - [ ] Modernize `tsconfig.app.json`: drop the deprecated `baseUrl` and `ignoreDeprecations`, use `"@/*": ["./src/*"]`. Check that `resolve.tsconfigPaths` still resolves `@/`.
@@ -303,6 +302,7 @@ import { Header } from '@/common/components/header';
 ## Work log
 
 ### 2026-11-23
+- Removed the unused `src/core/router/protected-route.tsx`. The app only uses `ProtectedRoute` from `protected-router.component.tsx`, and nothing imported the old file. The backlog item was removed.
 - `hideAlert` in `useHideMessage` now keeps the timer id in a `useRef` and calls `clearTimeout` before starting a new one, so a new alert is no longer hidden early by the timer of the previous one. The pending timer is also cleared when the component unmounts. The backlog item was removed.
 - Removed the `vite-tsconfig-paths` dev dependency: the `@/` alias is now resolved by Vite's native `resolve.tsconfigPaths: true` in `vite.config.ts`. No tsconfig changes were needed. README "Path aliases" section updated and the backlog item removed.
 - `exceljs` is now loaded with a dynamic `import('exceljs')` inside `generateExcelFile` (`time-tracker.page.tsx`), so it is no longer in the main bundle: the main chunk went from 1,205 kB to 278 kB and `exceljs` is a separate ~929 kB chunk downloaded on the first export. If the chunk fails to load, an error alert is shown. The build still warns about that lazy chunk, which is expected.
