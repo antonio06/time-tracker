@@ -6,7 +6,7 @@ import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 describe('time tracker mapper specs', () => {
   describe('mapToVm', () => {
     it('Should return a empty array when feed a empty array', () => {
-      // Arrangemodel.Dashboard[]
+      // Arrange
       const value: model.DashboardModel[] = [];
 
       // Act
