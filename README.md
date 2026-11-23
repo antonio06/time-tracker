@@ -294,6 +294,12 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Cancel the previous `setTimeout` in `hideAlert` of `useHideMessage` (`clearTimeout`), so a new alert is not hidden by the timer of the previous one.
+- [ ] Remove the unused `src/core/router/protected-route.tsx` (the app uses `protected-router.component.tsx`).
+- [ ] Unify file naming: `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, `login/component/` → `login/components/`. Update imports.
+- [ ] Fix the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts` (should be `// Arrange`).
+- [ ] Modernize `tsconfig.app.json`: drop the deprecated `baseUrl` and `ignoreDeprecations`, use `"@/*": ["./src/*"]`. Check that `resolve.tsconfigPaths` still resolves `@/`.
+- [ ] Extract the Excel generation from `time-tracker.page.tsx` into its own module and add unit tests.
+- [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
 
 ## Work log
 
