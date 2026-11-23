@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as model from '@/common';
+import * as model from './api/api-model';
 import * as vm from '@/common/model';
 import { mapToVm, createEmptyTrack } from './time-tracker.mapper';
 

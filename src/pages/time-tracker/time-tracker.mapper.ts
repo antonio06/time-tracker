@@ -1,4 +1,4 @@
-import * as model from '@/common';
+import * as model from './api/api-model';
 import * as vm from '@/common/model';
 
 export const mapToVm = (data: model.DashboardModel[]): vm.DashboardVm[] => {

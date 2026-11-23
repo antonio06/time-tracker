@@ -1,4 +1,4 @@
-import * as server from '@/common';
+import * as server from './api-model';
 import { getTrackerListMock, saveDashboardMock } from './api-mock';
 import { getTrackerListReal, saveDashboardReal } from './api-real';
 

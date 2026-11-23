@@ -114,7 +114,7 @@ npm run dev
     │   ├── components/           # Shared UI: alert, header, footer, table
     │   ├── context/              # React contexts (see below)
     │   ├── helpers/              # Date and general utilities
-    │   └── model/                # Dashboard models shared across pages
+    │   └── model/                # Dashboard view models shared across pages
     ├── core/
     │   └── router/               # Routes, router and ProtectedRoute
     ├── layouts/                  # AppLayout (header + content + footer)
@@ -293,9 +293,14 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Move `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, to follow the page anatomy (see [Page anatomy](#page-anatomy)). `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them. This changes the folder structure, so propose it in plan mode first.
+- [ ] Load `exceljs` with a dynamic `import('exceljs')` when exporting, because the build warns about a chunk larger than 500 kB.
+- [ ] Remove `vite-tsconfig-paths` and use Vite's `resolve.tsconfigPaths` to resolve the `@/` alias. Update the "Path aliases" section when done.
+- [ ] Cancel the previous `setTimeout` in `hideAlert` of `useHideMessage` (`clearTimeout`), so a new alert is not hidden by the timer of the previous one.
 
 ## Work log
+
+### 2026-11-23
+- Moved `DashboardModel` and `WorkedHoursModel` from `src/common/model` to `src/pages/time-tracker/api/api-model.ts`, following the page anatomy. `DashboardVm` and `WorkedHoursVm` stay in `src/common/model` because the shared table uses them.
 
 ### 2026-11-20
 - Added the `test:run` script (`scripts/run-vitest.mjs`): runs `vitest run` with the cwd drive letter normalized to uppercase, which fixes the "Cannot read properties of undefined (reading 'config')" failure on Windows. The Stop hook, `CLAUDE.md` and the README now use it.
