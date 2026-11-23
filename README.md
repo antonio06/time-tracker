@@ -294,7 +294,6 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Unify file naming: `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, `login/component/` → `login/components/`. Update imports.
-- [ ] Fix the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts` (should be `// Arrange`).
 - [ ] Modernize `tsconfig.app.json`: drop the deprecated `baseUrl` and `ignoreDeprecations`, use `"@/*": ["./src/*"]`. Check that `resolve.tsconfigPaths` still resolves `@/`.
 - [ ] Extract the Excel generation from `time-tracker.page.tsx` into its own module and add unit tests.
 - [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
@@ -302,6 +301,7 @@ import { Header } from '@/common/components/header';
 ## Work log
 
 ### 2026-11-23
+- Fixed the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts`: it is now `// Arrange`, like the rest of the spec. The backlog item was removed.
 - Removed the unused `src/core/router/protected-route.tsx`. The app only uses `ProtectedRoute` from `protected-router.component.tsx`, and nothing imported the old file. The backlog item was removed.
 - `hideAlert` in `useHideMessage` now keeps the timer id in a `useRef` and calls `clearTimeout` before starting a new one, so a new alert is no longer hidden early by the timer of the previous one. The pending timer is also cleared when the component unmounts. The backlog item was removed.
 - Removed the `vite-tsconfig-paths` dev dependency: the `@/` alias is now resolved by Vite's native `resolve.tsconfigPaths: true` in `vite.config.ts`. No tsconfig changes were needed. README "Path aliases" section updated and the backlog item removed.
