@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LoginForm } from './components/login-form.component';
 import * as vm from './login.vm';
 import { login } from './api/api';
-import { mapUserToUserCredencials, mapUserModelToUserVm } from './login.mapper';
+import { mapUserToUserCredentials, mapUserModelToUserVm } from './login.mapper';
 import { validateUserCredentials } from './login.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import { useUserContext } from '@/common/context';
@@ -27,7 +27,7 @@ export const LoginPage: React.FC = () => {
 		if (Object.keys(errors).length > 0) {
 			hideAlert(errors, false, true);
 		} else {
-			const modelCredentials = mapUserToUserCredencials(userCredentials);
+			const modelCredentials = mapUserToUserCredentials(userCredentials);
 
 			login(modelCredentials).then((apiUser) => {
 				if (apiUser) {

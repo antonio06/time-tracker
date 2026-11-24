@@ -296,7 +296,6 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
-- [ ] Fix the typo `mapUserToUserCredencials` → `mapUserToUserCredentials` in `login.mapper.ts` and its usage in `login.page.tsx`.
 - [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 - [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
 - [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
@@ -309,6 +308,7 @@ import { Header } from '@/common/components/header';
 - Extracted the Excel generation from `time-tracker.page.tsx` into `time-tracker.excel.ts` (`buildTimesheetWorkbook`, `downloadFile`, `exportTimesheetToExcel`, `getExcelFileName`) and added `time-tracker.excel.spec.ts` (17 tests, Node environment with the DOM download APIs stubbed). `exceljs` is still loaded with a dynamic `import()` (main chunk 277.78 kB, `exceljs` chunk 929.37 kB). The page now only calls `exportTimesheetToExcel` and shows an alert on error: the failure message changed from `Error loading Excel library` to `Error generating Excel file`, and it now also covers failures when writing the file. The backlog item was removed.
 - Modernized `tsconfig.app.json`: removed the deprecated `baseUrl` and the `ignoreDeprecations: "6.0"` that silenced it, and `paths` is now `"@/*": ["./src/*"]`. Vite's `resolve.tsconfigPaths` still resolves `@/` (checked with `npm run build` and `npm run test:run`; no other deprecation was hidden). The backlog item was removed.
 - Unified file naming (no logic changes): `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, and the `login/component/` and `create-account/component/` folders → `components/`. Also renamed `pages/notFound/` → `pages/not-found/` so every page folder is kebab-case. Imports and the README project tree were updated, and the backlog item was removed.
+- Fixed the typo `mapUserToUserCredencials` → `mapUserToUserCredentials` in `login.mapper.ts` and its usage in `login.page.tsx`. Done manually by Antonio (not by Claude); checked with `npm run build` and by logging in from the browser. The backlog item was removed.
 
 ### 2026-11-23
 - Fixed the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts`: it is now `// Arrange`, like the rest of the spec. The backlog item was removed.
