@@ -21,10 +21,10 @@ La documentación completa (estructura, modelo de datos, endpoints, contextos) e
 1. `npm run lint` sin errores
 2. `npm run test:run` en verde
 3. `npm run build` sin errores
-Si cambias lógica de `*.business.ts`, `*.mapper.ts`, `*.validations.ts` o `common/helpers`, añade o actualiza su `*.spec.ts`.
+Si cambias lógica de `*.business.ts`, `*.excel.ts`, `*.mapper.ts`, `*.validations.ts` o `common/helpers`, añade o actualiza su `*.spec.ts`.
 
 ## Arquitectura (respétala)
-- `pages/<page>/` sigue siempre la misma anatomía: `api/` (api.ts, api-mock.ts, api-real.ts, api-model.ts), `components/`, `*.page.tsx`, `*.vm.ts`, `*.mapper.ts`, `*.business.ts`, `*.validations.ts`, `*.spec.ts`, `index.ts`.
+- `pages/<page>/` sigue siempre la misma anatomía: `api/` (api.ts, api-mock.ts, api-real.ts, api-model.ts), `components/`, `*.page.tsx`, `*.vm.ts`, `*.mapper.ts`, `*.business.ts`, `*.excel.ts` (solo en time-tracker: construye el Excel y lo descarga; `exceljs` se carga con `import()` dinámico, nunca con import estático), `*.validations.ts`, `*.spec.ts`, `index.ts`.
 - La UI **nunca** usa modelos de API directamente: siempre pasa por un mapper (model ⇄ vm).
 - `api/api.ts` elige mock o real con `import.meta.env.VITE_IS_MOCK === 'true'`. `api-real.ts` lanza "Not implemented" de momento.
 - Cada ruta renderiza una **scene** (`src/scenes/*.scene.tsx`) que monta layout + providers + page. Rutas en `src/core/router/routes.ts` (`switchRoutes`). Las rutas privadas se envuelven en `ProtectedRoute` (`protected-router.component.tsx`).

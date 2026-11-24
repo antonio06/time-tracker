@@ -6,7 +6,7 @@ import * as vm from '@/common/model';
 import * as api from './api';
 import { getMonthName } from '@/common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
-import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
+import { exportTimesheetToExcel } from './time-tracker.excel';
 import { getDaysInMonth } from '@/common/helpers';
 import { useTimeContext, useUserContext, useUnsavedChangesContext } from '@/common/context';
 import classes from './time-tracker.module.css';
@@ -95,105 +95,11 @@ export const TimeTrackerPage: React.FC = () => {
   }
 
   const generateExcelFile = async () => {
-    // Load exceljs on demand so it is not part of the main bundle
-    let exceljs: typeof import('exceljs');
     try {
-      exceljs = await import('exceljs');
+      await exportTimesheetToExcel(trackerList, month, year);
     } catch (error) {
-      hideAlert(`Error loading Excel library: ${error}`, false, true);
-      return;
+      hideAlert(`Error generating Excel file: ${error}`, false, true);
     }
-
-    const workbook = new exceljs.Workbook();
-
-    const worksheet = workbook.addWorksheet(`${getMonthName(month)} ${year}`);
-
-    const days = getDaysOfMonth(month, year);
-
-    // Crear la cabecera
-    const headers = ['Task', ...days, 'Total'];
-
-    // Añadir la primera fila
-    const headerRow = worksheet.addRow(headers);
-
-    // Estilos de la cabecera
-    headerRow.font = {
-      bold: true,
-      color: { argb: 'FFFFFFFF' },
-    };
-
-    headerRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FF0F172A' },
-    };
-
-    headerRow.alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-
-    headerRow.height = 30;
-
-    // Ajustar ancho de columnas
-    worksheet.columns = [
-      { width: 20 },
-      ...days.map(() => ({ width: 12 })),
-      { width: 15 },
-    ];
-
-    trackerList.forEach((tracker) => {
-      const workedHoursByDay = days.map((_, index) => {
-        return getWorkedHoursByDay(index, tracker);
-      });
-
-      const totalHours = getTotalHours(workedHoursByDay);
-
-      worksheet.addRow([
-        tracker.task,
-        ...workedHoursByDay,
-        totalHours,
-      ]);
-    });
-
-    const dailyTotals = days.map((_, index) => {
-      return getDailyTotals(index, trackerList)
-    });
-
-    const grandTotal = getGrandTotal(dailyTotals);
-
-    const totalRow = worksheet.addRow([
-      'Total',
-      ...dailyTotals,
-      grandTotal,
-    ]);
-
-    totalRow.font = { bold: true };
-
-    totalRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFE0E7FF' },
-    };
-
-    // Generar Excel
-    const buffer = await workbook.xlsx.writeBuffer();
-
-    const blob = new Blob([buffer as BlobPart], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `time-tracker-${getMonthName(month).toLowerCase()}.xlsx`;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
   };
 
   React.useEffect(() => {

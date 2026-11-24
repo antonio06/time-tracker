@@ -144,6 +144,7 @@ pages/time-tracker/
 ├── *.vm.ts                       # View models used by the UI
 ├── *.mapper.ts                   # API model ⇄ view model conversion
 ├── *.business.ts                 # Pure logic (calculations)
+├── *.excel.ts                    # Excel export: builds the workbook and downloads the file (time-tracker only)
 ├── *.validations.ts              # Form validations
 └── *.spec.ts                     # Unit tests
 ```
@@ -260,6 +261,7 @@ Unit tests cover the pure logic of the app:
 | Spec | Covers |
 |---|---|
 | `time-tracker.business.spec.ts` | Totals and day calculations for the Excel export |
+| `time-tracker.excel.spec.ts` | Excel workbook content and styles, file name and file download |
 | `time-tracker.mapper.spec.ts` | API model ⇄ view model mapping |
 | `table-business.spec.ts` | Table totals and rounding |
 | `time-helpers.spec.ts` | Date utilities |
@@ -293,15 +295,16 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Extract the Excel generation from `time-tracker.page.tsx` into its own module and add unit tests.
 - [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
 - [ ] Fix the typo `mapUserToUserCredencials` → `mapUserToUserCredentials` in `login.mapper.ts` and its usage in `login.page.tsx`.
 - [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 - [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
+- [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
 
 ## Work log
 
 ### 2026-11-24
+- Extracted the Excel generation from `time-tracker.page.tsx` into `time-tracker.excel.ts` (`buildTimesheetWorkbook`, `downloadFile`, `exportTimesheetToExcel`, `getExcelFileName`) and added `time-tracker.excel.spec.ts` (17 tests, Node environment with the DOM download APIs stubbed). `exceljs` is still loaded with a dynamic `import()` (main chunk 277.78 kB, `exceljs` chunk 929.37 kB). The page now only calls `exportTimesheetToExcel` and shows an alert on error: the failure message changed from `Error loading Excel library` to `Error generating Excel file`, and it now also covers failures when writing the file. The backlog item was removed.
 - Modernized `tsconfig.app.json`: removed the deprecated `baseUrl` and the `ignoreDeprecations: "6.0"` that silenced it, and `paths` is now `"@/*": ["./src/*"]`. Vite's `resolve.tsconfigPaths` still resolves `@/` (checked with `npm run build` and `npm run test:run`; no other deprecation was hidden). The backlog item was removed.
 - Unified file naming (no logic changes): `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, and the `login/component/` and `create-account/component/` folders → `components/`. Also renamed `pages/notFound/` → `pages/not-found/` so every page folder is kebab-case. Imports and the README project tree were updated, and the backlog item was removed.
 
