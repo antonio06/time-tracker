@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateAccountForm } from './component/create-account-form.component';
+import { CreateAccountForm } from './components/create-account-form.component';
 import { validateUserCredentials } from './create-account.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import * as vm from './create-account.vm';

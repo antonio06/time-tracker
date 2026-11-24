@@ -122,7 +122,7 @@ npm run dev
     │   ├── login/
     │   ├── create-account/
     │   ├── time-tracker/
-    │   └── notFound/
+    │   └── not-found/
     ├── scenes/                   # Page + layout + providers for each route
     ├── App.tsx
     └── main.tsx
@@ -293,12 +293,16 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Unify file naming: `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, `login/component/` → `login/components/`. Update imports.
 - [ ] Modernize `tsconfig.app.json`: drop the deprecated `baseUrl` and `ignoreDeprecations`, use `"@/*": ["./src/*"]`. Check that `resolve.tsconfigPaths` still resolves `@/`.
 - [ ] Extract the Excel generation from `time-tracker.page.tsx` into its own module and add unit tests.
 - [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
+- [ ] Fix the typo `mapUserToUserCredencials` → `mapUserToUserCredentials` in `login.mapper.ts` and its usage in `login.page.tsx`.
+- [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 
 ## Work log
+
+### 2026-11-24
+- Unified file naming (no logic changes): `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, and the `login/component/` and `create-account/component/` folders → `components/`. Also renamed `pages/notFound/` → `pages/not-found/` so every page folder is kebab-case. Imports and the README project tree were updated, and the backlog item was removed.
 
 ### 2026-11-23
 - Fixed the `// Arrangemodel.Dashboard[]` comment in `time-tracker.mapper.spec.ts`: it is now `// Arrange`, like the rest of the spec. The backlog item was removed.

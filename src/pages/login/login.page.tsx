@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LoginForm } from './component/login-form.component';
+import { LoginForm } from './components/login-form.component';
 import * as vm from './login.vm';
 import { login } from './api/api';
-import { mapUserToUserCredencials, mapUserModelToUserVm } from './login.mappers';
+import { mapUserToUserCredencials, mapUserModelToUserVm } from './login.mapper';
 import { validateUserCredentials } from './login.validations';
 import { Alert, useHideMessage } from '@/common/components/alert';
 import { useUserContext } from '@/common/context';

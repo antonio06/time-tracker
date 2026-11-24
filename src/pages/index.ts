@@ -1,3 +1,3 @@
 export * from './time-tracker';
 export * from './login';
-export * from './notFound';
+export * from './not-found';
