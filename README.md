@@ -300,6 +300,7 @@ import { Header } from '@/common/components/header';
 - [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 - [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
 - [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
+- [ ] `getDaysOfMonth` spec sometimes times out (5000ms) when it runs in parallel with `time-tracker.excel.spec.ts`, which takes ~11s to import exceljs. Investigate a stable fix (e.g. per-test timeout, warming up Intl, or isolating the heavy spec) instead of raising the global timeout.
 
 ## Work log
 
