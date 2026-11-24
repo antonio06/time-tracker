@@ -274,7 +274,7 @@ npm run test:run    # single run
 
 ## Path aliases
 
-`@/` points to `src/`, configured in `tsconfig.app.json` (`baseUrl` + `paths`) and resolved by Vite's native `resolve.tsconfigPaths` option (enabled in `vite.config.ts`):
+`@/` points to `src/`, configured in `tsconfig.app.json` (`paths`, no `baseUrl`) and resolved by Vite's native `resolve.tsconfigPaths` option (enabled in `vite.config.ts`):
 
 ```typescript
 // ❌ Relative path
@@ -293,15 +293,16 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Modernize `tsconfig.app.json`: drop the deprecated `baseUrl` and `ignoreDeprecations`, use `"@/*": ["./src/*"]`. Check that `resolve.tsconfigPaths` still resolves `@/`.
 - [ ] Extract the Excel generation from `time-tracker.page.tsx` into its own module and add unit tests.
 - [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
 - [ ] Fix the typo `mapUserToUserCredencials` → `mapUserToUserCredentials` in `login.mapper.ts` and its usage in `login.page.tsx`.
 - [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
+- [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
 
 ## Work log
 
 ### 2026-11-24
+- Modernized `tsconfig.app.json`: removed the deprecated `baseUrl` and the `ignoreDeprecations: "6.0"` that silenced it, and `paths` is now `"@/*": ["./src/*"]`. Vite's `resolve.tsconfigPaths` still resolves `@/` (checked with `npm run build` and `npm run test:run`; no other deprecation was hidden). The backlog item was removed.
 - Unified file naming (no logic changes): `login-scene.tsx` → `login.scene.tsx`, `actions-component.tsx` → `actions.component.tsx`, `login.mappers.ts` → `login.mapper.ts`, and the `login/component/` and `create-account/component/` folders → `components/`. Also renamed `pages/notFound/` → `pages/not-found/` so every page folder is kebab-case. Imports and the README project tree were updated, and the backlog item was removed.
 
 ### 2026-11-23
