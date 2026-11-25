@@ -9,15 +9,15 @@
 .error404 {
 	font-size: 24px;
 	font-weight: bold;
-	background-color: #ff595e;
-	color: #f8f9fa;
+	background-color: var(--color-danger);
+	color: var(--color-text-on-color);
 	padding: 20px;
 	margin-bottom: 20px;
 }
 
 .goToHome {
 	font-size: 18px;
-	color: #007bff;
+	color: var(--color-link);
 	text-decoration: none;
 }
 

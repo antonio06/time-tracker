@@ -1,7 +1,7 @@
 .header {
 	width: 100%;
-	background-color: #219ebc;
-	color: #f8f9fa;
+	background-color: var(--color-primary);
+	color: var(--color-text-on-color);
 	padding: 1rem;
 	box-sizing: border-box;
 	display: flex;
@@ -16,7 +16,7 @@
 }
 
 .icon {
-	color: #f8f9fa;
+	color: var(--color-text-on-color);
 	filter: invert(1) brightness(2);
 }
 

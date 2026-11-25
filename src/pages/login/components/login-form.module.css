@@ -7,17 +7,17 @@ form {
 }
 
 .user {
-	border-bottom: 1px solid #3900F5;
+	border-bottom: 1px solid var(--color-accent);
 }
 
 .password {
-	border-bottom: 1px solid #3900F5;
+	border-bottom: 1px solid var(--color-accent);
 }
 
 .loginButton {
 	border: none;
-	background-color: #3900F5;
-	color: #f8f9fa;
+	background-color: var(--color-accent);
+	color: var(--color-text-on-color);
 	padding: 10px;
 	cursor: pointer;
 	font-weight: bold;

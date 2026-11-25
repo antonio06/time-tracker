@@ -64,6 +64,18 @@
   font-style: italic;
 }
 
+/* Color palette. Every text/background pair meets WCAG AA (4.5:1) */
+:root {
+  --color-primary: #176e83;       /* header and footer background */
+  --color-text-on-color: #f8f9fa; /* text on coloured backgrounds */
+  --color-accent: #3900f5;        /* Add Task, Login and Create Account buttons, input borders */
+  --color-save: #8438df;          /* Save button */
+  --color-excel: #327054;         /* Generate excel button */
+  --color-success: #1c7500;       /* success alert */
+  --color-danger: #bd2f34;        /* error alert and 404 title */
+  --color-link: #0065d2;          /* links on white */
+}
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)

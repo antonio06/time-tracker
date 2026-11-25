@@ -8,8 +8,8 @@
 
 .saveDashboardButton {
   border: none;
-  background-color: #9b5de5;
-  color: #f8f9fa;
+  background-color: var(--color-save);
+  color: var(--color-text-on-color);
   padding: 10px;
   cursor: pointer;
   font-weight: bold;
@@ -20,8 +20,8 @@
 
 .addTaskButton {
   border: none;
-  background-color: #3900F5;
-  color: #f8f9fa;
+  background-color: var(--color-accent);
+  color: var(--color-text-on-color);
   padding: 10px;
   cursor: pointer;
   font-weight: bold;
@@ -32,8 +32,8 @@
 
 .generateExcelButton {
   border: none;
-  background-color: #40916c;
-  color: #f8f9fa;
+  background-color: var(--color-excel);
+  color: var(--color-text-on-color);
   font-weight: bold;
   padding: 10px;
   cursor: pointer;
