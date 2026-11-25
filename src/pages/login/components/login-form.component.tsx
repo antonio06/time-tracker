@@ -5,7 +5,7 @@ import classes from './login-form.module.css';
 interface Props {
 	user: vm.UserCredentials;
 	onUserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+	onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
 }
 
 export const LoginForm: React.FC<Props> = ({ user, onUserChange, onSubmit }) => {

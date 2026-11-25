@@ -296,7 +296,6 @@ import { Header } from '@/common/components/header';
 ## Backlog
 
 - [ ] Fix the low color contrast reported by Lighthouse: `#f8f9fa` text on `#219ebc` in the header (user name) and the footer (~3:1), and on `#9b5de5` in the Save button (~3.9:1). WCAG AA requires 4.5:1 for normal text. This needs new colors, so the look will change.
-- [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 - [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
 - [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
 - [ ] `getDaysOfMonth` spec sometimes times out (5000ms) when it runs in parallel with `time-tracker.excel.spec.ts`, which takes ~11s to import exceljs. Investigate a stable fix (e.g. per-test timeout, warming up Intl, or isolating the heavy spec) instead of raising the global timeout.
@@ -305,6 +304,7 @@ import { Header } from '@/common/components/header';
 ## Work log
 
 ### 2026-11-25
+- Replaced the deprecated `React.FormEvent<HTMLFormElement>` with `React.SubmitEvent<HTMLFormElement>` (the type the `@types/react` `@deprecated` note recommends, and the one `onSubmit` already uses) in the submit handlers of `login.page.tsx` and `create-account.page.tsx` and in the `Props` of `login-form.component.tsx` and `create-account-form.component.tsx`. Type-only change, no logic changes. No `FormEvent` is left in `src/`. The backlog item was removed.
 - Fixed the Chrome DevTools "Issues" warnings and the Lighthouse label audits, with no behavior or style changes. The totals row now shows plain text in a `<span>` styled like the disabled inputs it replaces. Task inputs have a `name` and an `aria-label` (`Task name`, and `Hours for <task> on <Monday, November 3>` for hours). The delete icon's `alt` is `Delete <task>`. The month `<select>` has `name="month"` and `aria-label="Month"`. Login and create-account inputs have `autocomplete` (`username`, `current-password`, `new-password`). The backlog item was removed, and the contrast issues Lighthouse also reports were added to the backlog.
 
 ### 2026-11-24

@@ -16,7 +16,7 @@ export const CreateAccountPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { setUser } = useUserContext();
 
-	const handleCreateAccount = (event: React.FormEvent<HTMLFormElement>) => {
+	const handleCreateAccount = (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const errors = validateUserCredentials(userCredentials);
 		if (Object.keys(errors).length > 0) {

@@ -4,7 +4,7 @@ import classes from './create-account-form.module.css';
 
 interface Props {
 	userCredentials: vm.UserCredentials;
-	onCreateAccount: (event: React.FormEvent<HTMLFormElement>) => void;
+	onCreateAccount: (event: React.SubmitEvent<HTMLFormElement>) => void;
 	onUserChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

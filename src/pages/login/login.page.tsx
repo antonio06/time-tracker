@@ -21,7 +21,7 @@ export const LoginPage: React.FC = () => {
 		setUserCredentials({ ...userCredentials, [name]: value });
 	};
 
-	const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleLogin = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const errors = validateUserCredentials(userCredentials);
 		if (Object.keys(errors).length > 0) {
