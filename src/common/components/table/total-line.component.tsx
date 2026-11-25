@@ -16,7 +16,7 @@ export const TotalLine: React.FC<Props> = ({ days, trackList }) => {
       {
         days.map((_, index) => (
           <td key={index} className={classes.cell}>
-            <input disabled value={getRoundPerTwoDigits(getTotalWorkedHoursPerDay(index, trackList))} />
+            <span className={classes.dayTotal}>{getRoundPerTwoDigits(getTotalWorkedHoursPerDay(index, trackList))}</span>
           </td>
         ))
       }

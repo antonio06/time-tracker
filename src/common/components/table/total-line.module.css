@@ -8,3 +8,13 @@
   padding: 10px;
   font-weight: bold;
 }
+
+/* Same box as the disabled input it replaces, so the row looks the same */
+.dayTotal {
+  display: inline-block;
+  width: 100%;          /* row-table.module.css: input { width: 100% } */
+  padding: 10px;        /* row-table.module.css: input { padding: 10px } */
+  font-size: 13.333px;  /* browser default font size for inputs */
+  line-height: normal;  /* inputs use line-height: normal, body uses 1 */
+  color: #545454;       /* Chrome default text color for disabled inputs */
+}

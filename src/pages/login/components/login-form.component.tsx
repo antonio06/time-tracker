@@ -15,6 +15,7 @@ export const LoginForm: React.FC<Props> = ({ user, onUserChange, onSubmit }) => 
 				name="username"
 				className={classes.user}
 				type="text"
+				autoComplete="username"
 				placeholder="Username"
 				value={user.username}
 				onChange={onUserChange}
@@ -23,6 +24,7 @@ export const LoginForm: React.FC<Props> = ({ user, onUserChange, onSubmit }) => 
 				name="password"
 				className={classes.password}
 				type="password"
+				autoComplete="current-password"
 				placeholder="Password"
 				value={user.password}
 				onChange={onUserChange}

@@ -295,7 +295,7 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Review the Chrome DevTools "Issues" panel (~94 warnings, probably table inputs without `id`/`name`/label) and fix the accessibility ones.
+- [ ] Fix the low color contrast reported by Lighthouse: `#f8f9fa` text on `#219ebc` in the header (user name) and the footer (~3:1), and on `#9b5de5` in the Save button (~3.9:1). WCAG AA requires 4.5:1 for normal text. This needs new colors, so the look will change.
 - [ ] Review the `React.FormEvent` type, which the IDE reports as deprecated in `login.page.tsx` and `create-account.page.tsx`, and replace it with the recommended alternative.
 - [ ] `create-account.scene.tsx` imports its page with a relative path (`../pages/create-account`) because `src/pages/index.ts` does not export `create-account`. Add it to the barrel and import from `@/pages`, like the other scenes. Check for other relative imports that leave their folder.
 - [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
@@ -303,6 +303,9 @@ import { Header } from '@/common/components/header';
 - [ ] Unify duplicated total calculations: `table-business.ts` (table) and `time-tracker.business.ts` (Excel) compute the same totals with different functions, and `getGrandTotal`/`getTotalHours` are identical. They also differ in edge cases (`find` vs `filter` for a day's total; summing all `workedHours` vs only the month's days for a task total), so the table and the Excel could disagree. Decide the correct behaviour, move a single set of functions to `common/`, use them in both places and merge the tests. Also reuse it for the "1 Sun" day labels (duplicated in `head-table.component.tsx` and `getDaysOfMonth`).
 
 ## Work log
+
+### 2026-11-25
+- Fixed the Chrome DevTools "Issues" warnings and the Lighthouse label audits, with no behavior or style changes. The totals row now shows plain text in a `<span>` styled like the disabled inputs it replaces. Task inputs have a `name` and an `aria-label` (`Task name`, and `Hours for <task> on <Monday, November 3>` for hours). The delete icon's `alt` is `Delete <task>`. The month `<select>` has `name="month"` and `aria-label="Month"`. Login and create-account inputs have `autocomplete` (`username`, `current-password`, `new-password`). The backlog item was removed, and the contrast issues Lighthouse also reports were added to the backlog.
 
 ### 2026-11-24
 - Extracted the Excel generation from `time-tracker.page.tsx` into `time-tracker.excel.ts` (`buildTimesheetWorkbook`, `downloadFile`, `exportTimesheetToExcel`, `getExcelFileName`) and added `time-tracker.excel.spec.ts` (17 tests, Node environment with the DOM download APIs stubbed). `exceljs` is still loaded with a dynamic `import()` (main chunk 277.78 kB, `exceljs` chunk 929.37 kB). The page now only calls `exportTimesheetToExcel` and shows an alert on error: the failure message changed from `Error loading Excel library` to `Error generating Excel file`, and it now also covers failures when writing the file. The backlog item was removed.

@@ -20,7 +20,7 @@ export const MonthSelector: React.FC<Props> = ({ onMonthChange }) => {
 
 	return (
 		<>
-			<select className={classes.monthSelector} value={String(month)} onChange={handleChange}>
+			<select name="month" aria-label="Month" className={classes.monthSelector} value={String(month)} onChange={handleChange}>
 				<option value="">Select month</option>
 				{
 					months.map(m => (
