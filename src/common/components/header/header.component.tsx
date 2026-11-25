@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext, useUnsavedChangesContext } from '../../context';
+import { useUserContext, useUnsavedChangesContext } from '@/common/context';
 import classes from './header.module.css';
 import userIcon from '@/assets/user.svg';
 import logoutIcon from '@/assets/logout.svg';

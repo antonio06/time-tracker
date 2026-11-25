@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateAccountPage } from '../pages/create-account';
+import { CreateAccountPage } from '@/pages';
 import { AppLayout } from '@/layouts';
 
 export const CreateAccountScene: React.FC = () => {
