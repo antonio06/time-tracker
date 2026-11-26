@@ -295,12 +295,20 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] `getDaysOfMonth` spec sometimes times out (5000ms) when it runs in parallel with `time-tracker.excel.spec.ts`, which takes ~11s to import exceljs. Investigate a stable fix (e.g. per-test timeout, warming up Intl, or isolating the heavy spec) instead of raising the global timeout.
 - [ ] Unify duplicated total calculations: `table-business.ts` (table) and `time-tracker.business.ts` (Excel) compute the same totals with different functions, and `getGrandTotal`/`getTotalHours` are identical. They also differ in edge cases (`find` vs `filter` for a day's total; summing all `workedHours` vs only the month's days for a task total), so the table and the Excel could disagree. Decide the correct behaviour, move a single set of functions to `common/`, use them in both places and merge the tests. Also reuse it for the "1 Sun" day labels (duplicated in `head-table.component.tsx` and `getDaysOfMonth`).
 
 ## Work log
 
 ### 2026-11-26
+- Fixed the intermittent 5000 ms timeout of the first `getDaysOfMonth` test. `getDaysOfMonth` (`time-tracker.business.ts`) now formats the weekday with one module-level `Intl.DateTimeFormat('en-US', { weekday: 'short' })` instead of calling `toLocaleDateString('en-US', { weekday: 'short' })` for every day. The output is the same (`1 Sat`, `2 Sun`...). Calling `toLocaleDateString` with options builds a new ICU formatter each time.
+  - **Measurements before the fix.** Machine: i7-6500U, 2 cores / 4 threads, 8 GB RAM. Vitest 5.1 uses 3 workers by default with `vitest run`. The data come from 50 runs of temporary probes, since deleted, with the machine idle:
+    - The first `toLocaleDateString` call in a fresh worker costs ~25 ms. That is the cold load of ICU, and it is ~75% of the test. The other 29 calls take ~3 ms. With a reused formatter they take ~0.1 ms, and the cold creation moves to the module import, which has no timeout.
+    - The test took 33 ms (median) alone, 47 ms with the Excel spec, and 74 ms (median) / 235 ms (max) with the full suite. With parallel workers it always overlapped the Excel spec's import of `exceljs`, which took ~1 s, not the ~11 s noted in the backlog.
+    - With `--maxWorkers=2` the test took 46 ms, and the suite took the same time. Without file parallelism it took 33 ms, but the suite was 60% slower.
+    - Warming up Intl before the tests brought the test down to 11 ms.
+  - **The timeout never reproduced with the machine idle.** Every time it failed, `npm run dev:all` was running.
+  - **After the fix**, the test takes 3.4–4.4 ms with the full suite.
+  - Added a test that checks the labels: June 2024 starts with `1 Sat`…`7 Fri` and ends with `30 Sun`. The existing tests were not changed. The backlog item was removed.
 - The Excel file name now includes the year: `getExcelFileName(month, year)` returns `time-tracker-YYYY-MM.xlsx` with the month always padded to two digits (e.g. `time-tracker-2026-11.xlsx`, `time-tracker-2026-03.xlsx`), so files from different years no longer collide. `exportTimesheetToExcel` passes the year. An invalid month is not validated and goes into the name as it is (`13` → `time-tracker-2026-13.xlsx`). In `time-tracker.excel.spec.ts` only the file name tests were updated (`getExcelFileName`, the invalid month case and `link.download` in `exportTimesheetToExcel`), and a test for a single-digit month was added. The backlog item was removed.
 
 ### 2026-11-25

@@ -1,5 +1,8 @@
 import * as vm from '@/common/model';
 
+// Created once and reused: toLocaleDateString with options builds a new ICU formatter on every call
+const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
+
 export const getDaysOfMonth = (month: number, year: number): string[] => {
   const jsMonth = month - 1;
   const currentDate = new Date(year, jsMonth + 1, 0);
@@ -12,9 +15,7 @@ export const getDaysOfMonth = (month: number, year: number): string[] => {
 
       const day = date.getDate();
 
-      const weekday = date.toLocaleDateString('en-US', {
-        weekday: 'short',
-      });
+      const weekday = weekdayFormatter.format(date);
 
       return `${day} ${weekday}`;
     });
