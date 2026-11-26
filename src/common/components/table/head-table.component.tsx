@@ -1,4 +1,5 @@
 import React from 'react';
+import { getShortDayLabel } from '@/common/helpers';
 import classes from './head-table.module.css';
 
 interface Props {
@@ -12,11 +13,7 @@ export const HeadTable: React.FC<Props> = ({ days }) => {
         <th className={classes.head}></th>
         <th className={classes.head}>Task</th>
         {
-          days.map((d, id) => {
-            const day = new Date(d).getDate();
-            const dayOfWeek = new Date(d).toLocaleDateString('en-US', { weekday: 'short' });
-            return <th key={id} className={classes.head}>{day} {dayOfWeek}</th>;
-          })
+          days.map((d, id) => <th key={id} className={classes.head}>{getShortDayLabel(d)}</th>)
         }
         <th className={classes.head}>Total</th>
       </tr>

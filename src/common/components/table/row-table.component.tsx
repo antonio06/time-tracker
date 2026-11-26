@@ -1,6 +1,6 @@
 import React from 'react';
 import * as vm from '@/common/model';
-import { getTaskTotal } from '@/common/helpers';
+import { getTaskTotal, getLongDayLabel, isWeekend } from '@/common/helpers';
 import { getRoundPerTwoDigits } from './table-business';
 import trashIcon from '@/assets/trash.svg';
 import { useTimeContext } from '@/common/context';
@@ -29,14 +29,6 @@ export const RowTable: React.FC<Props> = ({ track, daysInMonth, onInputValueNumb
   // dateId is 0-based (0 = 1st of the month) and month is 1-based
   const getDate = (dateId: number) => new Date(year, month - 1, dateId + 1);
 
-  const getNameDay = (dateId: number) => {
-    return getDate(dateId).toLocaleDateString('en-US', { weekday: 'short' });
-  }
-
-  const getDayLabel = (dateId: number) => {
-    return getDate(dateId).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  }
-
   const taskName = track.task.trim() || 'untitled task';
 
   return (
@@ -60,11 +52,11 @@ export const RowTable: React.FC<Props> = ({ track, daysInMonth, onInputValueNumb
             <input
               key={i}
               name={`task-${track.id}-day-${wh.dateId + 1}`}
-              aria-label={`Hours for ${taskName} on ${getDayLabel(wh.dateId)}`}
+              aria-label={`Hours for ${taskName} on ${getLongDayLabel(getDate(wh.dateId))}`}
               value={wh.value}
               onChange={(e) => handleInputChange(wh, e)}
               type="number"
-              disabled={getNameDay(wh.dateId) === 'Sat' || getNameDay(wh.dateId) === 'Sun'}
+              disabled={isWeekend(getDate(wh.dateId))}
             />
           </td>
         ))

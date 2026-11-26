@@ -32,6 +32,7 @@ Si cambias lógica de `*.business.ts`, `*.excel.ts`, `*.mapper.ts`, `*.validatio
 - Si añades o cambias un endpoint, cámbialo también en `server-mock/src/` (index.ts, routes.ts, api-model.ts).
 - La página time-tracker funciona como un documento: todo cambio es local y marca `setIsDirty(true)`. **Save** envía el mes entero con un único `PUT`.
 - Los totales (horas de una tarea en un día, total por día, por tarea y del mes) viven en `common/helpers/totals-helpers.ts` y los usan la tabla y el Excel: no los vuelvas a calcular en otro sitio. Devuelven números; el redondeo a dos decimales se hace en la tabla (`getRoundPerTwoDigits` en `table-business.ts`). El total de un día suma todas sus entradas; el de una tarea, solo los días del mes.
+- Las etiquetas de día («1 Sun», «Monday, November 2») y los fines de semana (`isWeekend`, con `getDay()`) viven en `common/helpers/time-helpers.ts`, con formateadores `Intl.DateTimeFormat` creados una sola vez. No uses `toLocaleDateString` con opciones: crea un formateador ICU nuevo en cada llamada.
 
 ## Convenciones de código
 - Componentes: `React.FC<Props>` con `interface Props`, export nombrado (sin default, salvo `App`).
