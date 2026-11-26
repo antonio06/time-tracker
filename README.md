@@ -113,7 +113,7 @@ npm run dev
     ├── common/
     │   ├── components/           # Shared UI: alert, header, footer, table
     │   ├── context/              # React contexts (see below)
-    │   ├── helpers/              # Date and general utilities
+    │   ├── helpers/              # Date utilities and the totals shared by the table and the Excel
     │   └── model/                # Dashboard view models shared across pages
     ├── core/
     │   └── router/               # Routes, router and ProtectedRoute
@@ -260,10 +260,11 @@ Unit tests cover the pure logic of the app:
 
 | Spec | Covers |
 |---|---|
-| `time-tracker.business.spec.ts` | Totals and day calculations for the Excel export |
+| `time-tracker.business.spec.ts` | Day labels for the Excel export header |
 | `time-tracker.excel.spec.ts` | Excel workbook content and styles, file name and file download |
 | `time-tracker.mapper.spec.ts` | API model ⇄ view model mapping |
-| `table-business.spec.ts` | Table totals and rounding |
+| `table-business.spec.ts` | Rounding of the table totals |
+| `totals-helpers.spec.ts` | Totals per task, per day and per month, shared by the table and the Excel export |
 | `time-helpers.spec.ts` | Date utilities |
 | `common-helpers.spec.ts` | Month names |
 | `login.validations.spec.ts` | Login form validation |
@@ -295,11 +296,13 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Unify duplicated total calculations: `table-business.ts` (table) and `time-tracker.business.ts` (Excel) compute the same totals with different functions, and `getGrandTotal`/`getTotalHours` are identical. They also differ in edge cases (`find` vs `filter` for a day's total; summing all `workedHours` vs only the month's days for a task total), so the table and the Excel could disagree. Decide the correct behaviour, move a single set of functions to `common/`, use them in both places and merge the tests. Also reuse it for the "1 Sun" day labels (duplicated in `head-table.component.tsx` and `getDaysOfMonth`).
+- [ ] Unify the "1 Sun" day labels (step 2 of unifying the totals and the labels; the totals are done). `head-table.component.tsx` builds them with `toLocaleDateString`, which creates a new ICU formatter for every day, and `getDaysOfMonth` (`time-tracker.business.ts`) uses a reused `Intl.DateTimeFormat`. Move the formatter to `common/helpers`, use it in both places and move the tests. Also decide whether `row-table.component.tsx` should detect weekends with `getDay()` instead of comparing the weekday name.
+- [ ] `row-table` renders one cell per `workedHours` entry instead of one per day of the month. With a duplicated or out-of-month `dateId` from the backend, the row would have extra cells and be misaligned with the header. Render one cell per day (using `getTaskHoursByDay`) instead.
 
 ## Work log
 
 ### 2026-11-26
+- Unified the totals of the table and the Excel export (step 1 of the backlog item; the day labels are still pending). The new `src/common/helpers/totals-helpers.ts` has `getTaskHoursByDay`, `getDayTotal`, `getTaskTotal` and `getMonthTotal`, which return numbers and are used by both. They replace `getTotalWorkedHoursPerTask`, `getTotalWorkedHoursPerDay` and `getTotalWorkedPerTotal` from `table-business.ts`, which now only keeps the rounding (`getRoundPerTwoDigits`), and `getDailyTotals`, `getGrandTotal`, `getWorkedHoursByDay` and `getTotalHours` from `time-tracker.business.ts`, which now only keeps `getDaysOfMonth`. They follow the rules the Excel already used, so only the table changes, and only in two edge cases: a day total adds up every entry of that day (`filter`; the table used `find` and only counted the first one), and a task total only counts the days of the month, `dateId` 0 to days − 1 (the table added up every entry). The month total is the sum of the task totals, which is also the sum of the day totals. Nothing changes with the mock data, which has exactly one entry per day. `RowTable` gets the new `daysInMonth` prop from `BodyTable`. The two suites were merged into `totals-helpers.spec.ts`: the 17 total tests became 11, because 5 cases were in both suites and the multi-task day total covers the table's single-task one. 3 new tests cover the edge cases: several entries on one day, hours outside the month, and a month total equal to the sum of the day totals. `time-tracker.excel.spec.ts` was not changed and still passes.
 - Fixed the intermittent 5000 ms timeout of the first `getDaysOfMonth` test. `getDaysOfMonth` (`time-tracker.business.ts`) now formats the weekday with one module-level `Intl.DateTimeFormat('en-US', { weekday: 'short' })` instead of calling `toLocaleDateString('en-US', { weekday: 'short' })` for every day. The output is the same (`1 Sat`, `2 Sun`...). Calling `toLocaleDateString` with options builds a new ICU formatter each time.
   - **Measurements before the fix.** Machine: i7-6500U, 2 cores / 4 threads, 8 GB RAM. Vitest 5.1 uses 3 workers by default with `vitest run`. The data come from 50 runs of temporary probes, since deleted, with the machine idle:
     - The first `toLocaleDateString` call in a fresh worker costs ~25 ms. That is the cold load of ICU, and it is ~75% of the test. The other 29 calls take ~3 ms. With a reused formatter they take ~0.1 ms, and the cold creation moves to the module import, which has no timeout.

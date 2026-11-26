@@ -1,5 +1,6 @@
 import React from 'react';
-import { getTotalWorkedHoursPerDay, getTotalWorkedPerTotal, getRoundPerTwoDigits } from './table-business';
+import { getDayTotal, getMonthTotal } from '@/common/helpers';
+import { getRoundPerTwoDigits } from './table-business';
 import * as vm from '@/common/model';
 import classes from './total-line.module.css';
 
@@ -16,12 +17,12 @@ export const TotalLine: React.FC<Props> = ({ days, trackList }) => {
       {
         days.map((_, index) => (
           <td key={index} className={classes.cell}>
-            <span className={classes.dayTotal}>{getRoundPerTwoDigits(getTotalWorkedHoursPerDay(index, trackList))}</span>
+            <span className={classes.dayTotal}>{getRoundPerTwoDigits(getDayTotal(trackList, index))}</span>
           </td>
         ))
       }
       <td className={classes.total}>
-        {getRoundPerTwoDigits(getTotalWorkedPerTotal(trackList))}
+        {getRoundPerTwoDigits(getMonthTotal(trackList, days.length))}
       </td>
     </tr>
   )

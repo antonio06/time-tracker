@@ -1,5 +1,3 @@
-import * as vm from '@/common/model';
-
 // Created once and reused: toLocaleDateString with options builds a new ICU formatter on every call
 const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
 
@@ -23,27 +21,3 @@ export const getDaysOfMonth = (month: number, year: number): string[] => {
 
   return [];
 };
-
-export const getDailyTotals = (index: number, trackerList: vm.DashboardVm[]) => (
-  Array.isArray(trackerList) ? trackerList.reduce((total, tracker) => {
-    const hours = tracker.workedHours
-      .filter((workedHour) => workedHour.dateId === index)
-      .reduce((sum, workedHour) => sum + workedHour.value, 0);
-
-    return total + hours;
-  }, 0) : 0
-);
-
-export const getGrandTotal = (dailyTotals: number[]) => Array.isArray(dailyTotals) ? dailyTotals.reduce(
-  (total, hours) => total + hours,
-  0
-) : 0;
-
-export const getWorkedHoursByDay = (index: number, tracker: vm.DashboardVm) => Array.isArray(tracker.workedHours) ? tracker.workedHours
-  .filter((workedHour) => workedHour.dateId === index)
-  .reduce((total, workedHour) => total + workedHour.value, 0) : 0;
-
-export const getTotalHours = (workedHoursByDay: number[]) => Array.isArray(workedHoursByDay) ? workedHoursByDay.reduce(
-  (total, hours) => total + hours,
-  0
-) : 0;

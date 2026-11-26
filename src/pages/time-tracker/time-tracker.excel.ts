@@ -1,7 +1,7 @@
 import type { Workbook } from 'exceljs';
 import * as vm from '@/common/model';
-import { getMonthName } from '@/common/helpers';
-import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, getTotalHours } from './time-tracker.business';
+import { getMonthName, getTaskHoursByDay, getTaskTotal, getDayTotal, getMonthTotal } from '@/common/helpers';
+import { getDaysOfMonth } from './time-tracker.business';
 
 // Only types are imported from exceljs at the top level. The library itself is
 // loaded with a dynamic import in exportTimesheetToExcel, so it stays out of the main bundle.
@@ -56,10 +56,10 @@ export const buildTimesheetWorkbook = (
 
   trackerList.forEach((tracker) => {
     const workedHoursByDay = days.map((_, index) => {
-      return getWorkedHoursByDay(index, tracker);
+      return getTaskHoursByDay(tracker, index);
     });
 
-    const totalHours = getTotalHours(workedHoursByDay);
+    const totalHours = getTaskTotal(tracker, days.length);
 
     worksheet.addRow([
       tracker.task,
@@ -69,10 +69,10 @@ export const buildTimesheetWorkbook = (
   });
 
   const dailyTotals = days.map((_, index) => {
-    return getDailyTotals(index, trackerList);
+    return getDayTotal(trackerList, index);
   });
 
-  const grandTotal = getGrandTotal(dailyTotals);
+  const grandTotal = getMonthTotal(trackerList, days.length);
 
   const totalRow = worksheet.addRow([
     'Total',

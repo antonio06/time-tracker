@@ -1,6 +1,7 @@
 import React from 'react';
 import * as vm from '@/common/model';
-import { getTotalWorkedHoursPerTask, getRoundPerTwoDigits } from './table-business';
+import { getTaskTotal } from '@/common/helpers';
+import { getRoundPerTwoDigits } from './table-business';
 import trashIcon from '@/assets/trash.svg';
 import { useTimeContext } from '@/common/context';
 import classes from './row-table.module.css';
@@ -8,12 +9,13 @@ import classes from './row-table.module.css';
 interface Props {
   track: vm.DashboardVm;
   index: number;
+  daysInMonth: number;
   onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
   onInputValueStringChange: (taskId: number, newValue: string) => void;
   onDeleteTask: (taskId: number) => void;
 }
 
-export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
+export const RowTable: React.FC<Props> = ({ track, daysInMonth, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
   const { month, year } = useTimeContext();
 
   const handleInputChange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +70,7 @@ export const RowTable: React.FC<Props> = ({ track, onInputValueNumberChange, onI
         ))
       }
       <td className={classes.total}>
-        {getRoundPerTwoDigits(getTotalWorkedHoursPerTask(track.workedHours))}
+        {getRoundPerTwoDigits(getTaskTotal(track, daysInMonth))}
       </td>
     </tr>
   )
