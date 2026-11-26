@@ -295,11 +295,13 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-- [ ] Include the year in the Excel file name (`getExcelFileName` in `time-tracker.excel.ts` returns `time-tracker-november.xlsx`, so files from different years collide when downloaded). Update `getExcelFileName` to take the year, its call in `exportTimesheetToExcel`, and the tests in `time-tracker.excel.spec.ts` that check the file name (`getExcelFileName` and `exportTimesheetToExcel`).
 - [ ] `getDaysOfMonth` spec sometimes times out (5000ms) when it runs in parallel with `time-tracker.excel.spec.ts`, which takes ~11s to import exceljs. Investigate a stable fix (e.g. per-test timeout, warming up Intl, or isolating the heavy spec) instead of raising the global timeout.
 - [ ] Unify duplicated total calculations: `table-business.ts` (table) and `time-tracker.business.ts` (Excel) compute the same totals with different functions, and `getGrandTotal`/`getTotalHours` are identical. They also differ in edge cases (`find` vs `filter` for a day's total; summing all `workedHours` vs only the month's days for a task total), so the table and the Excel could disagree. Decide the correct behaviour, move a single set of functions to `common/`, use them in both places and merge the tests. Also reuse it for the "1 Sun" day labels (duplicated in `head-table.component.tsx` and `getDaysOfMonth`).
 
 ## Work log
+
+### 2026-11-26
+- The Excel file name now includes the year: `getExcelFileName(month, year)` returns `time-tracker-YYYY-MM.xlsx` with the month always padded to two digits (e.g. `time-tracker-2026-11.xlsx`, `time-tracker-2026-03.xlsx`), so files from different years no longer collide. `exportTimesheetToExcel` passes the year. An invalid month is not validated and goes into the name as it is (`13` → `time-tracker-2026-13.xlsx`). In `time-tracker.excel.spec.ts` only the file name tests were updated (`getExcelFileName`, the invalid month case and `link.download` in `exportTimesheetToExcel`), and a test for a single-digit month was added. The backlog item was removed.
 
 ### 2026-11-25
 - Replaced the relative imports that left their folder with the `@/` alias (import paths only, no logic changes). `src/pages/index.ts` now exports `create-account`, so `create-account.scene.tsx` imports `CreateAccountPage` from `@/pages` like the other scenes. `app-layout.tsx` now imports from `@/common/components` and `header.component.tsx` from `@/common/context`. The only `../` imports left in `src/` are `../login.vm` and `../create-account.vm` in the two form components, which stay inside their page. The backlog item was removed.

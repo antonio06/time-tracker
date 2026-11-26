@@ -8,8 +8,8 @@ import { getDaysOfMonth, getDailyTotals, getGrandTotal, getWorkedHoursByDay, get
 
 const EXCEL_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-export const getExcelFileName = (month: number): string => (
-  `time-tracker-${getMonthName(month).toLowerCase()}.xlsx`
+export const getExcelFileName = (month: number, year: number): string => (
+  `time-tracker-${year}-${String(month).padStart(2, '0')}.xlsx`
 );
 
 export const buildTimesheetWorkbook = (
@@ -119,5 +119,5 @@ export const exportTimesheetToExcel = async (
 
   const buffer = await workbook.xlsx.writeBuffer();
 
-  downloadFile(buffer as BlobPart, getExcelFileName(month));
+  downloadFile(buffer as BlobPart, getExcelFileName(month, year));
 };

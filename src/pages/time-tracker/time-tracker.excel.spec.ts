@@ -60,26 +60,40 @@ describe('time tracker excel spec', () => {
   });
 
   describe('getExcelFileName', () => {
-    it('Should return the file name with the lowercase month name', () => {
+    it('Should return the file name with the year and the month', () => {
       // Arrange
       const month = 11;
+      const year = 2026;
 
       // Act
-      const result = getExcelFileName(month);
+      const result = getExcelFileName(month, year);
 
       // Assert
-      expect(result).toBe('time-tracker-november.xlsx');
+      expect(result).toBe('time-tracker-2026-11.xlsx');
     });
 
-    it('Should return the file name without month name when the month is invalid', () => {
+    it('Should pad a single-digit month with a leading zero', () => {
       // Arrange
-      const month = 13;
+      const month = 3;
+      const year = 2026;
 
       // Act
-      const result = getExcelFileName(month);
+      const result = getExcelFileName(month, year);
 
       // Assert
-      expect(result).toBe('time-tracker-.xlsx');
+      expect(result).toBe('time-tracker-2026-03.xlsx');
+    });
+
+    it('Should keep the month number as it is when the month is invalid', () => {
+      // Arrange
+      const month = 13;
+      const year = 2026;
+
+      // Act
+      const result = getExcelFileName(month, year);
+
+      // Assert
+      expect(result).toBe('time-tracker-2026-13.xlsx');
     });
   });
 
@@ -285,7 +299,7 @@ describe('time tracker excel spec', () => {
   });
 
   describe('exportTimesheetToExcel', () => {
-    it('Should download an xlsx file named after the month', async () => {
+    it('Should download an xlsx file named after the year and the month', async () => {
       // Arrange
       const { link, createObjectURL, revokeObjectURL } = stubBrowserDownload();
       const trackerList = [createTracker(1, 'Task 1', { 0: 2 })];
@@ -296,7 +310,7 @@ describe('time tracker excel spec', () => {
       // Assert
       const blob = createObjectURL.mock.calls[0][0] as Blob;
       expect(blob.size).toBeGreaterThan(0);
-      expect(link.download).toBe('time-tracker-february.xlsx');
+      expect(link.download).toBe('time-tracker-2026-02.xlsx');
       expect(link.click).toHaveBeenCalledTimes(1);
       expect(revokeObjectURL).toHaveBeenCalledWith('blob:fake-url');
     });
