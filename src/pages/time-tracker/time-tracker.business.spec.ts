@@ -4,7 +4,7 @@ import * as vm from '@/common/model';
 
 describe('time tracker business spec', () => {
   describe('getDaysOfMonth', () => {
-    it('should return an array of days with weekdays for the given month and year', () => {
+    it('Should return an array of days with weekdays for the given month and year', () => {
       // Arrange
       const year = 2024;
       const month = 6; // June (1-based)
@@ -29,7 +29,7 @@ describe('time tracker business spec', () => {
       expect(result[29]).toBe('30 Sun');
     });
 
-    it('should return a empty array when given an invalid month', () => {
+    it('Should return a empty array when given an invalid month', () => {
       // Arrange
       const year = 2024;
       const month = 13; // Invalid month
@@ -43,7 +43,7 @@ describe('time tracker business spec', () => {
   });
 
   describe('getDailyTotals', () => {
-    it('should return the total hours for each day', () => {
+    it('Should return the total hours for each day', () => {
       // Arrange
       const index = 0;
       const trackerList: vm.DashboardVm[] = [
@@ -58,7 +58,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(6); // 2 + 4
     });
 
-    it('should return 0 when trackerList is empty', () => {
+    it('Should return 0 when trackerList is empty', () => {
       // Arrange
       const index = 0;
       const trackerList: vm.DashboardVm[] = [];
@@ -70,7 +70,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(0);
     });
 
-    it('should return 0 when index not matching any worked hours', () => {
+    it('Should return 0 when index not matching any worked hours', () => {
       // Arrange
       const index = 2; // Index not matching any worked hours
 
@@ -88,7 +88,7 @@ describe('time tracker business spec', () => {
   });
 
   describe('getGrandTotal', () => {
-    it('should return the total hours for all days', () => {
+    it('Should return the total hours for all days', () => {
       // Arrange
       const dailyTotals: number[] = [2, 3, 4, 1];
 
@@ -99,7 +99,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(10); // 2 + 3 + 4 + 1
     });
 
-    it('should return 0 when trackerList is empty', () => {
+    it('Should return 0 when trackerList is empty', () => {
       // Arrange
       const dailyTotals: number[] = [];
 
@@ -112,7 +112,7 @@ describe('time tracker business spec', () => {
   });
 
   describe('getWorkedHoursByDay', () => {
-    it('should return the worked hours for a specific day', () => {
+    it('Should return the worked hours for a specific day', () => {
       // Arrange
       const index = 0;
       const tracker: vm.DashboardVm = {
@@ -130,7 +130,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(2);
     });
 
-    it('should return the worked hours for a specific day when multiple entries exist', () => {
+    it('Should return the worked hours for a specific day when multiple entries exist', () => {
       // Arrange
       const index = 0;
       const tracker: vm.DashboardVm = {
@@ -148,7 +148,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(5);
     });
 
-    it('should return 0 when index not matching any worked hours', () => {
+    it('Should return 0 when index not matching any worked hours', () => {
       // Arrange
       const index = 2; // Index not matching any worked hours
       const tracker: vm.DashboardVm = {
@@ -168,7 +168,7 @@ describe('time tracker business spec', () => {
   });
 
   describe('getTotalHours', () => {
-    it('should return the total hours for a tracker list', () => {
+    it('Should return the total hours for a tracker list', () => {
       // Arrange
       const workeHoursByDay: number[] = [2, 3, 4, 1];
 
@@ -179,7 +179,7 @@ describe('time tracker business spec', () => {
       expect(result).toBe(10); // 2 + 3 + 4 + 1
     });
 
-    it('should return 0 when worked hours by day is empty', () => {
+    it('Should return 0 when worked hours by day is empty', () => {
       // Arrange
       const workeHoursByDay: number[] = [];
 
