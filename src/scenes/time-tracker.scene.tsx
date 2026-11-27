@@ -1,15 +1,15 @@
 import React from "react";
 import { TimeTrackerPage } from '@/pages';
-import { TimeProvider, UnsavedChangesProvider } from '@/common/context';
+import { UnsavedChangesProvider } from '@/common/context';
 import { AppLayout } from '@/layouts';
 
+// TimeProvider is in RouterComponent, shared with the yearly summary.
+// UnsavedChangesProvider stays here, so isDirty is reset when leaving the page, like its local state
 export const TimeTrackerScene: React.FC = () => {
 	const isLoggedIn = true;
 	return (<UnsavedChangesProvider>
 		<AppLayout isLoggedIn={isLoggedIn}>
-			<TimeProvider>
-				<TimeTrackerPage />
-			</TimeProvider>
+			<TimeTrackerPage />
 		</AppLayout>
 	</UnsavedChangesProvider>)
 };

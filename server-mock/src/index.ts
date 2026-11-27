@@ -50,6 +50,21 @@ app.put(routes.baseUrl, async (context) => {
   return context.json(true);
 });
 
+// Every task of the year, for the yearly summary
+app.get(routes.summary, (context) => {
+  const yearIdParam = context.req.query('yearId');
+  const userIdParam = context.req.query('userId');
+  const yearId = Number(yearIdParam);
+  const userId = Number(userIdParam);
+
+  if (!yearIdParam || !userIdParam || !Number.isInteger(yearId) || !Number.isInteger(userId)) {
+    return context.json({ error: 'yearId and userId are required' }, 400);
+  }
+
+  const filteredData = workerDataListCopy.filter(user => user.id === userId).flatMap(user => user.dashboard.filter(task => task.yearId === yearId));
+  return context.json(filteredData);
+});
+
 app.post(routes.createAccount, async (context) => {
   const user = await context.req.json<model.UserCredentials>();
 

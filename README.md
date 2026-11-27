@@ -13,8 +13,9 @@ A web application to track working hours per task across a monthly calendar, wit
 - ⏱️ **Edit worked hours per day** (weekends are disabled)
 - ➕ **Per-task, per-day and grand totals**, recalculated as you type
 - 💾 **Save changes** to the backend. All edits (adding, renaming and deleting tasks, and changing hours) stay local until you press **Save**
-- ⚠️ **Unsaved changes protection**: you get a warning when you change month, log out or close the tab with unsaved changes
+- ⚠️ **Unsaved changes protection**: you get a warning when you change month, open the yearly summary, log out or close the tab with unsaved changes
 - 📊 **Export to Excel**: generates a formatted `.xlsx` file of the current month
+- 📈 **Yearly summary**: total hours worked in the year and average hours per working day (Monday to Friday)
 - 🔔 **Alert notifications** for success and error feedback
 - 🔌 **Mock / real API switch** via environment variable
 
@@ -122,6 +123,7 @@ npm run dev
     │   ├── login/
     │   ├── create-account/
     │   ├── time-tracker/
+    │   ├── yearly-summary/
     │   └── not-found/
     ├── scenes/                   # Page + layout + providers for each route
     ├── App.tsx
@@ -158,6 +160,7 @@ The UI never consumes API models directly. Data always goes through a mapper, so
 | `/` | `LoginScene` | Public |
 | `/create-account` | `CreateAccountScene` | Public |
 | `/time-tracker` | `TimeTrackerScene` | Protected |
+| `/yearly-summary` | `YearlySummaryScene` | Protected |
 | `*` | `NotFoundScene` | Public |
 
 Protected routes are wrapped in `ProtectedRoute` (`src/core/router/protected-router.component.tsx`), which redirects to `/` when there is no logged-in user:
@@ -169,7 +172,7 @@ Protected routes are wrapped in `ProtectedRoute` (`src/core/router/protected-rou
 />
 ```
 
-The header (user name and logout) is only shown on the time tracker scene.
+The header (user name and logout) is only shown on the time tracker and yearly summary scenes.
 
 > The user is kept in memory only, so **reloading the page logs you out**.
 
@@ -180,7 +183,7 @@ Global state uses the React Context API. Each context is split into two files: `
 | Context | Hook | Provided in | Holds |
 |---|---|---|---|
 | `UserContext` | `useUserContext()` | `RouterComponent` (whole app) | Logged-in user `{ id, name }` |
-| `TimeContext` | `useTimeContext()` | `TimeTrackerScene` | Selected `month` (1–12) and `year` |
+| `TimeContext` | `useTimeContext()` | `RouterComponent` (whole app) | Selected `month` (1–12) and `year`, shared by the time tracker and the yearly summary |
 | `UnsavedChangesContext` | `useUnsavedChangesContext()` | `TimeTrackerScene` | `isDirty` flag for unsaved changes |
 
 ```tsx
@@ -192,14 +195,22 @@ const { user, setUser } = useUserContext();
 
 Each hook returns safe defaults when used outside its provider. For example, `isDirty` is `false`.
 
-`UnsavedChangesContext` sits above `AppLayout` so that both the page and the header can read it:
+`TimeProvider` wraps the router, so the selected month and year are kept when you go from the time tracker to the yearly summary and back. `UnsavedChangesContext` sits above `AppLayout` in `TimeTrackerScene` so that both the page and the header can read it. It stays in the scene so that `isDirty` is reset when you leave the page, just like the page's local state:
 
 ```
-UnsavedChangesProvider
-└── AppLayout
-    ├── Header              ← asks for confirmation on logout if isDirty
-    └── TimeProvider
-        └── TimeTrackerPage ← sets isDirty on any edit, resets it after a successful save
+UserProvider
+└── TimeProvider
+    └── Router
+        ├── TimeTrackerScene
+        │   └── UnsavedChangesProvider
+        │       └── AppLayout
+        │           ├── Header          ← asks for confirmation on logout if isDirty
+        │           └── TimeTrackerPage ← sets isDirty on any edit, resets it after a successful save,
+        │                                 and asks for confirmation before opening the yearly summary if isDirty
+        └── YearlySummaryScene
+            └── AppLayout
+                ├── Header
+                └── YearlySummaryPage   ← reads the year
 ```
 
 ### Saving model
@@ -234,6 +245,7 @@ The mock server (`server-mock/`) runs on `http://localhost:3001` with CORS enabl
 | `POST` | `/api/create-account` | `{ name, password }` | `{ id, name }`. `400` if fields are missing, `409` if the user already exists |
 | `GET` | `/api/dashboard?userId=&monthId=&yearId=` | — | `DashboardModel[]` for that user and month |
 | `PUT` | `/api/dashboard?userId=&monthId=&yearId=` | `DashboardModel[]` | `true` / `false`. Replaces all tasks of that month (creates, updates and deletes) |
+| `GET` | `/api/summary?userId=&yearId=` | — | `DashboardModel[]` with every task of that user and year, used by the yearly summary. `400` if `userId` or `yearId` is missing or not an integer |
 
 Example `GET /api/dashboard?userId=1&monthId=11&yearId=2026`:
 
@@ -263,6 +275,8 @@ Unit tests cover the pure logic of the app:
 | `time-tracker.business.spec.ts` | Day labels for the Excel export header, and editing the hours of a day (duplicated, missing and out-of-month days) |
 | `time-tracker.excel.spec.ts` | Excel workbook content and styles, file name and file download |
 | `time-tracker.mapper.spec.ts` | API model ⇄ view model mapping |
+| `yearly-summary.business.spec.ts` | Working days of a year, year total (tasks of other years, invalid months and days outside the month are left out) and average hours per working day |
+| `yearly-summary.mapper.spec.ts` | API model → view model mapping of the tasks of the year |
 | `table-business.spec.ts` | Rounding of the table totals |
 | `totals-helpers.spec.ts` | Totals per task, per day and per month, shared by the table and the Excel export |
 | `time-helpers.spec.ts` | Days of the month, day labels and weekend detection |
@@ -301,6 +315,7 @@ Nothing pending.
 ## Work log
 
 ### 2026-11-27
+- Added the yearly summary page (`/yearly-summary`, protected, with header and footer). It shows two figures for the year of `TimeContext` in a `<dl>`: the total hours worked in the year and the average hours per working day, that is, the total divided by the Monday-to-Friday days of the whole year (261 in 2026). The average counts every working day of the year, also the ones still to come and bank holidays. Both figures are shown with `getRoundPerTwoDigits`, which the table barrel now exports. The new mock endpoint `GET /api/summary?userId=&yearId=` returns every task of the user in that year, or `400` if a parameter is missing or not an integer. `yearly-summary.business.ts` calculates the figures with the helpers of `@/common/helpers` (`getDaysInMonth`, `isWeekend` and `getTaskTotal`), so, like the table, it only counts the days of each task's month and includes weekend hours. It also leaves out tasks of other years and tasks with a month outside 1–12, because `getDaysInMonth(13, year)` would return the days of January of the next year. The mapper maps the tasks to the shared `DashboardVm`. `TimeProvider` moved from `TimeTrackerScene` to `RouterComponent`, so both pages share the month and year and the time tracker keeps its month when you come back. `UnsavedChangesProvider` stays in the scene. The time tracker has a "Yearly summary" link, which asks for confirmation if there are unsaved changes (the summary only shows saved data), and the summary has a link back. The browser's back button does not ask for confirmation: `useBlocker` needs a data router, and the app uses `BrowserRouter`. With the mock data, 2026 shows 256.20 hours and an average of 0.98. Added `yearly-summary.business.spec.ts` (11 tests) and `yearly-summary.mapper.spec.ts` (3 tests).
 - The table rows now render one cell per day of the month instead of one per `workedHours` entry, and editing a cell works whatever the data. `RowTable` gets the same `days` as the header from `BodyTable` (the `daysInMonth` prop is gone) and builds each cell from the column date: `getTaskHoursByDay` for the value, `isWeekend` and `getLongDayLabel` for the disabled state and the `aria-label`. It no longer uses `useTimeContext`. Editing now goes through the new `updateTaskHoursByDay` (`time-tracker.business.ts`), which replaces the `updateWorkedHours` of the page: it leaves a single entry for the edited day with the typed value, creating it if the day had none and removing the duplicates, keeps every other entry as it is and returns them sorted by day. The entry uses the task id (`track.id`), not the `taskId` of the old entry. Before, with data from the backend that did not have exactly one entry per day in order: a duplicated day added a cell and shifted the rest of the row, and editing it set every entry of that day, so typing 4 gave 8; a missing day removed a cell and could not be edited (with one cell per day, the input would have stayed at 0); an out-of-month `dateId` added a cell for a day of the next month that did not count in the total; unordered entries showed values under the wrong day. Out-of-month entries are now not shown and not counted, and they are sent back unchanged on **Save**. Normalizing the data in `mapToVm` (one entry per day) was ruled out: it would delete on the next save entries the user never touched, it would put business logic in the mapper, and editing would still depend on every task going through it. Added 6 tests for `updateTaskHoursByDay` to `time-tracker.business.spec.ts` (normal day, duplicated day, missing day, out-of-month entries, a different `taskId` and no mutation of the original task). Each one also checks `getTaskHoursByDay` or `getTaskTotal` after editing. There are no component tests, since they would need `@testing-library/react` and `jsdom`. The backlog item was removed.
 
 ### 2026-11-26

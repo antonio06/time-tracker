@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { TimeTable } from '@/common/components'
 import { ActionsComponent, MonthSelector } from './components';
 import { Alert, useHideMessage } from '@/common/components/alert';
@@ -10,6 +11,7 @@ import { exportTimesheetToExcel } from './time-tracker.excel';
 import { updateTaskHoursByDay } from './time-tracker.business';
 import { getDaysInMonth } from '@/common/helpers';
 import { useTimeContext, useUserContext, useUnsavedChangesContext } from '@/common/context';
+import { switchRoutes } from '@/core/router';
 import classes from './time-tracker.module.css';
 
 export const TimeTrackerPage: React.FC = () => {
@@ -47,6 +49,13 @@ export const TimeTrackerPage: React.FC = () => {
       return;
     }
     setMonth(newMonth);
+  };
+
+  // The yearly summary only shows saved data, and leaving the page discards the local changes
+  const handleYearlySummaryClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isDirty && !window.confirm('You have unsaved changes. Do you want to leave anyway?')) {
+      e.preventDefault();
+    }
   };
 
   const handledInputValueStringChange = (taskId: number, newValue: string) => {
@@ -102,6 +111,7 @@ export const TimeTrackerPage: React.FC = () => {
         <div>
           <h1 className={classes.title}>Monthly Timesheet</h1>
           <h2>{getMonthName(month)} {year}</h2>
+          <Link to={switchRoutes.yearlySummary} onClick={handleYearlySummaryClick} className={classes.yearlySummaryLink}>Yearly summary</Link>
         </div>
         <MonthSelector onMonthChange={handleMonthChange} />
         <ActionsComponent onAddTask={addTask} onGenerateExcelFile={generateExcelFile} onSaveDashboard={saveDashboard} />
