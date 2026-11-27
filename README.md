@@ -310,7 +310,13 @@ import { Header } from '@/common/components/header';
 
 ## Backlog
 
-Nothing pending.
+- [ ] Use Vitest globals (`test.globals: true` + `vitest/globals` in tsconfig) and remove the `describe`/`it`/`expect` imports from every spec. Keep all specs consistent.
+- [ ] `DashboardModel`/`WorkedHoursModel` are duplicated in `time-tracker/api/api-model.ts` and `yearly-summary/api/api-model.ts`, but both pages consume the same server response. Share a single API model in `common` (pages must not import from each other). Also evaluate sharing the identical `User`/`UserCredentials` API models of login and create-account, keeping their view models separate.
+- [ ] Add a year selector: today only the month can change, so other years can't be viewed or summarized.
+- [ ] Add a GitHub Actions workflow that runs lint, tests and build on every push.
+- [ ] Show a loading state in the yearly summary instead of 0.00 while the data loads.
+- [ ] Move `getRoundPerTwoDigits` to `common/helpers` (now used by two pages).
+- [ ] Session and API security. Mock server: on login, create a session and set a cookie (`HttpOnly`, `SameSite=Lax`; `Secure` in production); add `GET /api/me` (401 without session) and `POST /api/logout`. Add an auth middleware so every data endpoint (`dashboard`, `summary`…) returns 401 without a valid session; only login, create-account and logout are public. Remove `userId` from the query params and always use the user of the session, so a user can only access their own data. Client: restore the user on startup via `/api/me`, show a "checking session" state so `ProtectedRoute` doesn't flash the login, call `/api/logout` on logout, and redirect to login on any 401. Use the Vite dev proxy for `/api`. Never store the session in localStorage or a JS-readable cookie. Tests: each protected endpoint without a session → 401; login OK / wrong password; logout invalidates the session.
 
 ## Work log
 
