@@ -7,6 +7,7 @@ import * as api from './api';
 import { getMonthName } from '@/common/helpers';
 import { mapToVm, createEmptyTrack, mapToModel } from './time-tracker.mapper';
 import { exportTimesheetToExcel } from './time-tracker.excel';
+import { updateTaskHoursByDay } from './time-tracker.business';
 import { getDaysInMonth } from '@/common/helpers';
 import { useTimeContext, useUserContext, useUnsavedChangesContext } from '@/common/context';
 import classes from './time-tracker.module.css';
@@ -33,7 +34,7 @@ export const TimeTrackerPage: React.FC = () => {
 
   const handledInputValueNumberChange = (taskId: number, dateId: number, newValue: number) => {
     const updatedTrackerList = trackerList.map(track => {
-      return taskId === track.id ? { ...track, workedHours: updateWorkedHours(track, dateId, newValue) } : { ...track }
+      return taskId === track.id ? updateTaskHoursByDay(track, dateId, newValue) : { ...track }
     })
 
     setTrackerList([...updatedTrackerList]);
@@ -47,17 +48,6 @@ export const TimeTrackerPage: React.FC = () => {
     }
     setMonth(newMonth);
   };
-
-  const updateWorkedHours = (track: vm.DashboardVm, dateId: number, newValue: number): vm.WorkedHoursVm[] => {
-    const updateWorkedHours = track.workedHours.map((wh => {
-      if (wh.dateId === dateId) {
-        return { ...wh, value: newValue }
-      } else {
-        return { ...wh }
-      }
-    }))
-    return updateWorkedHours
-  }
 
   const handledInputValueStringChange = (taskId: number, newValue: string) => {
     const updatedTrackerList = trackerList.map(track => {

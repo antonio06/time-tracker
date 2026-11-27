@@ -1,33 +1,23 @@
 import React from 'react';
 import * as vm from '@/common/model';
-import { getTaskTotal, getLongDayLabel, isWeekend } from '@/common/helpers';
+import { getTaskHoursByDay, getTaskTotal, getLongDayLabel, isWeekend } from '@/common/helpers';
 import { getRoundPerTwoDigits } from './table-business';
 import trashIcon from '@/assets/trash.svg';
-import { useTimeContext } from '@/common/context';
 import classes from './row-table.module.css';
 
 interface Props {
   track: vm.DashboardVm;
   index: number;
-  daysInMonth: number;
+  days: Date[];
   onInputValueNumberChange: (taskId: number, dateId: number, newValue: number) => void;
   onInputValueStringChange: (taskId: number, newValue: string) => void;
   onDeleteTask: (taskId: number) => void;
 }
 
-export const RowTable: React.FC<Props> = ({ track, daysInMonth, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
-  const { month, year } = useTimeContext();
-
-  const handleInputChange = (wh: vm.WorkedHoursVm, e: React.ChangeEvent<HTMLInputElement>) => {
-    onInputValueNumberChange(wh.taskId, wh.dateId, Number(e.target.value));
-  }
-
+export const RowTable: React.FC<Props> = ({ track, days, onInputValueNumberChange, onInputValueStringChange, onDeleteTask }) => {
   const handleDeleteTask = (taskId: number) => {
     onDeleteTask(taskId);
   }
-
-  // dateId is 0-based (0 = 1st of the month) and month is 1-based
-  const getDate = (dateId: number) => new Date(year, month - 1, dateId + 1);
 
   const taskName = track.task.trim() || 'untitled task';
 
@@ -47,22 +37,22 @@ export const RowTable: React.FC<Props> = ({ track, daysInMonth, onInputValueNumb
         />
       </td>
       {
-        track.workedHours.map((wh, i) => (
-          <td key={i} className={classes.cell}>
+        // One cell per day of the month, the same days as the header. dateId is 0-based (0 = 1st of the month)
+        days.map((date, dateId) => (
+          <td key={dateId} className={classes.cell}>
             <input
-              key={i}
-              name={`task-${track.id}-day-${wh.dateId + 1}`}
-              aria-label={`Hours for ${taskName} on ${getLongDayLabel(getDate(wh.dateId))}`}
-              value={wh.value}
-              onChange={(e) => handleInputChange(wh, e)}
+              name={`task-${track.id}-day-${dateId + 1}`}
+              aria-label={`Hours for ${taskName} on ${getLongDayLabel(date)}`}
+              value={getTaskHoursByDay(track, dateId)}
+              onChange={(e) => onInputValueNumberChange(track.id, dateId, Number(e.target.value))}
               type="number"
-              disabled={isWeekend(getDate(wh.dateId))}
+              disabled={isWeekend(date)}
             />
           </td>
         ))
       }
       <td className={classes.total}>
-        {getRoundPerTwoDigits(getTaskTotal(track, daysInMonth))}
+        {getRoundPerTwoDigits(getTaskTotal(track, days.length))}
       </td>
     </tr>
   )

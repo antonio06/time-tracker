@@ -16,7 +16,7 @@ export const BodyTable: React.FC<Props> = ({ trackList, days, onInputValueNumber
     <tbody>
       {
         trackList.map((track, id) => {
-          return <RowTable key={id} track={track} index={id} daysInMonth={days.length} onInputValueNumberChange={onInputValueNumberChange} onInputValueStringChange={onInputValueStringChange} onDeleteTask={onDeleteTask} />
+          return <RowTable key={id} track={track} index={id} days={days} onInputValueNumberChange={onInputValueNumberChange} onInputValueStringChange={onInputValueStringChange} onDeleteTask={onDeleteTask} />
         })
       }
       <TotalLine days={days} trackList={trackList} />

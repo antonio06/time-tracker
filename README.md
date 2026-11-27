@@ -260,7 +260,7 @@ Unit tests cover the pure logic of the app:
 
 | Spec | Covers |
 |---|---|
-| `time-tracker.business.spec.ts` | Day labels for the Excel export header |
+| `time-tracker.business.spec.ts` | Day labels for the Excel export header, and editing the hours of a day (duplicated, missing and out-of-month days) |
 | `time-tracker.excel.spec.ts` | Excel workbook content and styles, file name and file download |
 | `time-tracker.mapper.spec.ts` | API model ⇄ view model mapping |
 | `table-business.spec.ts` | Rounding of the table totals |
@@ -291,14 +291,17 @@ import { Header } from '@/common/components/header';
 
 - **Months are 1-based** (1 = January) everywhere in the app and the API, unlike JavaScript's `Date.getMonth()`, which returns 0–11.
 - **`dateId` is 0-based**: `dateId: 0` is the 1st of the month.
-- **New tasks** must have one `workedHours` entry per day. Use `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`.
+- **New tasks** should have one `workedHours` entry per day. Use `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`. The table and editing no longer depend on it: each row renders one cell per day of the month, and `updateTaskHoursByDay` creates the entry of a missing day.
 - **Task ids for new tasks are generated on the client** (`Date.now() + Math.random()`). That's fine for the mock, but a real backend should assign ids when saving.
 
 ## Backlog
 
-- [ ] `row-table` renders one cell per `workedHours` entry instead of one per day of the month. With a duplicated or out-of-month `dateId` from the backend, the row would have extra cells and be misaligned with the header. Render one cell per day (using `getTaskHoursByDay`) instead.
+Nothing pending.
 
 ## Work log
+
+### 2026-11-27
+- The table rows now render one cell per day of the month instead of one per `workedHours` entry, and editing a cell works whatever the data. `RowTable` gets the same `days` as the header from `BodyTable` (the `daysInMonth` prop is gone) and builds each cell from the column date: `getTaskHoursByDay` for the value, `isWeekend` and `getLongDayLabel` for the disabled state and the `aria-label`. It no longer uses `useTimeContext`. Editing now goes through the new `updateTaskHoursByDay` (`time-tracker.business.ts`), which replaces the `updateWorkedHours` of the page: it leaves a single entry for the edited day with the typed value, creating it if the day had none and removing the duplicates, keeps every other entry as it is and returns them sorted by day. The entry uses the task id (`track.id`), not the `taskId` of the old entry. Before, with data from the backend that did not have exactly one entry per day in order: a duplicated day added a cell and shifted the rest of the row, and editing it set every entry of that day, so typing 4 gave 8; a missing day removed a cell and could not be edited (with one cell per day, the input would have stayed at 0); an out-of-month `dateId` added a cell for a day of the next month that did not count in the total; unordered entries showed values under the wrong day. Out-of-month entries are now not shown and not counted, and they are sent back unchanged on **Save**. Normalizing the data in `mapToVm` (one entry per day) was ruled out: it would delete on the next save entries the user never touched, it would put business logic in the mapper, and editing would still depend on every task going through it. Added 6 tests for `updateTaskHoursByDay` to `time-tracker.business.spec.ts` (normal day, duplicated day, missing day, out-of-month entries, a different `taskId` and no mutation of the original task). Each one also checks `getTaskHoursByDay` or `getTaskTotal` after editing. There are no component tests, since they would need `@testing-library/react` and `jsdom`. The backlog item was removed.
 
 ### 2026-11-26
 - Unified the day labels and the weekend detection (step 2 of unifying the totals and the labels). `src/common/helpers/time-helpers.ts` now holds the module-level `Intl.DateTimeFormat` formatters and three helpers: `getShortDayLabel` (`1 Sun`, used by the table header and, through `getDaysOfMonth`, by the Excel header), `getLongDayLabel` (`Monday, November 2`, the `aria-label` of the hour inputs) and `isWeekend`, which uses `getDay()` (0 = Sunday, 6 = Saturday) instead of comparing the weekday name, so it no longer depends on the `en-US` output. `head-table.component.tsx` and `row-table.component.tsx` no longer call `toLocaleDateString`, which built a new ICU formatter on every call: 30 per render in the header and up to 3 per hour cell in each row (two for the weekend check, one for the `aria-label`), so every keystroke rebuilt hundreds of them. No `toLocaleDateString` is left in `src/`. `getDaysOfMonth` stays in `time-tracker.business.ts` because only the Excel uses it. It is now `getDaysInMonth(...).map(getShortDayLabel)` and still returns `[]` for a month outside 1–12. The output is the same: its 3 tests and `time-tracker.excel.spec.ts` were not changed and still pass. Added 4 tests to `time-helpers.spec.ts` (`getShortDayLabel`, `getLongDayLabel` and two for `isWeekend`). The backlog item was removed.

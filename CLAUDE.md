@@ -46,7 +46,7 @@ Si cambias lógica de `*.business.ts`, `*.excel.ts`, `*.mapper.ts`, `*.validatio
 ## Gotchas
 - Los meses son **1-based** (1 = enero) en toda la app y en la API. `Date.getMonth()` es 0-based.
 - `dateId` es **0-based** (0 = día 1 del mes).
-- Las tareas nuevas necesitan una entrada de `workedHours` por día: `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`.
+- Las tareas nuevas se crean con una entrada de `workedHours` por día: `createEmptyTrack(getDaysInMonth(month, year).length, month, year)`. La tabla no depende de ello: pinta una celda por día con `getTaskHoursByDay`. Para editar las horas de un día usa `updateTaskHoursByDay` (`time-tracker.business.ts`), que funciona aunque el día falte o esté repetido.
 - El usuario solo vive en memoria: recargar la página cierra la sesión.
 - Con `VITE_IS_MOCK=true` el mes por defecto es noviembre de 2026 (para cuadrar con los datos mock).
 
